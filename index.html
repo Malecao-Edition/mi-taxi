@@ -2,210 +2,244 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <!-- Etiquetas clave para iPhone / iOS -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="TaxiTracker">
-    <title>TaxiTracker Pro iOS</title>
+    <title>TaxiTracker v2.1</title>
+    
+    <!-- FUENTES GOOGLE (Inter y Montserrat) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FONT AWESOME -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CHART.JS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
         :root {
-            --bg-color: #121212; --card-bg: #1e1e1e; --text-main: #ffffff; --text-muted: #a0a0a0;
-            --green: #2ecc71; --green-bg: rgba(46, 204, 113, 0.15);
-            --red: #e74c3c; --red-bg: rgba(231, 76, 60, 0.15);
-            --blue: #3498db; --blue-bg: rgba(52, 152, 219, 0.15);
-            --yellow: #f1c40f; --yellow-bg: rgba(241, 196, 15, 0.15);
+            --bg-color: #0f0f13; --card-bg: #1c1c21; --text-main: #ffffff; --text-muted: #8e8e93;
+            --green: #34c759; --green-bg: rgba(52, 199, 89, 0.15);
+            --red: #ff3b30; --red-bg: rgba(255, 59, 48, 0.15);
+            --blue: #0a84ff; --blue-bg: rgba(10, 132, 255, 0.15);
+            --yellow: #ffd60a; --yellow-bg: rgba(255, 214, 10, 0.15);
+            --font-text: 'Inter', sans-serif;
+            --font-title: 'Montserrat', sans-serif;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent;}
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-text); -webkit-tap-highlight-color: transparent;}
         body { background-color: var(--bg-color); color: var(--text-main); display: flex; justify-content: center; overscroll-behavior-y: none; padding-top: env(safe-area-inset-top); padding-bottom: calc(80px + env(safe-area-inset-bottom)); }
         
+        h1, h2, h3, strong, .vuelta-income, .section-title, .app-title { font-family: var(--font-title); }
+
         .app-container { width: 100%; max-width: 450px; min-height: 100vh; padding: 15px; display: flex; flex-direction: column; gap: 15px; }
-        .section-title { font-size: 14px; margin-bottom: 8px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; align-items: center;}
+        
+        .app-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; padding-top: 5px;}
+        .app-title { font-size: 18px; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 8px;}
+        .badge-v2 { background: var(--blue); color: white; font-size: 10px; padding: 3px 8px; border-radius: 12px; font-weight: 800; letter-spacing: 1px;}
 
-        /* NAVEGACIÓN INFERIOR */
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; max-width: 450px; background: rgba(26, 26, 26, 0.95); backdrop-filter: blur(10px); display: flex; justify-content: space-around; padding: 10px 0 calc(10px + env(safe-area-inset-bottom)) 0; border-top: 1px solid #333; z-index: 1000; }
-        .nav-btn { background: none; border: none; color: var(--text-muted); font-size: 12px; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; }
+        .section-title { font-size: 12px; margin-bottom: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; align-items: center;}
+
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; max-width: 450px; background: rgba(28, 28, 33, 0.95); backdrop-filter: blur(15px); display: flex; justify-content: space-around; padding: 12px 0 calc(12px + env(safe-area-inset-bottom)) 0; border-top: 1px solid rgba(255,255,255,0.05); z-index: 1000; }
+        .nav-btn { background: none; border: none; color: var(--text-muted); font-size: 11px; display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; font-weight: 500; transition: color 0.2s;}
         .nav-btn.active { color: var(--blue); }
-        .nav-icon { font-size: 20px; }
+        .nav-icon { font-size: 22px; }
 
-        .view { display: none; flex-direction: column; gap: 15px; }
+        .view { display: none; flex-direction: column; gap: 15px; animation: fadeIn 0.3s ease;}
         .view.active { display: flex; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* MÓDULO RUTAS */
-        .route-panel { background-color: var(--card-bg); border-radius: 15px; padding: 15px; border: 1px solid #333; }
-        .route-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; position: relative;}
-        .btn-route { background: #2a2a2a; color: var(--text-main); border: 1px solid #444; padding: 10px 5px; border-radius: 10px; font-size: 12px; cursor: pointer; position: relative;}
-        .btn-route:active { transform: scale(0.97); }
-        .active-vuelta-card { display: none; background: var(--blue-bg); border: 1px solid var(--blue); border-radius: 15px; padding: 15px; text-align: center; }
+        .card-panel { background-color: var(--card-bg); border-radius: 16px; padding: 16px; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 4px 15px rgba(0,0,0,0.2);}
+        
+        .route-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 5px; position: relative;}
+        .btn-route { background: #2c2c35; color: var(--text-main); border: 1px solid transparent; padding: 12px 5px; border-radius: 12px; font-size: 12px; font-weight: 500; cursor: pointer;}
+        .btn-route:active { transform: scale(0.97); background: #3a3a45;}
+        
+        .active-vuelta-card { display: none; background: var(--blue-bg); border: 1px solid var(--blue); border-radius: 16px; padding: 20px; text-align: center; }
         .active-vuelta-card.active { display: block; }
-        .vuelta-name { font-size: 16px; font-weight: bold; color: var(--blue); margin-bottom: 5px; }
-        .vuelta-income { font-size: 32px; font-weight: bold; color: var(--green); margin: 10px 0; }
-        .vuelta-info { font-size: 12px; color: var(--blue); margin-bottom: 10px; }
-        .btn-end-vuelta { background: var(--red); color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: bold; width: 100%; font-size: 16px; }
+        .vuelta-name { font-size: 18px; color: var(--blue); margin-bottom: 5px; }
+        .vuelta-income { font-size: 36px; color: var(--green); margin: 10px 0; font-variant-numeric: tabular-nums;}
+        .btn-end-vuelta { background: var(--red); color: white; border: none; padding: 12px 20px; border-radius: 12px; font-weight: 700; width: 100%; font-size: 15px; margin-top: 10px; font-family: var(--font-text);}
 
-        /* DASHBOARD Y BOTONES */
-        .dashboard { background-color: var(--card-bg); border-radius: 15px; padding: 15px; text-align: center; }
-        .stats { display: flex; justify-content: space-between; }
-        .stat-item { width: 33%; }
-        .stat-item span { display: block; font-size: 11px; color: var(--text-muted); }
-        .stat-item strong { font-size: 16px; }
+        .quick-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; position: relative;}
+        .btn { border: none; border-radius: 14px; padding: 16px 5px; font-size: 16px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; font-family: var(--font-title);}
+        .btn:active { transform: scale(0.95); }
+        .btn-income { background-color: var(--green-bg); color: var(--green); border: 1px solid rgba(52, 199, 89, 0.3); position: relative;}
+        .btn-expense { background-color: var(--red-bg); color: var(--red); border: 1px solid rgba(255, 59, 48, 0.3); width: 100%; padding: 16px; font-size: 14px; gap: 10px; margin-top: 5px; font-weight: 600;}
+        .btn-expense-alt { background: #2c2c35; color: var(--text-muted); border: none; }
+        .btn-sync { background-color: var(--text-main); color: #000; width: 100%; padding: 16px; border-radius: 14px; font-size: 15px; font-weight: 700; margin-top: 10px; display: flex; justify-content: center; gap: 10px; align-items: center;}
+
+        .stats { display: flex; justify-content: space-between; margin-top: 15px;}
+        .stat-item { width: 33%; text-align: center;}
+        .stat-item span { display: block; font-size: 10px; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase;}
+        .stat-item strong { font-size: 16px; font-variant-numeric: tabular-nums;}
         .stat-net { color: var(--text-main); border-right: 1px solid #333; }
         .stat-income { color: var(--green); border-right: 1px solid #333; }
         .stat-expense { color: var(--red); }
 
-        .quick-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; position: relative;}
-        .btn { border: none; border-radius: 12px; padding: 15px 5px; font-size: 16px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        .btn:active { transform: scale(0.95); }
-        .btn-income { background-color: var(--green-bg); color: var(--green); border: 1px solid var(--green); position: relative;}
-        .btn-expense { background-color: var(--red-bg); color: var(--red); border: 1px solid var(--red); width: 100%; padding: 15px; font-size: 16px; gap: 10px; margin-top: 5px; }
-        .btn-sync { background-color: var(--text-main); color: var(--bg-color); width: 100%; padding: 15px; border-radius: 12px; font-size: 16px; font-weight: bold; margin-top: 10px;}
-
-        /* EDICIÓN */
-        .edit-mode-btn { background: none; border: none; color: var(--blue); font-size: 12px; cursor: pointer; font-weight: bold;}
-        .delete-badge { display: none; position: absolute; top: -5px; right: -5px; background: var(--red); color: white; border-radius: 50%; width: 20px; height: 20px; font-size: 12px; line-height: 20px; text-align: center; font-weight: bold;}
+        .edit-mode-btn { background: none; border: none; color: var(--blue); font-size: 12px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 5px;}
+        .delete-badge { display: none; position: absolute; top: -6px; right: -6px; background: var(--red); color: white; border-radius: 50%; width: 22px; height: 22px; font-size: 12px; line-height: 22px; text-align: center; font-weight: bold;}
         .editing .delete-badge { display: block; }
-        .editing .btn-income, .editing .btn-route { animation: shake 0.5s infinite; border: 1px dashed var(--yellow);}
+        .editing .btn-income, .editing .btn-route { animation: shake 0.4s infinite; border: 1px dashed var(--yellow); opacity: 0.8;}
         @keyframes shake { 0% { transform: rotate(0deg); } 25% { transform: rotate(1deg); } 50% { transform: rotate(0eg); } 75% { transform: rotate(-1deg); } 100% { transform: rotate(0deg); } }
 
-        /* CALENDARIO Y KILOMETRAJE */
-        .km-panel { background: var(--card-bg); border-radius: 15px; padding: 15px; border-left: 4px solid var(--yellow); margin-bottom: 15px;}
+        /* CALENDARIO, TABLERO Y GRILLA DE REGISTROS */
         .input-row { display: flex; gap: 10px; margin-top: 10px; }
-        .km-input { background: #2a2a2a; border: 1px solid #444; color: white; padding: 10px; border-radius: 8px; width: 100%; font-size: 14px; text-align: center;}
-        .btn-save-km { background: var(--yellow); color: #000; border: none; padding: 10px; border-radius: 8px; font-weight: bold; width: 100%; margin-top: 10px;}
-        .calendar-card { background: #222; border-radius: 12px; padding: 15px; margin-bottom: 10px; border: 1px solid #333;}
-        .cal-header { display: flex; justify-content: space-between; border-bottom: 1px solid #444; padding-bottom: 8px; margin-bottom: 8px; font-weight: bold;}
-        .cal-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 5px;}
-        .tag-glp { background: var(--red-bg); color: var(--red); padding: 2px 6px; border-radius: 4px; font-size: 11px; margin-left: 5px;}
-        .tag-km { background: var(--yellow-bg); color: var(--yellow); padding: 2px 6px; border-radius: 4px; font-size: 11px;}
-
-        /* STATS Y BACKUP */
-        .stat-card { background: var(--card-bg); border-radius: 15px; padding: 15px; margin-bottom: 15px; border-left: 4px solid var(--blue);}
-        .stat-row { display: flex; justify-content: space-between; margin-top: 10px; font-size: 14px;}
-        .peak-hour-bar { background: var(--green-bg); padding: 5px; margin-top: 5px; border-radius: 5px; display: flex; justify-content: space-between; font-size: 12px; color: var(--green);}
+        .km-input { background: #2c2c35; border: 1px solid transparent; color: white; padding: 12px; border-radius: 10px; width: 100%; font-size: 14px; text-align: center; font-family: var(--font-text);}
+        .km-input:focus { border: 1px solid var(--yellow); outline: none;}
+        .btn-save-km { background: var(--yellow); color: #000; border: none; padding: 12px; border-radius: 10px; font-weight: 700; width: 100%; margin-top: 10px; font-family: var(--font-text);}
         
-        .backup-panel { background: #222; border: 1px dashed #555; padding: 15px; border-radius: 15px; text-align: center; margin-top: 20px;}
-        .btn-backup { background: #333; color: white; border: none; padding: 10px; width: 100%; border-radius: 8px; margin-top: 10px; font-size: 14px; cursor: pointer;}
+        .calendar-day-card { background: #222228; border-radius: 14px; padding: 15px; margin-bottom: 15px; border-left: 4px solid var(--blue);}
+        .cal-header { display: flex; justify-content: space-between; border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 10px; align-items: center;}
+        .cal-summary { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 10px;}
+        
+        /* BOTÓN DESPLEGABLE */
+        .toggle-btn { background: #2c2c35; color: var(--text-main); border: none; padding: 5px 12px; border-radius: 8px; font-size: 12px; cursor: pointer; display: flex; gap: 5px; align-items: center;}
+        
+        /* DOS COLUMNAS PARA REGISTROS */
+        .transaction-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; display: none; } /* Oculto por defecto */
+        .transaction-list.show { display: grid; } /* Clase para mostrar */
+        
+        .tx-item { display: flex; flex-direction: column; background: rgba(0,0,0,0.3); padding: 8px 10px; border-radius: 8px;}
+        .tx-header { display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted); margin-bottom: 4px;}
+        .tx-body { display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-family: var(--font-title);}
+        .tx-amt.inc { color: var(--green); }
+        .tx-amt.exp { color: var(--red); }
+
+        /* STATS Y GRÁFICOS */
+        .stat-card { background: var(--card-bg); border-radius: 16px; padding: 16px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05);}
+        .stat-row { display: flex; justify-content: space-between; margin-top: 10px; font-size: 13px; align-items: center;}
+        .peak-hour-bar { background: var(--green-bg); padding: 8px 12px; margin-top: 8px; border-radius: 8px; display: flex; justify-content: space-between; font-size: 13px; color: var(--green); font-weight: 600;}
+        .chart-container { position: relative; height: 180px; width: 100%; margin-top: 15px;}
+
+        /* RESPALDO */
+        .backup-panel { background: #1c1c21; border: 1px dashed #444; padding: 20px; border-radius: 16px; text-align: center; margin-top: 10px;}
+        .btn-backup { background: #2c2c35; color: white; border: none; padding: 12px; width: 100%; border-radius: 10px; margin-top: 10px; font-size: 13px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; font-weight: 600;}
         #file-input { display: none; }
 
-        #toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 12px 24px; border-radius: 25px; font-size: 14px; opacity: 0; pointer-events: none; z-index: 9999; transition: 0.3s; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.5);}
+        #toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: rgba(52, 199, 89, 0.9); color: white; padding: 12px 24px; border-radius: 25px; font-size: 14px; opacity: 0; pointer-events: none; z-index: 9999; transition: 0.3s; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.3); backdrop-filter: blur(5px);}
     </style>
 </head>
 <body>
 
 <div class="app-container">
 
+    <div class="app-header">
+        <div class="app-title"><i class="fa-solid fa-car" style="color:var(--yellow)"></i> TaxiTracker <span class="badge-v2">New v2.1</span></div>
+    </div>
+
     <!-- VISTA 1: MI TURNO -->
     <div id="view-turno" class="view active">
         
-        <div class="route-panel">
+        <div class="card-panel">
             <div class="section-title">
                 <span>Control de Ruta</span>
-                <button class="edit-mode-btn" id="btn-edit-routes" onclick="toggleEditRoutes()">⚙️ Editar Rutas</button>
+                <button class="edit-mode-btn" id="btn-edit-routes" onclick="toggleEditRoutes()"><i class="fa-solid fa-gear"></i> Editar</button>
             </div>
             
-            <div id="route-selector" class="route-selector">
-                <!-- Rutas inyectadas por JS -->
-            </div>
+            <div id="route-selector" class="route-selector"></div>
             
             <div id="active-vuelta" class="active-vuelta-card">
                 <div class="vuelta-name" id="ui-vuelta-name">Ruta Activa</div>
-                <div class="vuelta-info" id="ui-vuelta-info">0 km aprox.</div>
-                <div style="font-size: 12px; color: var(--text-muted);">Recaudado en esta vuelta:</div>
+                <div style="font-size: 11px; color: var(--blue); margin-bottom: 10px;" id="ui-vuelta-info">0 km</div>
+                <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Recaudado en esta vuelta:</div>
                 <div class="vuelta-income" id="ui-vuelta-income">S/ 0.00</div>
-                <button class="btn-end-vuelta" onclick="endVuelta()">Terminar Vuelta</button>
+                <button class="btn-end-vuelta" onclick="endVuelta()"><i class="fa-solid fa-flag-checkered"></i> Terminar Vuelta</button>
             </div>
         </div>
 
-        <div>
+        <div class="card-panel">
             <div class="section-title">
-                <span>Cobro Rápido (Pasaje)</span>
-                <button class="edit-mode-btn" id="btn-edit-mode" onclick="toggleEditMode()">✏️ Editar Botones</button>
+                <span>Cobro Rápido</span>
+                <button class="edit-mode-btn" id="btn-edit-mode" onclick="toggleEditMode()"><i class="fa-solid fa-pen"></i> Editar</button>
             </div>
             <div class="quick-grid" id="buttons-container"></div>
         </div>
 
         <div>
-            <button class="btn btn-expense" onclick="registerGas()"><span>⛽</span> Registrar GLP / Gasolina</button>
-            <button class="btn btn-expense" style="background: #2a2a2a; border-color: #444; color: var(--text-muted); font-size: 14px; padding: 10px;" onclick="manualExpense()">Otros Gastos (Peaje, Lavado, etc)</button>
+            <button class="btn btn-expense" onclick="registerGas()"><i class="fa-solid fa-gas-pump"></i> Registrar Gasolina / GLP</button>
+            <button class="btn btn-expense btn-expense-alt" onclick="manualExpense()"><i class="fa-solid fa-money-bill-1"></i> Otros Gastos Múltiples</button>
         </div>
 
-        <div class="dashboard">
-            <h3 class="section-title" style="margin-bottom: 10px; justify-content: center;">Resumen de tu Turno</h3>
+        <div class="card-panel" style="text-align: center; border-color: rgba(10, 132, 255, 0.3);">
+            <div class="section-title" style="justify-content: center; color: var(--text-main);">Resumen del Turno</div>
             <div class="stats">
                 <div class="stat-item stat-net"><span>Neta (Bolsillo)</span><strong id="ui-net">S/ 0.00</strong></div>
-                <div class="stat-item stat-income"><span>Total Bruto</span><strong id="ui-income">S/ 0.00</strong></div>
+                <div class="stat-item stat-income"><span>Ingresos</span><strong id="ui-income">S/ 0.00</strong></div>
                 <div class="stat-item stat-expense"><span>Gastos</span><strong id="ui-expense">S/ 0.00</strong></div>
             </div>
         </div>
 
-        <button class="btn-sync" onclick="syncData()" id="btn-sync">☁️ Cerrar Turno y Subir a la Nube</button>
+        <button class="btn-sync" onclick="syncData()" id="btn-sync"><i class="fa-solid fa-cloud"></i> Cerrar Turno y Subir</button>
     </div>
 
-    <!-- VISTA 2: DIARIO -->
+    <!-- VISTA 2: DIARIO (Ordenado) -->
     <div id="view-calendar" class="view">
-        <div class="km-panel">
-            <h3 class="section-title" style="color: var(--yellow);">Anotar Tablero (Hoy)</h3>
+        <div class="card-panel" style="border-left: 4px solid var(--yellow);">
+            <div class="section-title" style="color: var(--yellow);">Anotar Tablero</div>
             <div class="input-row">
                 <input type="number" id="input-odo" class="km-input" placeholder="Odómetro">
                 <input type="text" id="input-hrs" class="km-input" placeholder="Horas">
             </div>
-            <button class="btn-save-km" onclick="saveDashboardData()">Guardar Tablero</button>
+            <button class="btn-save-km" onclick="saveDashboardData()"><i class="fa-solid fa-floppy-disk"></i> Guardar Tablero</button>
         </div>
-        <h3 class="section-title">Calendario de Turnos</h3>
-        <div id="calendar-list"></div>
+        
+        <div class="section-title" style="margin-top: 10px;"><i class="fa-regular fa-calendar"></i> Historial de Turnos</div>
+        <div id="calendar-list" style="padding-bottom: 20px;"></div>
     </div>
 
-    <!-- VISTA 3: ESTADÍSTICAS Y RESPALDO -->
+    <!-- VISTA 3: ESTADÍSTICAS -->
     <div id="view-stats" class="view">
-        <h2 style="text-align: center; color: var(--blue); margin-bottom: 10px;">Tus Estadísticas</h2>
         
-        <div class="stat-card" style="border-left-color: var(--yellow);">
-            <h3 class="section-title">Hoy</h3>
-            <div class="stat-row"><span>Ingresos:</span> <strong style="color:var(--green)" id="st-hoy-ingreso">S/ 0.00</strong></div>
-            <div class="stat-row"><span>Gastos:</span> <strong style="color:var(--red)" id="st-hoy-gasto">S/ 0.00</strong></div>
-            <div class="stat-row"><span>Neta:</span> <strong id="st-hoy-neta">S/ 0.00</strong></div>
+        <div class="card-panel">
+            <div class="section-title"><i class="fa-solid fa-chart-bar"></i> Rendimiento Semanal</div>
+            <div class="chart-container">
+                <canvas id="myChart"></canvas>
+            </div>
         </div>
 
-        <div class="stat-card">
-            <h3 class="section-title">Últimos 7 Días</h3>
-            <div class="stat-row"><span>Ingresos:</span> <strong style="color:var(--green)" id="st-sem-ingreso">S/ 0.00</strong></div>
-            <div class="stat-row"><span>Gastos:</span> <strong style="color:var(--red)" id="st-sem-gasto">S/ 0.00</strong></div>
+        <div class="card-panel" style="border-left: 4px solid var(--blue);">
+            <div class="section-title" style="color: var(--blue);">Resumen Global</div>
+            <div class="stat-row"><span>Ingresos Hoy:</span> <strong style="color:var(--green)" id="st-hoy-ingreso">S/ 0.00</strong></div>
+            <div class="stat-row"><span>Gastos Hoy:</span> <strong style="color:var(--red)" id="st-hoy-gasto">S/ 0.00</strong></div>
+            <div class="stat-row" style="border-top: 1px solid #333; padding-top: 8px; margin-top: 8px;"><span>Ganancia Neta Hoy:</span> <strong id="st-hoy-neta">S/ 0.00</strong></div>
+            
+            <div class="stat-row" style="margin-top: 20px; color: var(--text-muted);"><span>Ingresos (Últimos 7 Días):</span> <strong style="color:var(--text-main)" id="st-sem-ingreso">S/ 0.00</strong></div>
+            <div class="stat-row" style="color: var(--text-muted);"><span>Gastos (Últimos 7 Días):</span> <strong style="color:var(--text-main)" id="st-sem-gasto">S/ 0.00</strong></div>
         </div>
 
-        <div class="stat-card" style="border-left-color: var(--text-main);">
-            <h3 class="section-title">Horas Pico (Más Ganancia Hoy)</h3>
+        <div class="card-panel" style="border-left: 4px solid var(--green);">
+            <div class="section-title" style="color: var(--green);">Horas Pico (Mejores Horarios Hoy)</div>
             <div id="st-horas"></div>
         </div>
 
-        <!-- ZONA DE RESPALDO (EXPORTAR/IMPORTAR) -->
         <div class="backup-panel">
-            <h3 class="section-title" style="justify-content: center;">💾 Respaldo de Datos</h3>
-            <p style="font-size: 11px; color: gray; margin-bottom: 10px;">Extrae tu información para no perderla cuando conectes la app a la nube.</p>
-            
-            <button class="btn-backup" style="background: var(--blue); color: white;" onclick="exportData()">⬇️ Descargar Datos (Exportar)</button>
-            
-            <button class="btn-backup" onclick="document.getElementById('file-input').click()">⬆️ Cargar Datos (Importar)</button>
+            <div class="section-title" style="justify-content: center;"><i class="fa-solid fa-download"></i> Respaldo de Datos</div>
+            <button class="btn-backup" style="background: var(--blue);" onclick="exportData()"><i class="fa-solid fa-circle-up"></i> Descargar Datos</button>
+            <button class="btn-backup" onclick="document.getElementById('file-input').click()"><i class="fa-solid fa-circle-down"></i> Importar Datos</button>
             <input type="file" id="file-input" accept=".json" onchange="importData(event)">
         </div>
     </div>
 
 </div>
 
-<!-- BARRA INFERIOR -->
+<!-- NAVEGACIÓN -->
 <div class="bottom-nav">
-    <button class="nav-btn active" onclick="switchTab('turno', this)"><span class="nav-icon">🚕</span><span>Turno</span></button>
-    <button class="nav-btn" onclick="switchTab('calendar', this)"><span class="nav-icon">📅</span><span>Diario</span></button>
-    <button class="nav-btn" onclick="switchTab('stats', this)"><span class="nav-icon">📊</span><span>Stats</span></button>
+    <button class="nav-btn active" onclick="switchTab('turno', this)"><i class="fa-solid fa-car nav-icon"></i><span>Turno</span></button>
+    <button class="nav-btn" onclick="switchTab('calendar', this)"><i class="fa-regular fa-calendar nav-icon"></i><span>Diario</span></button>
+    <button class="nav-btn" onclick="switchTab('stats', this)"><i class="fa-solid fa-chart-bar nav-icon"></i><span>Stats</span></button>
 </div>
 
-<div id="toast">Notificación</div>
+<div id="toast"><i class="fa-solid fa-check"></i> Operación exitosa</div>
 
 <script>
+    // URL DE GOOGLE SHEETS ACTUALIZADA
     const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbzOwq-Mc_HZ5vuWF1TCRu17H-pWr6CI_BQ9FFwLMIXcs3QLPTuj654DeJ6Z4nUPGL8M/exec"; 
     
-    // VARIABLES Y ALMACENAMIENTO LOCAL
-    let defaultAmounts = [2.00, 2.50, 3.00, 4.00, 5.00];
+    let defaultAmounts = [2.00, 2.50, 3.00, 3.50, 4.00, 5.00];
     let customAmounts = JSON.parse(localStorage.getItem('taxiButtons')) || defaultAmounts;
     
     let defaultRoutes = [
@@ -219,251 +253,167 @@
     let masterHistory = JSON.parse(localStorage.getItem('taxiHistory')) || []; 
     let currentShift = JSON.parse(localStorage.getItem('taxiCurrentShift')) || []; 
     
-    let isEditMode = false;
-    let isEditRoutes = false;
-    
-    let isVueltaActive = false;
-    let currentRutaIdx = -1;
-    let currentVueltaId = "";
-    let currentVueltaIncome = 0;
+    let isEditMode = false; let isEditRoutes = false; let isVueltaActive = false;
+    let currentRutaIdx = -1; let currentVueltaId = ""; let currentVueltaIncome = 0;
+    let myChartInstance = null;
 
     function init() { renderButtons(); renderRoutes(); updateShiftUI(); }
 
-    // --- RUTAS DINÁMICAS ---
     function renderRoutes() {
-        const container = document.getElementById('route-selector');
-        container.innerHTML = '';
+        const container = document.getElementById('route-selector'); container.innerHTML = '';
         customRoutes.forEach((ruta, index) => {
-            container.innerHTML += `
-                <button class="btn-route" onclick="handleRouteClick(${index})">
-                    ${ruta.name}<br><small style="color:gray">${ruta.km}km - ${ruta.min}m</small>
-                    <span class="delete-badge">X</span>
-                </button>`;
+            container.innerHTML += `<button class="btn-route" onclick="handleRouteClick(${index})">${ruta.name}<br><span style="color:var(--text-muted); font-size:10px;">${ruta.km}km - ${ruta.min}m</span><span class="delete-badge"><i class="fa-solid fa-xmark"></i></span></button>`;
         });
-        container.innerHTML += `<button class="btn-route" id="btn-add-route" style="display:none; border: 1px dashed var(--yellow); color: var(--yellow);" onclick="addNewRoute()">Nueva Ruta ➕</button>`;
+        container.innerHTML += `<button class="btn-route" id="btn-add-route" style="display:none; border: 1px dashed var(--yellow); color: var(--yellow);" onclick="addNewRoute()"><i class="fa-solid fa-plus"></i> Nueva</button>`;
     }
 
     function toggleEditRoutes() {
-        isEditRoutes = !isEditRoutes;
-        const container = document.getElementById('route-selector');
-        if (isEditRoutes) {
-            container.classList.add('editing'); document.getElementById('btn-edit-routes').innerText = "✅ Listo"; document.getElementById('btn-add-route').style.display = "block";
-        } else {
-            container.classList.remove('editing'); document.getElementById('btn-edit-routes').innerText = "⚙️ Editar Rutas"; document.getElementById('btn-add-route').style.display = "none";
-            localStorage.setItem('taxiRoutes', JSON.stringify(customRoutes));
-        }
+        isEditRoutes = !isEditRoutes; const container = document.getElementById('route-selector');
+        if (isEditRoutes) { container.classList.add('editing'); document.getElementById('btn-edit-routes').innerHTML = "<i class='fa-solid fa-check'></i> Listo"; document.getElementById('btn-add-route').style.display = "block"; } 
+        else { container.classList.remove('editing'); document.getElementById('btn-edit-routes').innerHTML = "<i class='fa-solid fa-gear'></i> Editar"; document.getElementById('btn-add-route').style.display = "none"; localStorage.setItem('taxiRoutes', JSON.stringify(customRoutes)); }
     }
 
     function handleRouteClick(index) {
-        if (isEditRoutes) {
-            if(confirm(`¿Borrar la ruta "${customRoutes[index].name}"?`)){ customRoutes.splice(index, 1); renderRoutes(); }
-        } else { startVuelta(index); }
+        if (isEditRoutes) { if(confirm(`¿Borrar "${customRoutes[index].name}"?`)){ customRoutes.splice(index, 1); renderRoutes(); } } 
+        else { startVuelta(index); }
     }
 
     function addNewRoute() {
-        let name = prompt("Nombre de la ruta (Ej: Terminal ➔ Centro):");
-        if (!name) return;
-        let km = prompt("¿Cuántos Kilómetros aprox. tiene esta ruta? (Ej: 10)");
-        let min = prompt("¿Cuántos Minutos aprox. demora? (Ej: 20)");
+        let name = prompt("Nombre de la ruta:"); if (!name) return;
+        let km = prompt("Kilómetros aprox:"); let min = prompt("Minutos aprox:");
         if(km && min) { customRoutes.push({ name: name, km: parseFloat(km), min: parseInt(min) }); renderRoutes(); }
     }
 
-    // --- BOTONES DE PASAJE DINÁMICOS ---
     function renderButtons() {
-        const container = document.getElementById('buttons-container');
-        container.innerHTML = '';
-        customAmounts.forEach((amount, index) => {
-            container.innerHTML += `<button class="btn btn-income" onclick="handleButtonClick(${amount}, ${index})">S/ ${amount.toFixed(2)}<span class="delete-badge">X</span></button>`;
-        });
-        container.innerHTML += `<button class="btn btn-income" style="background: #333; color: white; border: none;" onclick="manualIncome()">Otro ➕</button>`;
-        container.innerHTML += `<button class="btn btn-income" id="btn-add-new" style="display:none; background: var(--blue); color:white; border:none;" onclick="addNewAmount()">Nuevo ➕</button>`;
+        const container = document.getElementById('buttons-container'); container.innerHTML = '';
+        customAmounts.forEach((amount, index) => { container.innerHTML += `<button class="btn btn-income" onclick="handleButtonClick(${amount}, ${index})">S/ ${amount.toFixed(2)}<span class="delete-badge"><i class="fa-solid fa-xmark"></i></span></button>`; });
+        container.innerHTML += `<button class="btn btn-income" style="background: #2c2c35; color: white; border: none;" onclick="manualIncome()">Otro <i class="fa-solid fa-plus" style="margin-left:5px; font-size:12px"></i></button>`;
+        container.innerHTML += `<button class="btn btn-income" id="btn-add-new" style="display:none; background: var(--blue); color:white; border:none;" onclick="addNewAmount()"><i class="fa-solid fa-plus"></i></button>`;
     }
 
     function toggleEditMode() {
-        isEditMode = !isEditMode;
-        const container = document.getElementById('buttons-container');
-        if (isEditMode) {
-            container.classList.add('editing'); document.getElementById('btn-edit-mode').innerText = "✅ Listo"; document.getElementById('btn-add-new').style.display = "block";
-        } else {
-            container.classList.remove('editing'); document.getElementById('btn-edit-mode').innerText = "✏️ Editar Botones"; document.getElementById('btn-add-new').style.display = "none";
-            localStorage.setItem('taxiButtons', JSON.stringify(customAmounts));
-        }
+        isEditMode = !isEditMode; const container = document.getElementById('buttons-container');
+        if (isEditMode) { container.classList.add('editing'); document.getElementById('btn-edit-mode').innerHTML = "<i class='fa-solid fa-check'></i> Listo"; document.getElementById('btn-add-new').style.display = "block"; } 
+        else { container.classList.remove('editing'); document.getElementById('btn-edit-mode').innerHTML = "<i class='fa-solid fa-pen'></i> Editar"; document.getElementById('btn-add-new').style.display = "none"; localStorage.setItem('taxiButtons', JSON.stringify(customAmounts)); }
     }
 
     function handleButtonClick(amount, index) {
-        if (isEditMode) {
-            if(confirm(`¿Borrar botón de S/ ${amount.toFixed(2)}?`)){ customAmounts.splice(index, 1); renderButtons(); }
-        } else { addTransaction('Ingreso', 'Pasaje', amount); }
+        if (isEditMode) { if(confirm(`¿Borrar botón de S/ ${amount.toFixed(2)}?`)){ customAmounts.splice(index, 1); renderButtons(); } } 
+        else { addTransaction('Ingreso', 'Pasaje', amount); }
     }
 
-    function addNewAmount() {
-        let newAmt = prompt("Nuevo monto frecuente (Ej: 3.50):");
-        if (newAmt && !isNaN(newAmt)) { customAmounts.push(parseFloat(newAmt)); customAmounts.sort((a,b) => a-b); renderButtons(); }
-    }
+    function addNewAmount() { let newAmt = prompt("Nuevo monto frecuente (Ej: 3.50):"); if (newAmt && !isNaN(newAmt)) { customAmounts.push(parseFloat(newAmt)); customAmounts.sort((a,b) => a-b); renderButtons(); } }
 
-    // --- LÓGICA DE TRANSACCIONES ---
     function addTransaction(type, category, amount, extraInfo = '') {
         if (!amount || amount <= 0 || isNaN(amount)) return;
-        let numAmount = parseFloat(amount);
-        let rutaNombre = isVueltaActive ? customRoutes[currentRutaIdx].name : (extraInfo || 'Libre');
+        let now = new Date(); let fechaFormat = now.toLocaleDateString('es-PE') + ', ' + now.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
+        let numAmount = parseFloat(amount); let rutaNombre = isVueltaActive ? customRoutes[currentRutaIdx].name : (extraInfo || 'Libre');
         
-        const record = {
-            id: Date.now(),
-            fecha: new Date().toLocaleString('es-PE'),
-            tipo: type,
-            categoria: category,
-            monto: numAmount,
-            ruta: rutaNombre,
-            vuelta_id: isVueltaActive && type === 'Ingreso' ? currentVueltaId : '-'
-        };
-
+        const record = { id: Date.now(), fecha: fechaFormat, tipo: type, categoria: category, monto: numAmount, ruta: rutaNombre, vuelta_id: isVueltaActive && type === 'Ingreso' ? currentVueltaId : '-' };
         if (type === 'Ingreso' && isVueltaActive) currentVueltaIncome += numAmount;
 
-        currentShift.push(record);
-        masterHistory.push(record);
-        
-        localStorage.setItem('taxiHistory', JSON.stringify(masterHistory));
-        localStorage.setItem('taxiCurrentShift', JSON.stringify(currentShift)); // Guarda el turno x si se cierra safari
-        
+        currentShift.push(record); masterHistory.push(record);
+        localStorage.setItem('taxiHistory', JSON.stringify(masterHistory)); localStorage.setItem('taxiCurrentShift', JSON.stringify(currentShift)); 
         updateShiftUI();
-        if(type !== 'Info') showToast(`${type} guardado`);
+        if(type === 'Ingreso') showToast(`+ S/ ${numAmount.toFixed(2)} registrado`);
+        if(type === 'Gasto') showToast(`- S/ ${numAmount.toFixed(2)} registrado`);
     }
 
     function manualIncome() { if(!isEditMode) { let amt = prompt("¿Cuánto cobraste en S/?"); if (amt) addTransaction('Ingreso', 'Pasaje', amt.replace(',', '.')); } }
-    function registerGas() { let amt = prompt("¿Cuánto echaste de GLP/Gasolina en S/?"); if (amt) addTransaction('Gasto', 'GLP/Gasolina', amt.replace(',', '.')); }
-    function manualExpense() { let amt = prompt("Monto del gasto (S/):"); if (amt) addTransaction('Gasto', 'Operativo', amt.replace(',', '.')); }
+    function registerGas() { let amt = prompt("¿Cuánto echaste de GLP/Gasolina en S/?"); if (amt) addTransaction('Gasto', 'Gasolina', amt.replace(',', '.')); }
+    function manualExpense() { let amt = prompt("Monto del gasto (S/):"); if (amt) { let cat = prompt("Detalle (Peaje, Lavado, etc):") || 'Operativo'; addTransaction('Gasto', cat, amt.replace(',', '.')); } }
 
-    // --- VUELTAS ---
     function startVuelta(rutaIndex) {
-        isVueltaActive = true; currentRutaIdx = rutaIndex; currentVueltaIncome = 0;
-        let rutaObj = customRoutes[rutaIndex];
-        currentVueltaId = "V-" + Math.floor(Math.random() * 10000);
-        document.getElementById('route-selector').style.display = 'none';
-        document.querySelector('.route-panel .section-title').style.display = 'none';
-        document.getElementById('active-vuelta').classList.add('active');
-        document.getElementById('ui-vuelta-name').innerText = rutaObj.name;
-        document.getElementById('ui-vuelta-info').innerText = `Trayecto: ${rutaObj.km} km (~${rutaObj.min} min)`;
+        isVueltaActive = true; currentRutaIdx = rutaIndex; currentVueltaIncome = 0; let rutaObj = customRoutes[rutaIndex]; currentVueltaId = "V-" + Math.floor(Math.random() * 10000);
+        document.getElementById('route-selector').style.display = 'none'; document.querySelector('.card-panel .section-title').style.display = 'none';
+        document.getElementById('active-vuelta').classList.add('active'); document.getElementById('ui-vuelta-name').innerText = rutaObj.name; document.getElementById('ui-vuelta-info').innerText = `${rutaObj.km} km (~${rutaObj.min} min)`;
         updateShiftUI();
     }
 
     function endVuelta() {
-        let rutaObj = customRoutes[currentRutaIdx];
-        addTransaction('Info', 'RutaKM', rutaObj.km, rutaObj.name); // Guarda los KM
-        
-        alert(`🏁 Vuelta terminada.\nTrayecto: ${rutaObj.name}\nTotal recaudado: S/ ${currentVueltaIncome.toFixed(2)}\nDistancia sumada: ${rutaObj.km} km`);
-        
+        let rutaObj = customRoutes[currentRutaIdx]; addTransaction('Info', 'RutaKM', rutaObj.km, rutaObj.name); 
+        alert(`🏁 Vuelta terminada.\nTrayecto: ${rutaObj.name}\nTotal: S/ ${currentVueltaIncome.toFixed(2)}`);
         isVueltaActive = false; currentRutaIdx = -1; currentVueltaId = ""; currentVueltaIncome = 0;
-        document.getElementById('route-selector').style.display = 'grid';
-        document.querySelector('.route-panel .section-title').style.display = 'flex';
-        document.getElementById('active-vuelta').classList.remove('active');
+        document.getElementById('route-selector').style.display = 'grid'; document.querySelector('.card-panel .section-title').style.display = 'flex'; document.getElementById('active-vuelta').classList.remove('active');
     }
 
     function updateShiftUI() {
-        let inc = 0, exp = 0;
-        currentShift.forEach(t => { if(t.tipo==='Ingreso') inc+=t.monto; else if(t.tipo==='Gasto') exp+=t.monto; });
-        document.getElementById('ui-vuelta-income').innerText = `S/ ${currentVueltaIncome.toFixed(2)}`;
-        document.getElementById('ui-net').innerText = `S/ ${(inc - exp).toFixed(2)}`;
-        document.getElementById('ui-income').innerText = `S/ ${inc.toFixed(2)}`;
-        document.getElementById('ui-expense').innerText = `S/ ${exp.toFixed(2)}`;
+        let inc = 0, exp = 0; currentShift.forEach(t => { if(t.tipo==='Ingreso') inc+=t.monto; else if(t.tipo==='Gasto') exp+=t.monto; });
+        document.getElementById('ui-vuelta-income').innerText = `S/ ${currentVueltaIncome.toFixed(2)}`; document.getElementById('ui-net').innerText = `S/ ${(inc - exp).toFixed(2)}`;
+        document.getElementById('ui-income').innerText = `S/ ${inc.toFixed(2)}`; document.getElementById('ui-expense').innerText = `S/ ${exp.toFixed(2)}`;
     }
 
-    // --- KILOMETRAJE Y CALENDARIO ---
     function saveDashboardData() {
-        let odo = document.getElementById('input-odo').value;
-        let hrs = document.getElementById('input-hrs').value;
-        if(!odo && !hrs) return alert("Ingresa algún dato.");
-        if(odo) addTransaction('Info', 'Odómetro', odo);
-        if(hrs) addTransaction('Info', 'Horas Motor', hrs);
-        showToast("✅ Tablero guardado");
-        document.getElementById('input-odo').value = ""; document.getElementById('input-hrs').value = "";
-        generateCalendar();
+        let odo = document.getElementById('input-odo').value; let hrs = document.getElementById('input-hrs').value;
+        if(!odo && !hrs) return;
+        if(odo) addTransaction('Info', 'Odómetro', odo); if(hrs) addTransaction('Info', 'Horas', hrs);
+        showToast("Tablero guardado"); document.getElementById('input-odo').value = ""; document.getElementById('input-hrs').value = "";
+        if(document.getElementById('view-calendar').classList.contains('active')) generateCalendar();
     }
 
-    // --- IMPORTAR / EXPORTAR (NUEVO) ---
-    function exportData() {
-        // Crea un objeto con toda la info actual de la app
-        let exportObj = {
-            history: masterHistory,
-            buttons: customAmounts,
-            routes: customRoutes,
-            dateExported: new Date().toLocaleString('es-PE')
-        };
-        
-        // Lo convierte en texto JSON
-        let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj));
-        let downloadAnchorNode = document.createElement('a');
-        downloadAnchorNode.setAttribute("href", dataStr);
-        downloadAnchorNode.setAttribute("download", `TaxiTracker_Respaldo_${Date.now()}.json`);
-        document.body.appendChild(downloadAnchorNode); 
-        downloadAnchorNode.click();
-        downloadAnchorNode.remove();
-        showToast("✅ Archivo descargado");
-    }
-
-    function importData(event) {
-        let file = event.target.files[0];
-        if (!file) return;
-
-        let reader = new FileReader();
-        reader.onload = function(e) {
-            try {
-                let importedData = JSON.parse(e.target.result);
-                
-                if(importedData.history) masterHistory = importedData.history;
-                if(importedData.buttons) customAmounts = importedData.buttons;
-                if(importedData.routes) customRoutes = importedData.routes;
-
-                // Guardar en el telefono
-                localStorage.setItem('taxiHistory', JSON.stringify(masterHistory));
-                localStorage.setItem('taxiButtons', JSON.stringify(customAmounts));
-                localStorage.setItem('taxiRoutes', JSON.stringify(customRoutes));
-
-                // Recargar interfaz
-                init();
-                calculateStats();
-                generateCalendar();
-                
-                alert("✅ ¡Datos restaurados con éxito!");
-            } catch(err) {
-                alert("❌ Error: El archivo no es válido.");
-            }
-        };
-        reader.readAsText(file);
-    }
-
-    // --- NAVEGACIÓN Y STATS (Oculto en código por espacio, mismas funciones que antes) ---
     function switchTab(tab, btnElement) {
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById('view-' + tab).classList.add('active');
-        btnElement.classList.add('active');
-        if(tab === 'stats') calculateStats();
+        document.getElementById('view-' + tab).classList.add('active'); btnElement.classList.add('active');
+        if(tab === 'stats') { calculateStats(); renderChart(); }
         if(tab === 'calendar') generateCalendar();
+    }
+
+    // OCULTAR Y MOSTRAR REGISTROS (NUEVO)
+    function toggleDayList(dateId) {
+        const list = document.getElementById('list-' + dateId);
+        list.classList.toggle('show');
     }
 
     function generateCalendar() {
         const calList = document.getElementById('calendar-list'); calList.innerHTML = '';
         let days = {};
         masterHistory.forEach(t => {
-            let dateStr = t.fecha.split(',')[0];
-            if(!days[dateStr]) days[dateStr] = { inc: 0, exp: 0, glp: false, kmAuto: 0, odo: "-", hrs: "-" };
-            if(t.tipo === 'Ingreso') days[dateStr].inc += t.monto;
-            if(t.tipo === 'Gasto') { days[dateStr].exp += t.monto; if(t.categoria.includes('GLP')) days[dateStr].glp = true; }
+            let partes = t.fecha.split(','); let dateStr = partes[0].trim(); let timeStr = partes.length > 1 ? partes[1].trim() : '--:--';
+            if(!days[dateStr]) days[dateStr] = { inc: 0, exp: 0, odo: "-", hrs: "-", items: [] };
+            if(t.tipo === 'Ingreso') { days[dateStr].inc += t.monto; days[dateStr].items.push({time: timeStr, desc: t.categoria, amt: t.monto, type: 'inc'}); }
+            if(t.tipo === 'Gasto') { days[dateStr].exp += t.monto; days[dateStr].items.push({time: timeStr, desc: t.categoria, amt: t.monto, type: 'exp'}); }
             if(t.tipo === 'Info') {
-                if(t.categoria === 'RutaKM') days[dateStr].kmAuto += t.monto;
                 if(t.categoria === 'Odómetro') days[dateStr].odo = t.monto;
-                if(t.categoria === 'Horas Motor') days[dateStr].hrs = t.monto;
+                if(t.categoria === 'Horas') days[dateStr].hrs = t.monto;
+                if(t.categoria === 'RutaKM') days[dateStr].items.push({time: timeStr, desc: `Ruta`, amt: `${t.monto} km`, type: 'info'});
             }
         });
+
         let sortedDates = Object.keys(days).sort((a,b) => { let [d1,m1,y1] = a.split('/'); let [d2,m2,y2] = b.split('/'); return new Date(y2,m2-1,d2) - new Date(y1,m1-1,d1); });
-        if(sortedDates.length === 0) return calList.innerHTML = `<div style="text-align:center; color:gray; padding:20px;">No hay registros aún</div>`;
-        sortedDates.forEach(date => {
+        if(sortedDates.length === 0) return calList.innerHTML = `<div style="text-align:center; color:var(--text-muted); padding:20px;">No hay registros aún</div>`;
+        
+        sortedDates.forEach((date, index) => {
             let d = days[date]; let net = d.inc - d.exp;
+            let dateId = date.replace(/\//g, ''); // ID unico sin barras
+            
+            let itemsHtml = '';
+            d.items.reverse().forEach(item => {
+                let colorClass = item.type === 'inc' ? 'inc' : (item.type === 'exp' ? 'exp' : '');
+                let prefix = item.type === 'inc' ? '+' : (item.type === 'exp' ? '-' : '');
+                let prefixMoneda = item.type === 'info' ? '' : 'S/ ';
+                itemsHtml += `
+                    <div class="tx-item">
+                        <div class="tx-header"><span>${item.time}</span> <span>${item.desc}</span></div>
+                        <div class="tx-body"><span class="tx-amt ${colorClass}">${prefix}${prefixMoneda}${item.amt}</span></div>
+                    </div>`;
+            });
+
             calList.innerHTML += `
-                <div class="calendar-card">
-                    <div class="cal-header"><span>📅 ${date} ${d.glp ? '<span class="tag-glp">⛽ Echaste GLP</span>' : ''}</span><span style="color: ${net >= 0 ? 'var(--green)' : 'var(--red)'}">${net >= 0 ? '+' : '-'} S/ ${Math.abs(net).toFixed(2)}</span></div>
-                    <div class="cal-row"><span>Bruto: S/ ${d.inc.toFixed(2)}</span> <span>Gastos: S/ ${d.exp.toFixed(2)}</span></div>
-                    <div class="cal-row" style="color:var(--text-muted); border-top: 1px solid #333; padding-top:5px; margin-top:5px;"><div>Tablero: ${d.odo} | Hrs: ${d.hrs}</div><div>${d.kmAuto > 0 ? '<span class="tag-km">🚗 Rutas: '+d.kmAuto+' km</span>' : ''}</div></div>
+                <div class="calendar-day-card">
+                    <div class="cal-header">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <strong style="font-size:16px;">${date}</strong>
+                            <button class="toggle-btn" onclick="toggleDayList('${dateId}')">Ver Info <i class="fa-solid fa-caret-down"></i></button>
+                        </div>
+                        <span style="color: ${net >= 0 ? 'var(--green)' : 'var(--red)'}; font-family:var(--font-title); font-weight:700;">${net >= 0 ? '+' : '-'} S/ ${Math.abs(net).toFixed(2)}</span>
+                    </div>
+                    <div class="cal-summary">
+                        <span style="color:var(--text-muted)">Tablero: ${d.odo} | Hrs: ${d.hrs}</span>
+                        <span>Gastos: S/ ${d.exp.toFixed(2)}</span>
+                    </div>
+                    <!-- CONTENEDOR OCULTO A 2 COLUMNAS -->
+                    <div class="transaction-list ${index === 0 ? 'show' : ''}" id="list-${dateId}">${itemsHtml}</div>
                 </div>`;
         });
     }
@@ -481,34 +431,47 @@
         });
         document.getElementById('st-hoy-ingreso').innerText = `S/ ${stats.hoy.inc.toFixed(2)}`; document.getElementById('st-hoy-gasto').innerText = `S/ ${stats.hoy.exp.toFixed(2)}`; document.getElementById('st-hoy-neta').innerText = `S/ ${(stats.hoy.inc - stats.hoy.exp).toFixed(2)}`;
         document.getElementById('st-sem-ingreso').innerText = `S/ ${stats.sem.inc.toFixed(2)}`; document.getElementById('st-sem-gasto').innerText = `S/ ${stats.sem.exp.toFixed(2)}`;
+        
         let horasHtml = ''; let sortedHours = Object.entries(stats.horas).sort((a,b) => b[1] - a[1]).slice(0,3);
-        if (sortedHours.length === 0) horasHtml = `<div style="font-size:12px; color:gray;">No hay pasajes hoy.</div>`;
-        else sortedHours.forEach(([h, g]) => { horasHtml += `<div class="peak-hour-bar"><span>Hora: ${h}</span> <strong>S/ ${g.toFixed(2)}</strong></div>`; });
+        if (sortedHours.length === 0) horasHtml = `<div style="font-size:12px; color:var(--text-muted);">Sin datos hoy.</div>`;
+        else sortedHours.forEach(([h, g]) => { horasHtml += `<div class="peak-hour-bar"><span>${h}</span> <strong>S/ ${g.toFixed(2)}</strong></div>`; });
         document.getElementById('st-horas').innerHTML = horasHtml;
     }
 
-    async function syncData() {
-        if (currentShift.length === 0) return alert("No hay registros nuevos en este turno para subir.");
-        if (isVueltaActive) return alert("⚠️ Termina la vuelta en curso antes de subir a la nube.");
-        if (GOOGLE_SHEET_URL === "PEGAR_TU_URL_DE_GOOGLE_AQUI") return alert("Aún no has conectado Google Sheets. Tus datos están a salvo en tu teléfono.");
+    // GRAFICO SEMANAL DINAMICO
+    function renderChart() {
+        let daysMap = {};
+        for(let i=6; i>=0; i--) { let d = new Date(); d.setDate(d.getDate() - i); let dateStr = d.toLocaleDateString('es-PE', {weekday: 'short', day: 'numeric'}); daysMap[d.toLocaleDateString('es-PE')] = { label: dateStr, inc: 0, exp: 0 }; }
+        masterHistory.forEach(t => { let dateStr = t.fecha.split(',')[0].trim(); if(daysMap[dateStr]) { if(t.tipo === 'Ingreso') daysMap[dateStr].inc += t.monto; if(t.tipo === 'Gasto') daysMap[dateStr].exp += t.monto; } });
+        let labels = [], dataInc = [], dataExp = []; Object.values(daysMap).forEach(val => { labels.push(val.label); dataInc.push(val.inc); dataExp.push(val.exp); });
 
-        const btn = document.getElementById('btn-sync'); btn.innerText = "⏳ Subiendo..."; btn.style.opacity = "0.7";
+        const ctx = document.getElementById('myChart').getContext('2d');
+        if(myChartInstance) myChartInstance.destroy(); 
+        Chart.defaults.color = '#8e8e93'; Chart.defaults.font.family = "'Inter', sans-serif";
+        myChartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: { labels: labels, datasets: [ { label: 'Ingresos', data: dataInc, backgroundColor: '#34c759', borderRadius: 4}, { label: 'Gastos', data: dataExp, backgroundColor: '#ff3b30', borderRadius: 4} ] },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } }, y: { grid: { color: 'rgba(255,255,255,0.05)' }, border: {display: false} } } }
+        });
+    }
+
+    function exportData() { let exportObj = { history: masterHistory, buttons: customAmounts, routes: customRoutes }; let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj)); let downloadAnchorNode = document.createElement('a'); downloadAnchorNode.setAttribute("href", dataStr); downloadAnchorNode.setAttribute("download", `TaxiTracker_Respaldo.json`); document.body.appendChild(downloadAnchorNode); downloadAnchorNode.click(); downloadAnchorNode.remove(); showToast("Archivo descargado"); }
+
+    function importData(event) { let file = event.target.files[0]; if (!file) return; let reader = new FileReader(); reader.onload = function(e) { try { let importedData = JSON.parse(e.target.result); if(importedData.history) masterHistory = importedData.history; if(importedData.buttons) customAmounts = importedData.buttons; if(importedData.routes) customRoutes = importedData.routes; localStorage.setItem('taxiHistory', JSON.stringify(masterHistory)); localStorage.setItem('taxiButtons', JSON.stringify(customAmounts)); localStorage.setItem('taxiRoutes', JSON.stringify(customRoutes)); init(); alert("✅ ¡Datos restaurados!"); } catch(err) { alert("❌ Error: Archivo inválido."); } }; reader.readAsText(file); }
+
+    async function syncData() {
+        if (currentShift.length === 0) return alert("Nada nuevo para subir hoy.");
+        if (isVueltaActive) return alert("⚠️ Termina la vuelta antes de subir.");
+        
+        const btn = document.getElementById('btn-sync'); btn.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i> Subiendo..."; btn.style.opacity = "0.7";
         try {
             await fetch(GOOGLE_SHEET_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(currentShift) });
             showToast("✅ Subido a la nube");
-            setTimeout(() => { 
-                currentShift = []; 
-                localStorage.setItem('taxiCurrentShift', JSON.stringify([])); // Limpia la memoria del turno
-                updateShiftUI(); 
-                btn.innerText = "☁️ Cerrar Turno y Subir a la Nube"; btn.style.opacity = "1"; 
-            }, 1000);
-        } catch (error) {
-            alert("Error de red. Intenta en una zona con mejor señal.");
-            btn.innerText = "☁️ Reintentar"; btn.style.opacity = "1";
-        }
+            setTimeout(() => { currentShift = []; localStorage.setItem('taxiCurrentShift', JSON.stringify([])); updateShiftUI(); btn.innerHTML = "<i class='fa-solid fa-cloud'></i> Cerrar Turno y Subir"; btn.style.opacity = "1"; }, 1000);
+        } catch (error) { alert("Error de red."); btn.innerHTML = "<i class='fa-solid fa-cloud'></i> Reintentar"; btn.style.opacity = "1"; }
     }
 
-    function showToast(msg) { const toast = document.getElementById('toast'); toast.innerText = msg; toast.style.opacity = 1; setTimeout(() => toast.style.opacity = 0, 2000); }
+    function showToast(msg) { const t = document.getElementById('toast'); t.innerHTML = `<i class="fa-solid fa-check"></i> ${msg}`; t.style.opacity = 1; setTimeout(() => t.style.opacity = 0, 2500); }
     
     init();
 </script>

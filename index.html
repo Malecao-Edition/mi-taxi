@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="TaxiTracker">
-    <title>TaxiTracker v2.2</title>
+    <title>TaxiTracker v2.6</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -56,8 +56,14 @@
 
         .card-panel { background-color: var(--card-bg); border-radius: 16px; padding: 16px; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
         .route-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 5px; position: relative; }
-        .btn-route { background: #2c2c35; color: var(--text-main); border: 1px solid transparent; padding: 12px 5px; border-radius: 12px; font-size: 12px; font-weight: 500; cursor: pointer; }
+        .route-card-wrap { position: relative; display: flex; flex-direction: column; gap: 7px; }
+        .btn-route { background: #2c2c35; color: var(--text-main); border: 1px solid transparent; padding: 12px 5px; border-radius: 12px; font-size: 12px; font-weight: 500; cursor: pointer; min-height: 62px; }
         .btn-route:active { transform: scale(0.97); background: #3a3a45; }
+        .route-edit-actions { display: none; grid-template-columns: repeat(3, 1fr); gap: 5px; }
+        .editing .route-edit-actions { display: grid; }
+        .route-mini-btn { border: none; border-radius: 9px; padding: 7px 4px; background: #3a3a45; color: white; font-size: 11px; font-weight: 800; cursor: pointer; }
+        .route-mini-btn.danger { background: var(--red); }
+        .route-mini-btn:disabled { opacity: .35; cursor: default; }
 
         .active-vuelta-card { display: none; background: var(--blue-bg); border: 1px solid var(--blue); border-radius: 16px; padding: 20px; text-align: center; }
         .active-vuelta-card.active { display: block; }
@@ -66,6 +72,13 @@
         .btn-end-vuelta { background: var(--red); color: white; border: none; padding: 12px 20px; border-radius: 12px; font-weight: 700; width: 100%; font-size: 15px; margin-top: 10px; font-family: var(--font-text); }
 
         .quick-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; position: relative; }
+        .quick-btn-wrap { position: relative; display: flex; flex-direction: column; gap: 7px; }
+        .quick-btn-wrap .btn-income { width: 100%; }
+        .quick-reorder-actions { display: none; grid-template-columns: repeat(3, 1fr); gap: 5px; }
+        .editing .quick-reorder-actions { display: grid; }
+        .quick-mini-btn { border: none; border-radius: 9px; padding: 7px 4px; background: #3a3a45; color: white; font-size: 11px; font-weight: 800; cursor: pointer; }
+        .quick-mini-btn.danger { background: var(--red); }
+        .quick-mini-btn:disabled { opacity: .35; cursor: default; }
         .btn { border: none; border-radius: 14px; padding: 16px 5px; font-size: 16px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; font-family: var(--font-title); }
         .btn:active { transform: scale(0.95); }
         .btn-income { background-color: var(--green-bg); color: var(--green); border: 1px solid rgba(52, 199, 89, 0.3); position: relative; }
@@ -126,6 +139,16 @@
         .record-amount.exp { color: var(--red); }
         .record-amount.info { color: var(--blue); }
         .record-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+        .record-actions.summary-actions { grid-template-columns: repeat(3, 1fr); }
+        .route-summary-card { background: linear-gradient(135deg, rgba(10,132,255,0.16), rgba(191,90,242,0.14)); border: 1px solid rgba(10,132,255,0.22); }
+        .route-total-pill { background: rgba(52,199,89,0.14); color: var(--green); border-radius: 999px; padding: 7px 10px; font-family: var(--font-title); font-weight: 800; white-space: nowrap; }
+        .route-detail-list { display: none; margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.07); padding-top: 10px; }
+        .route-detail-list.show { display: block; }
+        .route-km-bold { display: inline-block; margin-top: 3px; color: var(--text-main); font-weight: 800; font-family: var(--font-title); }
+        .detail-row { display: flex; justify-content: space-between; gap: 10px; color: var(--text-muted); font-size: 12px; padding: 6px 0; }
+        .detail-row strong { color: var(--text-main); font-size: 12px; }
+        .small-action.full { grid-column: span 2; background: #2c2c35; }
+        .summary-actions .small-action.full { grid-column: span 1; background: #2c2c35; }
         .small-action { border: none; border-radius: 10px; padding: 9px; color: white; font-size: 12px; font-weight: 700; cursor: pointer; }
         .small-action.edit { background: var(--blue); }
         .small-action.delete { background: var(--red); }
@@ -142,6 +165,18 @@
         .modal-btn { border: none; border-radius: 12px; padding: 12px; font-weight: 800; cursor: pointer; }
         .modal-btn.cancel { background: #2c2c35; color: white; }
         .modal-btn.save { background: var(--yellow); color: #000; }
+        .fuel-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+        .fuel-option { border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 14px 10px; background: #2c2c35; color: white; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .fuel-option.active { border-color: var(--yellow); background: var(--yellow-bg); color: var(--yellow); }
+        .fuel-amount-box { display: none; margin-top: 8px; }
+        .fuel-amount-box.show { display: block; }
+
+        .summary-edit-info { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 10px; margin-top: 10px; color: var(--text-muted); font-size: 12px; line-height: 1.45; }
+        .summary-passenger-list { display: flex; flex-direction: column; gap: 8px; max-height: 230px; overflow-y: auto; margin-top: 8px; padding-right: 2px; }
+        .summary-passenger-row { display: grid; grid-template-columns: 34px 1fr; gap: 8px; align-items: center; background: #24242c; border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 8px; }
+        .summary-passenger-number { width: 30px; height: 30px; border-radius: 50%; background: var(--green-bg); color: var(--green); display: flex; align-items: center; justify-content: center; font-weight: 800; font-family: var(--font-title); font-size: 12px; }
+        .summary-passenger-meta { color: var(--text-muted); font-size: 10px; margin-bottom: 5px; }
+        .summary-passenger-input { text-align: left; }
 
         .stat-card { background: var(--card-bg); border-radius: 16px; padding: 16px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); }
         .stat-row { display: flex; justify-content: space-between; margin-top: 10px; font-size: 13px; align-items: center; }
@@ -158,7 +193,7 @@
 
 <div class="app-container">
     <div class="app-header">
-        <div class="app-title"><i class="fa-solid fa-car" style="color:var(--yellow)"></i> TaxiTracker <span class="badge-v2">New v2.2</span></div>
+        <div class="app-title"><i class="fa-solid fa-car" style="color:var(--yellow)"></i> TaxiTracker <span class="badge-v2">New v2.6</span></div>
     </div>
 
     <div id="view-turno" class="view active">
@@ -253,7 +288,7 @@
         </div>
 
         <div class="card-panel" style="border-left: 4px solid var(--green);">
-            <div class="section-title" style="color: var(--green);">Horas Pico de Hoy</div>
+            <div class="section-title" style="color: var(--green);">Horas Pico de la Semana</div>
             <div id="st-horas"></div>
         </div>
 
@@ -313,6 +348,55 @@
     </div>
 </div>
 
+
+<div id="summary-edit-modal" class="modal-overlay">
+    <div class="modal-card">
+        <div class="modal-title"><i class="fa-solid fa-route" style="color:var(--blue)"></i> Editar ruta y pasajes</div>
+        <input type="hidden" id="summary-vuelta-id">
+        <div class="form-grid">
+            <div class="full">
+                <label class="field-label">Ruta</label>
+                <select id="summary-ruta-select" class="edit-select"></select>
+            </div>
+            <div>
+                <label class="field-label">Fecha</label>
+                <input type="date" id="summary-fecha" class="edit-input">
+            </div>
+            <div>
+                <label class="field-label">Hora</label>
+                <input type="time" id="summary-hora" class="edit-input">
+            </div>
+            <div class="full">
+                <label class="field-label">Pasajes registrados</label>
+                <div id="summary-passenger-list" class="summary-passenger-list"></div>
+            </div>
+        </div>
+        <div id="summary-route-info" class="summary-edit-info"></div>
+        <div class="modal-actions">
+            <button class="modal-btn cancel" onclick="closeSummaryEditModal()">Cancelar</button>
+            <button class="modal-btn save" onclick="saveSummaryEdit()">Guardar</button>
+        </div>
+    </div>
+</div>
+
+<div id="fuel-modal" class="modal-overlay">
+    <div class="modal-card">
+        <div class="modal-title"><i class="fa-solid fa-gas-pump" style="color:var(--red)"></i> Registrar combustible</div>
+        <div class="fuel-options">
+            <button class="fuel-option" id="fuel-glp" onclick="chooseFuel('GLP')"><i class="fa-solid fa-fire-flame-simple"></i> GLP</button>
+            <button class="fuel-option" id="fuel-gasolina" onclick="chooseFuel('Gasolina')"><i class="fa-solid fa-gas-pump"></i> Gasolina</button>
+        </div>
+        <div class="fuel-amount-box" id="fuel-amount-box">
+            <label class="field-label">Monto</label>
+            <input type="number" step="0.01" id="fuel-amount" class="edit-input" placeholder="S/ 0.00">
+        </div>
+        <div class="modal-actions">
+            <button class="modal-btn cancel" onclick="closeFuelModal()">Cancelar</button>
+            <button class="modal-btn save" onclick="saveFuelExpense()">Guardar</button>
+        </div>
+    </div>
+</div>
+
 <div id="toast"><i class="fa-solid fa-check"></i> Operación exitosa</div>
 
 <script>
@@ -339,6 +423,8 @@
     let myChartInstance = null;
     let calendarCursor = new Date();
     let selectedDateKey = toDateKey(new Date());
+    let selectedFuelCategory = '';
+    let editingSummaryId = '';
 
     function init() {
         normalizeStoredRecords();
@@ -439,9 +525,40 @@
         const container = document.getElementById('route-selector');
         container.innerHTML = '';
         customRoutes.forEach((ruta, index) => {
-            container.innerHTML += `<button class="btn-route" onclick="handleRouteClick(${index})">${ruta.name}<br><span style="color:var(--text-muted); font-size:10px;">${ruta.km}km - ${ruta.min}m</span><span class="delete-badge"><i class="fa-solid fa-xmark"></i></span></button>`;
+            container.innerHTML += `
+                <div class="route-card-wrap">
+                    <button class="btn-route" onclick="handleRouteClick(${index})">
+                        ${ruta.name}<br><span style="color:var(--text-muted); font-size:10px;">${ruta.km}km - ${ruta.min}m</span><span class="delete-badge"><i class="fa-solid fa-xmark"></i></span>
+                    </button>
+                    <div class="route-edit-actions">
+                        <button class="route-mini-btn" onclick="moveRoute(${index}, -1)" ${index === 0 ? 'disabled' : ''}><i class="fa-solid fa-arrow-up"></i></button>
+                        <button class="route-mini-btn" onclick="moveRoute(${index}, 1)" ${index === customRoutes.length - 1 ? 'disabled' : ''}><i class="fa-solid fa-arrow-down"></i></button>
+                        <button class="route-mini-btn danger" onclick="deleteRoute(${index})"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>`;
         });
         container.innerHTML += `<button class="btn-route" id="btn-add-route" style="display:none; border: 1px dashed var(--yellow); color: var(--yellow);" onclick="addNewRoute()"><i class="fa-solid fa-plus"></i> Nueva</button>`;
+    }
+
+    function moveRoute(index, direction) {
+        const newIndex = index + direction;
+        if(newIndex < 0 || newIndex >= customRoutes.length) return;
+        const [route] = customRoutes.splice(index, 1);
+        customRoutes.splice(newIndex, 0, route);
+        renderRoutes();
+        document.getElementById('route-selector').classList.add('editing');
+        document.getElementById('btn-add-route').style.display = "block";
+        saveAll();
+    }
+
+    function deleteRoute(index) {
+        if(confirm(`¿Borrar "${customRoutes[index].name}"?`)) {
+            customRoutes.splice(index, 1);
+            renderRoutes();
+            document.getElementById('route-selector').classList.add('editing');
+            document.getElementById('btn-add-route').style.display = "block";
+            saveAll();
+        }
     }
 
     function toggleEditRoutes() {
@@ -460,9 +577,8 @@
     }
 
     function handleRouteClick(index) {
-        if (isEditRoutes) {
-            if(confirm(`¿Borrar "${customRoutes[index].name}"?`)) { customRoutes.splice(index, 1); renderRoutes(); saveAll(); }
-        } else startVuelta(index);
+        if (isEditRoutes) return;
+        startVuelta(index);
     }
 
     function addNewRoute() {
@@ -475,10 +591,40 @@
         const container = document.getElementById('buttons-container');
         container.innerHTML = '';
         customAmounts.forEach((amount, index) => {
-            container.innerHTML += `<button class="btn btn-income" onclick="handleButtonClick(${amount}, ${index})">S/ ${amount.toFixed(2)}<span class="delete-badge"><i class="fa-solid fa-xmark"></i></span></button>`;
+            container.innerHTML += `
+                <div class="quick-btn-wrap">
+                    <button class="btn btn-income" onclick="handleButtonClick(${amount}, ${index})">S/ ${amount.toFixed(2)}<span class="delete-badge"><i class="fa-solid fa-xmark"></i></span></button>
+                    <div class="quick-reorder-actions">
+                        <button class="quick-mini-btn" onclick="moveQuickAmount(${index}, -1)" ${index === 0 ? 'disabled' : ''}><i class="fa-solid fa-arrow-up"></i></button>
+                        <button class="quick-mini-btn" onclick="moveQuickAmount(${index}, 1)" ${index === customAmounts.length - 1 ? 'disabled' : ''}><i class="fa-solid fa-arrow-down"></i></button>
+                        <button class="quick-mini-btn danger" onclick="deleteQuickAmount(${index})"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>`;
         });
         container.innerHTML += `<button class="btn btn-income" style="background: #2c2c35; color: white; border: none;" onclick="manualIncome()">Otro <i class="fa-solid fa-plus" style="margin-left:5px; font-size:12px"></i></button>`;
         container.innerHTML += `<button class="btn btn-income" id="btn-add-new" style="display:none; background: var(--blue); color:white; border:none;" onclick="addNewAmount()"><i class="fa-solid fa-plus"></i></button>`;
+    }
+
+    function moveQuickAmount(index, direction) {
+        const newIndex = index + direction;
+        if(newIndex < 0 || newIndex >= customAmounts.length) return;
+        const [amount] = customAmounts.splice(index, 1);
+        customAmounts.splice(newIndex, 0, amount);
+        renderButtons();
+        document.getElementById('buttons-container').classList.add('editing');
+        document.getElementById('btn-add-new').style.display = "block";
+        saveAll();
+    }
+
+    function deleteQuickAmount(index) {
+        const amount = customAmounts[index];
+        if(confirm(`¿Borrar botón de S/ ${amount.toFixed(2)}?`)) {
+            customAmounts.splice(index, 1);
+            renderButtons();
+            document.getElementById('buttons-container').classList.add('editing');
+            document.getElementById('btn-add-new').style.display = "block";
+            saveAll();
+        }
     }
 
     function toggleEditMode() {
@@ -497,16 +643,14 @@
     }
 
     function handleButtonClick(amount, index) {
-        if (isEditMode) {
-            if(confirm(`¿Borrar botón de S/ ${amount.toFixed(2)}?`)) { customAmounts.splice(index, 1); renderButtons(); saveAll(); }
-        } else addTransaction('Ingreso', 'Pasaje', amount);
+        if (isEditMode) return;
+        addTransaction('Ingreso', 'Pasaje', amount);
     }
 
     function addNewAmount() {
         let newAmt = prompt("Nuevo monto frecuente:");
         if (newAmt && !isNaN(newAmt.replace(',', '.'))) {
             customAmounts.push(parseFloat(newAmt.replace(',', '.')));
-            customAmounts.sort((a,b) => a-b);
             renderButtons(); saveAll();
         }
     }
@@ -528,7 +672,7 @@
             categoria: category,
             monto: numAmount,
             ruta: rutaNombre,
-            vuelta_id: isVueltaActive && type === 'Ingreso' ? currentVueltaId : '-'
+            vuelta_id: isVueltaActive ? currentVueltaId : '-'
         };
         if (type === 'Ingreso' && isVueltaActive) currentVueltaIncome += numAmount;
         currentShift.push(record);
@@ -541,7 +685,36 @@
     }
 
     function manualIncome() { if(!isEditMode) { let amt = prompt("¿Cuánto cobraste en S/?"); if (amt) addTransaction('Ingreso', 'Pasaje', amt); } }
-    function registerGas() { let amt = prompt("¿Cuánto echaste de GLP/Gasolina en S/?"); if (amt) addTransaction('Gasto', 'Gasolina', amt); }
+
+    function registerGas() {
+        selectedFuelCategory = '';
+        document.getElementById('fuel-glp').classList.remove('active');
+        document.getElementById('fuel-gasolina').classList.remove('active');
+        document.getElementById('fuel-amount').value = '';
+        document.getElementById('fuel-amount-box').classList.remove('show');
+        document.getElementById('fuel-modal').classList.add('show');
+    }
+
+    function chooseFuel(category) {
+        selectedFuelCategory = category;
+        document.getElementById('fuel-glp').classList.toggle('active', category === 'GLP');
+        document.getElementById('fuel-gasolina').classList.toggle('active', category === 'Gasolina');
+        document.getElementById('fuel-amount-box').classList.add('show');
+        document.getElementById('fuel-amount').focus();
+    }
+
+    function closeFuelModal() {
+        document.getElementById('fuel-modal').classList.remove('show');
+    }
+
+    function saveFuelExpense() {
+        if(!selectedFuelCategory) return alert('Elige GLP o Gasolina.');
+        const amt = document.getElementById('fuel-amount').value;
+        if(!amt) return alert('Ingresa el monto.');
+        addTransaction('Gasto', selectedFuelCategory, amt);
+        closeFuelModal();
+    }
+
     function manualExpense() { let amt = prompt("Monto del gasto en S/:"); if (amt) { let cat = prompt("Detalle:") || 'Operativo'; addTransaction('Gasto', cat, amt); } }
 
     function startVuelta(rutaIndex) {
@@ -675,13 +848,69 @@
             list.innerHTML = `<div class="empty-note"><i class="fa-regular fa-calendar-xmark"></i><br>No hay registros para este día</div>`;
             return;
         }
-        list.innerHTML = '';
+
+        const routeGroups = {};
+        const singleRecords = [];
         dayRecords.forEach(t => {
+            if(t.vuelta_id && t.vuelta_id !== '-') {
+                if(!routeGroups[t.vuelta_id]) routeGroups[t.vuelta_id] = [];
+                routeGroups[t.vuelta_id].push(t);
+            } else singleRecords.push(t);
+        });
+
+        const cards = [];
+        Object.entries(routeGroups).forEach(([vueltaId, items]) => {
+            const first = items[items.length - 1] || items[0];
+            const ruta = first.ruta || 'Ruta';
+            const ingresos = items.filter(x => x.tipo === 'Ingreso').reduce((sum, x) => sum + parseFloat(x.monto || 0), 0);
+            const gastos = items.filter(x => x.tipo === 'Gasto').reduce((sum, x) => sum + parseFloat(x.monto || 0), 0);
+            const km = items.find(x => x.tipo === 'Info' && x.categoria === 'RutaKM');
+            const startTime = parseRecordDate(items[items.length - 1]).timeKey;
+            const endTime = parseRecordDate(items[0]).timeKey;
+            const detailId = `detail-${String(vueltaId).replace(/[^a-zA-Z0-9]/g, '')}`;
+            const pasajes = items.filter(x => x.tipo === 'Ingreso');
+            const detailItems = items.filter(x => !(x.tipo === 'Info' && x.categoria === 'RutaKM'));
+            let detailHtml = '';
+            detailItems.slice().sort((a,b) => getRecordTimestamp(a) - getRecordTimestamp(b)).forEach(item => {
+                const p = parseRecordDate(item);
+                const detailAmount = item.tipo === 'Info'
+                    ? `${item.monto}`
+                    : `${item.tipo === 'Ingreso' ? '+' : '-'} S/ ${parseFloat(item.monto || 0).toFixed(2)}`;
+                detailHtml += `<div class="detail-row"><span>${p.timeKey} · ${item.tipo} · ${item.categoria}</span><strong>${detailAmount}</strong></div>`;
+            });
+            if(detailItems.length === 0) detailHtml = `<div class="empty-note" style="padding:8px;">Sin pasajes registrados en esta ruta</div>`;
+            cards.push({
+                time: getRecordTimestamp(items[0]),
+                html: `
+                <div class="record-card route-summary-card">
+                    <div class="record-main">
+                        <div>
+                            <div class="record-title"><i class="fa-solid fa-route" style="color:var(--blue)"></i> ${ruta}</div>
+                            <div class="record-meta">
+                                <i class="fa-regular fa-clock"></i> ${startTime} - ${endTime} · <i class="fa-regular fa-calendar"></i> ${displayDate(selectedDateKey)}<br>
+                                ${pasajes.length} pasajes${gastos > 0 ? ` · Gastos S/ ${gastos.toFixed(2)}` : ''}${km ? `<br><span class="route-km-bold"><i class="fa-solid fa-road"></i> Ruta: ${km.monto} km</span>` : ''}
+                            </div>
+                        </div>
+                        <div class="route-total-pill">S/ ${ingresos.toFixed(2)}</div>
+                    </div>
+                    <div class="record-actions summary-actions">
+                        <button class="small-action full" onclick="toggleRouteDetail('${detailId}')"><i class="fa-solid fa-eye"></i> Detalle</button>
+                        <button class="small-action edit" onclick="editRouteSummary('${vueltaId}')"><i class="fa-solid fa-pen"></i> Editar</button>
+                        <button class="small-action delete" onclick="deleteRouteSummary('${vueltaId}')"><i class="fa-solid fa-trash"></i> Borrar</button>
+                    </div>
+                    <div class="route-detail-list" id="${detailId}">${detailHtml}</div>
+                </div>`
+            });
+        });
+
+        singleRecords.forEach(t => {
             const parsed = parseRecordDate(t);
             const amountClass = t.tipo === 'Ingreso' ? 'inc' : (t.tipo === 'Gasto' ? 'exp' : 'info');
             const prefix = t.tipo === 'Ingreso' ? '+' : (t.tipo === 'Gasto' ? '-' : '');
             const amountText = t.tipo === 'Info' ? `${t.monto}${t.categoria === 'RutaKM' ? ' km' : ''}` : `${prefix} S/ ${parseFloat(t.monto || 0).toFixed(2)}`;
-            list.innerHTML += `
+            cards.push({
+                time: getRecordTimestamp(t),
+                html: `
                 <div class="record-card">
                     <div class="record-main">
                         <div>
@@ -697,8 +926,139 @@
                         <button class="small-action edit" onclick="openEditModal(${t.id})"><i class="fa-solid fa-pen"></i> Editar</button>
                         <button class="small-action delete" onclick="deleteRecord(${t.id})"><i class="fa-solid fa-trash"></i> Borrar</button>
                     </div>
-                </div>`;
+                </div>`
+            });
         });
+
+        list.innerHTML = cards.sort((a,b) => b.time - a.time).map(card => card.html).join('');
+    }
+
+    function editRouteSummary(vueltaId) {
+        const items = masterHistory
+            .filter(t => String(t.vuelta_id) === String(vueltaId))
+            .sort((a,b) => getRecordTimestamp(a) - getRecordTimestamp(b));
+        if(items.length === 0) return;
+
+        editingSummaryId = String(vueltaId);
+        document.getElementById('summary-vuelta-id').value = editingSummaryId;
+
+        const currentName = items.find(t => t.ruta)?.ruta || 'Ruta';
+        const firstParsed = parseRecordDate(items[0]);
+        document.getElementById('summary-fecha').value = firstParsed.dateKey;
+        document.getElementById('summary-hora').value = firstParsed.timeKey;
+
+        const select = document.getElementById('summary-ruta-select');
+        select.innerHTML = '';
+        customRoutes.forEach((route, index) => {
+            const option = document.createElement('option');
+            option.value = String(index);
+            option.textContent = `${route.name} · ${route.km} km`;
+            if(route.name === currentName) option.selected = true;
+            select.appendChild(option);
+        });
+        if(customRoutes.length === 0) {
+            const option = document.createElement('option');
+            option.value = '-1';
+            option.textContent = currentName;
+            select.appendChild(option);
+        }
+
+        const passengerList = document.getElementById('summary-passenger-list');
+        const incomeItems = items.filter(t => t.tipo === 'Ingreso');
+        if(incomeItems.length === 0) {
+            passengerList.innerHTML = `<div class="empty-note" style="padding:8px;">Esta ruta no tiene pasajes para editar.</div>`;
+        } else {
+            passengerList.innerHTML = incomeItems.map((item, idx) => {
+                const parsed = parseRecordDate(item);
+                return `
+                    <div class="summary-passenger-row">
+                        <div class="summary-passenger-number">${idx + 1}</div>
+                        <div>
+                            <div class="summary-passenger-meta">${parsed.timeKey} · Pasaje</div>
+                            <input type="number" step="0.01" min="0" class="edit-input summary-passenger-input" data-passenger-id="${item.id}" value="${parseFloat(item.monto || 0).toFixed(2)}">
+                        </div>
+                    </div>`;
+            }).join('');
+        }
+
+        updateSummaryRouteInfo();
+        select.onchange = updateSummaryRouteInfo;
+        document.getElementById('summary-edit-modal').classList.add('show');
+    }
+
+    function updateSummaryRouteInfo() {
+        const select = document.getElementById('summary-ruta-select');
+        const route = customRoutes[parseInt(select.value, 10)];
+        const info = document.getElementById('summary-route-info');
+        if(route) {
+            info.innerHTML = `<strong style="color:var(--text-main);">Ruta seleccionada:</strong> ${route.name}<br><strong style="color:var(--text-main);">Kilómetros:</strong> ${route.km} km · <strong style="color:var(--text-main);">Tiempo aprox.:</strong> ${route.min} min`;
+        } else {
+            info.innerHTML = `Selecciona una ruta para actualizar el resumen.`;
+        }
+    }
+
+    function closeSummaryEditModal() {
+        document.getElementById('summary-edit-modal').classList.remove('show');
+        editingSummaryId = '';
+    }
+
+    function saveSummaryEdit() {
+        const vueltaId = document.getElementById('summary-vuelta-id').value;
+        const selectedRoute = customRoutes[parseInt(document.getElementById('summary-ruta-select').value, 10)];
+        const newDate = document.getElementById('summary-fecha').value;
+        const newTime = document.getElementById('summary-hora').value || '00:00';
+        if(!vueltaId) return;
+        if(!selectedRoute) return alert('Elige una ruta válida.');
+        if(!newDate) return alert('Elige una fecha.');
+
+        const passengerInputs = Array.from(document.querySelectorAll('#summary-passenger-list [data-passenger-id]'));
+        for(const input of passengerInputs) {
+            const val = parseFloat(String(input.value).replace(',', '.'));
+            if(isNaN(val) || val < 0) return alert('Revisa los montos de los pasajes.');
+        }
+
+        const updateRecord = (record) => {
+            record.ruta = selectedRoute.name;
+            record.dateKey = newDate;
+            record.timeKey = newTime;
+            record.fecha = formatFecha(newDate, newTime);
+            if(record.tipo === 'Info' && record.categoria === 'RutaKM') record.monto = selectedRoute.km;
+        };
+
+        masterHistory.forEach(t => { if(String(t.vuelta_id) === String(vueltaId)) updateRecord(t); });
+        currentShift.forEach(t => { if(String(t.vuelta_id) === String(vueltaId)) updateRecord(t); });
+
+        passengerInputs.forEach(input => {
+            const id = String(input.dataset.passengerId);
+            const amount = parseFloat(String(input.value).replace(',', '.'));
+            const target = masterHistory.find(t => String(t.id) === id);
+            if(target) target.monto = amount;
+            const shiftTarget = currentShift.find(t => String(t.id) === id);
+            if(shiftTarget) shiftTarget.monto = amount;
+        });
+
+        saveAll();
+        updateShiftUI();
+        closeSummaryEditModal();
+        selectedDateKey = newDate;
+        calendarCursor = new Date(`${newDate}T00:00:00`);
+        renderDiary();
+        showToast('Ruta, fecha, hora y pasajes actualizados');
+    }
+
+    function deleteRouteSummary(vueltaId) {
+        if(!confirm('¿Borrar esta ruta y todos sus pasajes registrados?')) return;
+        masterHistory = masterHistory.filter(t => String(t.vuelta_id) !== String(vueltaId));
+        currentShift = currentShift.filter(t => String(t.vuelta_id) !== String(vueltaId));
+        saveAll();
+        updateShiftUI();
+        renderDiary();
+        showToast('Ruta y pasajes borrados');
+    }
+
+    function toggleRouteDetail(detailId) {
+        const detail = document.getElementById(detailId);
+        if(detail) detail.classList.toggle('show');
     }
 
     function findRecord(id) {
@@ -764,16 +1124,16 @@
         masterHistory.forEach(t => {
             let tTime = getRecordTimestamp(t);
             if (tTime >= startOfToday) {
+                if(t.tipo === 'Ingreso') stats.hoy.inc += parseFloat(t.monto || 0);
+                else if(t.tipo === 'Gasto') stats.hoy.exp += parseFloat(t.monto || 0);
+            }
+            if (tTime >= startOfWeek) {
                 if(t.tipo === 'Ingreso') {
-                    stats.hoy.inc += parseFloat(t.monto || 0);
+                    stats.sem.inc += parseFloat(t.monto || 0);
                     let hour = new Date(tTime).getHours();
                     let h12 = (hour % 12 || 12) + (hour >= 12 ? ' PM' : ' AM');
                     stats.horas[h12] = (stats.horas[h12] || 0) + parseFloat(t.monto || 0);
-                } else if(t.tipo === 'Gasto') stats.hoy.exp += parseFloat(t.monto || 0);
-            }
-            if (tTime >= startOfWeek) {
-                if(t.tipo === 'Ingreso') stats.sem.inc += parseFloat(t.monto || 0);
-                else if(t.tipo === 'Gasto') stats.sem.exp += parseFloat(t.monto || 0);
+                } else if(t.tipo === 'Gasto') stats.sem.exp += parseFloat(t.monto || 0);
             }
         });
         document.getElementById('st-hoy-ingreso').innerText = `S/ ${stats.hoy.inc.toFixed(2)}`;
@@ -782,9 +1142,9 @@
         document.getElementById('st-sem-ingreso').innerText = `S/ ${stats.sem.inc.toFixed(2)}`;
         document.getElementById('st-sem-gasto').innerText = `S/ ${stats.sem.exp.toFixed(2)}`;
         let horasHtml = '';
-        let sortedHours = Object.entries(stats.horas).sort((a,b) => b[1] - a[1]).slice(0,3);
-        if (sortedHours.length === 0) horasHtml = `<div style="font-size:12px; color:var(--text-muted);">Sin datos hoy.</div>`;
-        else sortedHours.forEach(([h, g]) => { horasHtml += `<div class="peak-hour-bar"><span>${h}</span> <strong>S/ ${g.toFixed(2)}</strong></div>`; });
+        let sortedHours = Object.entries(stats.horas).sort((a,b) => b[1] - a[1]).slice(0,5);
+        if (sortedHours.length === 0) horasHtml = `<div style="font-size:12px; color:var(--text-muted);">Sin datos esta semana.</div>`;
+        else sortedHours.forEach(([h, g], idx) => { horasHtml += `<div class="peak-hour-bar"><span>${idx + 1}. ${h}</span> <strong>S/ ${g.toFixed(2)}</strong></div>`; });
         document.getElementById('st-horas').innerHTML = horasHtml;
     }
 
@@ -880,6 +1240,14 @@
 
     document.getElementById('edit-modal').addEventListener('click', function(e) {
         if(e.target.id === 'edit-modal') closeEditModal();
+    });
+
+    document.getElementById('summary-edit-modal').addEventListener('click', function(e) {
+        if(e.target.id === 'summary-edit-modal') closeSummaryEditModal();
+    });
+
+    document.getElementById('fuel-modal').addEventListener('click', function(e) {
+        if(e.target.id === 'fuel-modal') closeFuelModal();
     });
 
     init();

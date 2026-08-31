@@ -6,11 +6,11 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="TaxiTracker">
-    <title>TaxiTracker v2.6</title>
+    <title>TaxiTracker v2.7</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -55,6 +55,25 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
         .card-panel { background-color: var(--card-bg); border-radius: 16px; padding: 16px; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        
+        /* Turno Shift Status Banner */
+        .shift-status-box { background: linear-gradient(135deg, rgba(10,132,255,0.18), rgba(52,199,89,0.12)); border-radius: 16px; padding: 14px; border: 1px solid rgba(10,132,255,0.3); margin-bottom: 5px; }
+        .shift-status-box.inactive { background: #23232b; border-color: rgba(255,255,255,0.08); text-align: center; }
+        .shift-status-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .shift-badge { background: var(--green); color: black; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .shift-badge.off { background: #444; color: #bbb; }
+        .shift-timer { font-family: var(--font-title); font-size: 24px; font-weight: 800; color: var(--text-main); }
+        .shift-meta { font-size: 12px; color: var(--text-muted); margin-top: 4px; display: flex; gap: 12px; flex-wrap: wrap; }
+        .shift-actions { display: grid; grid-template-columns: 1fr auto; gap: 8px; margin-top: 12px; }
+        .btn-shift-start { background: var(--green); color: #000; font-family: var(--font-title); font-weight: 700; border: none; padding: 14px; border-radius: 12px; width: 100%; cursor: pointer; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-shift-end { background: var(--red); color: #fff; font-family: var(--font-title); font-weight: 700; border: none; padding: 10px 14px; border-radius: 10px; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .btn-shift-adjust { background: #2c2c35; color: white; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 10px 12px; font-size: 12px; cursor: pointer; font-weight: 600; }
+
+        /* Vueltas Counter Banner */
+        .vueltas-counter-card { background: rgba(191, 90, 242, 0.12); border: 1px solid rgba(191, 90, 242, 0.3); border-radius: 14px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .vueltas-pill { font-family: var(--font-title); font-size: 14px; font-weight: 800; color: var(--purple); display: flex; align-items: center; gap: 6px; }
+        .vueltas-sub { font-size: 11px; color: var(--text-muted); }
+
         .route-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 5px; position: relative; }
         .route-card-wrap { position: relative; display: flex; flex-direction: column; gap: 7px; }
         .btn-route { background: #2c2c35; color: var(--text-main); border: 1px solid transparent; padding: 12px 5px; border-radius: 12px; font-size: 12px; font-weight: 500; cursor: pointer; min-height: 62px; }
@@ -154,6 +173,14 @@
         .small-action.delete { background: var(--red); }
         .empty-note { text-align: center; color: var(--text-muted); padding: 18px 8px; font-size: 13px; }
 
+        /* Shifts list in stats */
+        .shift-history-card { background: #24242c; border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 12px; margin-bottom: 10px; }
+        .shift-history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+        .shift-history-net { font-family: var(--font-title); font-size: 16px; font-weight: 800; color: var(--green); }
+        .shift-history-net.neg { color: var(--red); }
+        .shift-history-meta { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
+        .shift-history-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+
         .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.68); z-index: 2000; padding: 18px; align-items: center; justify-content: center; }
         .modal-overlay.show { display: flex; }
         .modal-card { width: 100%; max-width: 420px; background: var(--card-bg); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; box-shadow: 0 16px 60px rgba(0,0,0,0.45); }
@@ -180,7 +207,6 @@
 
         .stat-card { background: var(--card-bg); border-radius: 16px; padding: 16px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); }
         .stat-row { display: flex; justify-content: space-between; margin-top: 10px; font-size: 13px; align-items: center; }
-        .peak-hour-bar { background: var(--green-bg); padding: 8px 12px; margin-top: 8px; border-radius: 8px; display: flex; justify-content: space-between; font-size: 13px; color: var(--green); font-weight: 600; }
         .chart-container { position: relative; height: 180px; width: 100%; margin-top: 15px; }
 
         .backup-panel { background: #1c1c21; border: 1px dashed #444; padding: 20px; border-radius: 16px; text-align: center; margin-top: 10px; }
@@ -193,15 +219,30 @@
 
 <div class="app-container">
     <div class="app-header">
-        <div class="app-title"><i class="fa-solid fa-car" style="color:var(--yellow)"></i> TaxiTracker <span class="badge-v2">New v2.6</span></div>
+        <div class="app-title"><i class="fa-solid fa-car" style="color:var(--yellow)"></i> TaxiTracker <span class="badge-v2">v2.7</span></div>
     </div>
 
+    <!-- VISTA TURNO -->
     <div id="view-turno" class="view active">
+        
+        <!-- Shift Control Box -->
+        <div id="shift-container"></div>
+
+        <!-- Route Control Card -->
         <div class="card-panel">
             <div class="section-title">
                 <span>Control de Ruta</span>
                 <button class="edit-mode-btn" id="btn-edit-routes" onclick="toggleEditRoutes()"><i class="fa-solid fa-gear"></i> Editar</button>
             </div>
+
+            <!-- Vueltas Counter Banner -->
+            <div class="vueltas-counter-card" id="vueltas-banner">
+                <div>
+                    <div class="vueltas-pill"><i class="fa-solid fa-arrows-rotate"></i> <span id="ui-vueltas-count">0</span> Vueltas Completas</div>
+                    <div class="vueltas-sub" id="ui-vueltas-sub">0 tramos completados (Ida y Vuelta)</div>
+                </div>
+            </div>
+
             <div id="route-selector" class="route-selector"></div>
             <div id="active-vuelta" class="active-vuelta-card">
                 <div class="vuelta-name" id="ui-vuelta-name">Ruta Activa</div>
@@ -237,6 +278,7 @@
         <button class="btn-sync" onclick="syncData()" id="btn-sync"><i class="fa-solid fa-cloud"></i> Cerrar Turno y Subir</button>
     </div>
 
+    <!-- VISTA DIARIO / CALENDARIO -->
     <div id="view-calendar" class="view">
         <section class="diary-hero">
             <div class="diary-top">
@@ -272,6 +314,7 @@
         </div>
     </div>
 
+    <!-- VISTA STATS -->
     <div id="view-stats" class="view">
         <div class="card-panel">
             <div class="section-title"><i class="fa-solid fa-chart-bar"></i> Rendimiento Semanal</div>
@@ -287,9 +330,13 @@
             <div class="stat-row" style="color: var(--text-muted);"><span>Gastos Últimos 7 Días:</span> <strong style="color:var(--text-main)" id="st-sem-gasto">S/ 0.00</strong></div>
         </div>
 
+        <!-- SECCIÓN GANANCIAS POR TURNO (V2.7) -->
         <div class="card-panel" style="border-left: 4px solid var(--green);">
-            <div class="section-title" style="color: var(--green);">Horas Pico de la Semana</div>
-            <div id="st-horas"></div>
+            <div class="section-title" style="color: var(--green);">
+                <span><i class="fa-solid fa-clock-rotate-left"></i> Ganancias por Turno</span>
+                <span id="st-shift-total-count" style="font-size:11px; color:var(--text-muted); text-transform:none;">0 jornadas</span>
+            </div>
+            <div id="shift-history-list"></div>
         </div>
 
         <div class="backup-panel">
@@ -307,6 +354,7 @@
     <button class="nav-btn" onclick="switchTab('stats', this)"><i class="fa-solid fa-chart-bar nav-icon"></i><span>Stats</span></button>
 </div>
 
+<!-- MODAL EDITAR REGISTRO INDIVIDUAL -->
 <div id="edit-modal" class="modal-overlay">
     <div class="modal-card">
         <div class="modal-title"><i class="fa-solid fa-pen-to-square" style="color:var(--yellow)"></i> Editar registro</div>
@@ -348,7 +396,7 @@
     </div>
 </div>
 
-
+<!-- MODAL EDITAR RUTA Y PASAJES -->
 <div id="summary-edit-modal" class="modal-overlay">
     <div class="modal-card">
         <div class="modal-title"><i class="fa-solid fa-route" style="color:var(--blue)"></i> Editar ruta y pasajes</div>
@@ -379,6 +427,7 @@
     </div>
 </div>
 
+<!-- MODAL COMBUSTIBLE -->
 <div id="fuel-modal" class="modal-overlay">
     <div class="modal-card">
         <div class="modal-title"><i class="fa-solid fa-gas-pump" style="color:var(--red)"></i> Registrar combustible</div>
@@ -393,6 +442,44 @@
         <div class="modal-actions">
             <button class="modal-btn cancel" onclick="closeFuelModal()">Cancelar</button>
             <button class="modal-btn save" onclick="saveFuelExpense()">Guardar</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL EDITAR TURNO / JORNADA (V2.7) -->
+<div id="shift-edit-modal" class="modal-overlay">
+    <div class="modal-card">
+        <div class="modal-title"><i class="fa-solid fa-clock-rotate-left" style="color:var(--green)"></i> Editar Jornada / Turno</div>
+        <input type="hidden" id="edit-shift-id">
+        <div class="form-grid">
+            <div>
+                <label class="field-label">Fecha</label>
+                <input type="date" id="edit-shift-fecha" class="edit-input">
+            </div>
+            <div>
+                <label class="field-label">Vueltas</label>
+                <input type="number" id="edit-shift-vueltas" class="edit-input" placeholder="0">
+            </div>
+            <div>
+                <label class="field-label">Hora Inicio</label>
+                <input type="time" id="edit-shift-inicio" class="edit-input">
+            </div>
+            <div>
+                <label class="field-label">Hora Fin</label>
+                <input type="time" id="edit-shift-fin" class="edit-input">
+            </div>
+            <div>
+                <label class="field-label">Ingresos (S/)</label>
+                <input type="number" step="0.01" id="edit-shift-ingreso" class="edit-input">
+            </div>
+            <div>
+                <label class="field-label">Gastos (S/)</label>
+                <input type="number" step="0.01" id="edit-shift-gasto" class="edit-input">
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button class="modal-btn cancel" onclick="closeShiftEditModal()">Cancelar</button>
+            <button class="modal-btn save" onclick="saveEditedShift()">Guardar</button>
         </div>
     </div>
 </div>
@@ -413,6 +500,10 @@
     let customRoutes = JSON.parse(localStorage.getItem('taxiRoutes')) || defaultRoutes;
     let masterHistory = JSON.parse(localStorage.getItem('taxiHistory')) || [];
     let currentShift = JSON.parse(localStorage.getItem('taxiCurrentShift')) || [];
+    
+    // V2.7 - Gestión de Turnos y Jornadas
+    let activeShift = JSON.parse(localStorage.getItem('taxiActiveShift')) || null;
+    let shiftsHistory = JSON.parse(localStorage.getItem('taxiShiftsHistory')) || [];
 
     let isEditMode = false;
     let isEditRoutes = false;
@@ -425,12 +516,15 @@
     let selectedDateKey = toDateKey(new Date());
     let selectedFuelCategory = '';
     let editingSummaryId = '';
+    let shiftTimerInterval = null;
 
     function init() {
         normalizeStoredRecords();
         renderButtons();
         renderRoutes();
+        renderShiftUI();
         updateShiftUI();
+        startShiftTimer();
     }
 
     function normalizeStoredRecords() {
@@ -478,6 +572,14 @@
         return `${d}/${m}/${y}`;
     }
 
+    function formatDuration(ms) {
+        if (ms < 0) ms = 0;
+        const totalMinutes = Math.floor(ms / (1000 * 60));
+        const hours = Math.floor(totalMinutes / 60);
+        const mins = totalMinutes % 60;
+        return `${hours}h ${mins}m`;
+    }
+
     function parseRecordDate(record) {
         if (record.dateKey && record.timeKey) return { dateKey: record.dateKey, timeKey: record.timeKey };
         const raw = String(record.fecha || '').trim();
@@ -519,8 +621,306 @@
         localStorage.setItem('taxiCurrentShift', JSON.stringify(currentShift));
         localStorage.setItem('taxiButtons', JSON.stringify(customAmounts));
         localStorage.setItem('taxiRoutes', JSON.stringify(customRoutes));
+        localStorage.setItem('taxiActiveShift', JSON.stringify(activeShift));
+        localStorage.setItem('taxiShiftsHistory', JSON.stringify(shiftsHistory));
     }
 
+    /* ==========================================================
+       V2.7: CÁLCULO DE VUELTAS (IDA Y VUELTA)
+       ========================================================== */
+    function calculateVueltas(records) {
+        const legs = [];
+        records.forEach(r => {
+            if (r.tipo === 'Info' && r.categoria === 'RutaKM' && r.ruta) {
+                legs.push(r.ruta);
+            }
+        });
+
+        let fullVueltas = 0;
+        let unmatched = [...legs];
+
+        for (let i = 0; i < unmatched.length; i++) {
+            const legA = unmatched[i];
+            if (!legA) continue;
+            const partsA = legA.split(/➔|->| a /i).map(s => s.trim().toLowerCase());
+
+            if (partsA.length === 2) {
+                const reverseIdx = unmatched.findIndex((legB, j) => {
+                    if (j <= i || !legB) return false;
+                    const partsB = legB.split(/➔|->| a /i).map(s => s.trim().toLowerCase());
+                    return partsB.length === 2 && partsB[0] === partsA[1] && partsB[1] === partsA[0];
+                });
+
+                if (reverseIdx !== -1) {
+                    fullVueltas++;
+                    unmatched[i] = null;
+                    unmatched[reverseIdx] = null;
+                }
+            }
+        }
+
+        const halfLegs = unmatched.filter(x => x !== null).length;
+        return {
+            fullVueltas,
+            halfLegs,
+            totalLegs: legs.length
+        };
+    }
+
+    function updateVueltasBanner() {
+        const stats = calculateVueltas(currentShift);
+        const countEl = document.getElementById('ui-vueltas-count');
+        const subEl = document.getElementById('ui-vueltas-sub');
+        if (countEl && subEl) {
+            countEl.innerText = stats.fullVueltas;
+            let subText = `${stats.totalLegs} tramos completados`;
+            if (stats.halfLegs > 0) {
+                subText += ` (+${stats.halfLegs} ida sin retorno)`;
+            }
+            subEl.innerText = subText;
+        }
+    }
+
+    /* ==========================================================
+       V2.7: GESTIÓN DE TURNO Y JORNADA
+       ========================================================== */
+    function renderShiftUI() {
+        const container = document.getElementById('shift-container');
+        if (!container) return;
+
+        if (!activeShift) {
+            container.innerHTML = `
+                <div class="shift-status-box inactive card-panel">
+                    <div style="font-size:13px; color:var(--text-muted); margin-bottom:10px;">
+                        <i class="fa-solid fa-moon"></i> No hay jornada activa en este momento
+                    </div>
+                    <button class="btn-shift-start" onclick="startShift()">
+                        <i class="fa-solid fa-play"></i> Iniciar Jornada de Trabajo
+                    </button>
+                </div>
+            `;
+        } else {
+            const startTimeStr = activeShift.startTime;
+            const liveDuration = formatDuration(Date.now() - activeShift.startTimestamp);
+            container.innerHTML = `
+                <div class="shift-status-box card-panel">
+                    <div class="shift-status-header">
+                        <span class="shift-badge"><i class="fa-solid fa-bolt"></i> En Curso</span>
+                        <button class="btn-shift-adjust" onclick="adjustShiftStartTime()"><i class="fa-regular fa-clock"></i> Inició: ${startTimeStr}</button>
+                    </div>
+                    <div class="shift-timer" id="live-shift-timer">${liveDuration}</div>
+                    <div class="shift-meta">
+                        <span><i class="fa-solid fa-calendar-day"></i> ${displayDate(activeShift.dateKey)}</span>
+                        <span><i class="fa-solid fa-arrows-rotate"></i> <strong id="shift-live-vueltas">0</strong> Vueltas</span>
+                    </div>
+                    <div class="shift-actions">
+                        <button class="btn-shift-end" onclick="finishShift()">
+                            <i class="fa-solid fa-stop"></i> Finalizar Jornada
+                        </button>
+                        <button class="btn-shift-adjust" onclick="cancelActiveShift()" title="Descartar"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+            `;
+        }
+        updateVueltasBanner();
+    }
+
+    function startShiftTimer() {
+        if (shiftTimerInterval) clearInterval(shiftTimerInterval);
+        shiftTimerInterval = setInterval(() => {
+            if (activeShift) {
+                const el = document.getElementById('live-shift-timer');
+                if (el) el.innerText = formatDuration(Date.now() - activeShift.startTimestamp);
+            }
+        }, 30000); // actualiza cada 30 segs
+    }
+
+    function startShift() {
+        const now = new Date();
+        activeShift = {
+            id: Date.now(),
+            dateKey: toDateKey(now),
+            startTime: toTimeKey(now),
+            startTimestamp: now.getTime()
+        };
+        saveAll();
+        renderShiftUI();
+        showToast("🚀 ¡Turno iniciado con éxito!");
+    }
+
+    function adjustShiftStartTime() {
+        if (!activeShift) return;
+        let newTime = prompt("Hora de inicio del turno (HH:MM formato 24h):", activeShift.startTime);
+        if (newTime && /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/.test(newTime)) {
+            activeShift.startTime = newTime;
+            const [h, m] = newTime.split(':');
+            const d = new Date(activeShift.startTimestamp);
+            d.setHours(parseInt(h, 10), parseInt(m, 10), 0, 0);
+            activeShift.startTimestamp = d.getTime();
+            saveAll();
+            renderShiftUI();
+            showToast("Hora de inicio actualizada");
+        }
+    }
+
+    function cancelActiveShift() {
+        if (confirm("¿Descartar el turno actual en curso sin guardarlo en el historial de jornadas?")) {
+            activeShift = null;
+            saveAll();
+            renderShiftUI();
+        }
+    }
+
+    function finishShift() {
+        if (!activeShift) return;
+        if (isVueltaActive) return alert("⚠️ Por favor termina la vuelta en curso antes de finalizar la jornada.");
+
+        let inc = 0, exp = 0;
+        currentShift.forEach(t => {
+            if (t.tipo === 'Ingreso') inc += parseFloat(t.monto || 0);
+            else if (t.tipo === 'Gasto') exp += parseFloat(t.monto || 0);
+        });
+
+        const endNow = new Date();
+        const endTimeStr = toTimeKey(endNow);
+        const durationMs = endNow.getTime() - activeShift.startTimestamp;
+        const vueltasData = calculateVueltas(currentShift);
+
+        const summaryText = `🏁 FINALIZAR JORNADA\n\n` +
+            `⏱️ Duración: ${formatDuration(durationMs)} (${activeShift.startTime} - ${endTimeStr})\n` +
+            `🔄 Vueltas completas: ${vueltasData.fullVueltas} (${vueltasData.totalLegs} tramos)\n` +
+            `💵 Ingresos: S/ ${inc.toFixed(2)}\n` +
+            `⛽ Gastos: S/ ${exp.toFixed(2)}\n` +
+            `💰 Ganancia Neta: S/ ${(inc - exp).toFixed(2)}\n\n` +
+            `¿Deseas guardar y cerrar este turno?`;
+
+        if (!confirm(summaryText)) return;
+
+        const shiftEntry = {
+            id: activeShift.id || Date.now(),
+            dateKey: activeShift.dateKey,
+            startTime: activeShift.startTime,
+            endTime: endTimeStr,
+            startTimestamp: activeShift.startTimestamp,
+            endTimestamp: endNow.getTime(),
+            durationText: formatDuration(durationMs),
+            income: inc,
+            expense: exp,
+            net: inc - exp,
+            vueltas: vueltasData.fullVueltas,
+            tramos: vueltasData.totalLegs
+        };
+
+        shiftsHistory.unshift(shiftEntry);
+        activeShift = null;
+        saveAll();
+        renderShiftUI();
+        showToast("✅ Jornada finalizada y guardada");
+    }
+
+    /* ==========================================================
+       V2.7: GANANCIAS POR TURNO (SECCIÓN STATS)
+       ========================================================== */
+    function renderShiftsHistoryList() {
+        const list = document.getElementById('shift-history-list');
+        const countLabel = document.getElementById('st-shift-total-count');
+        if (!list) return;
+
+        if (countLabel) countLabel.innerText = `${shiftsHistory.length} jornadas`;
+
+        if (shiftsHistory.length === 0) {
+            list.innerHTML = `<div style="font-size:12px; color:var(--text-muted); text-align:center; padding:15px 0;">No hay jornadas finalizadas registradas aún.</div>`;
+            return;
+        }
+
+        list.innerHTML = shiftsHistory.map(s => {
+            const netClass = s.net >= 0 ? '' : 'neg';
+            return `
+                <div class="shift-history-card">
+                    <div class="shift-history-header">
+                        <div>
+                            <strong style="font-size:13px; font-family:var(--font-title);"><i class="fa-regular fa-calendar"></i> ${displayDate(s.dateKey)}</strong>
+                        </div>
+                        <div class="shift-history-net ${netClass}">S/ ${parseFloat(s.net || 0).toFixed(2)}</div>
+                    </div>
+                    <div class="shift-history-meta">
+                        <i class="fa-regular fa-clock"></i> ${s.startTime} - ${s.endTime} · <strong>${s.durationText || 'N/A'}</strong><br>
+                        <i class="fa-solid fa-arrows-rotate"></i> ${s.vueltas || 0} vueltas (${s.tramos || 0} tramos) · Ingresos: S/ ${parseFloat(s.income||0).toFixed(2)} · Gastos: S/ ${parseFloat(s.expense||0).toFixed(2)}
+                    </div>
+                    <div class="shift-history-actions">
+                        <button class="small-action edit" onclick="openShiftEditModal(${s.id})"><i class="fa-solid fa-pen"></i> Editar</button>
+                        <button class="small-action delete" onclick="deleteShiftRecord(${s.id})"><i class="fa-solid fa-trash"></i> Borrar</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function openShiftEditModal(shiftId) {
+        const s = shiftsHistory.find(item => String(item.id) === String(shiftId));
+        if (!s) return;
+        document.getElementById('edit-shift-id').value = s.id;
+        document.getElementById('edit-shift-fecha').value = s.dateKey;
+        document.getElementById('edit-shift-vueltas').value = s.vueltas || 0;
+        document.getElementById('edit-shift-inicio').value = s.startTime;
+        document.getElementById('edit-shift-fin').value = s.endTime;
+        document.getElementById('edit-shift-ingreso').value = parseFloat(s.income || 0).toFixed(2);
+        document.getElementById('edit-shift-gasto').value = parseFloat(s.expense || 0).toFixed(2);
+        document.getElementById('shift-edit-modal').classList.add('show');
+    }
+
+    function closeShiftEditModal() {
+        document.getElementById('shift-edit-modal').classList.remove('show');
+    }
+
+    function saveEditedShift() {
+        const id = document.getElementById('edit-shift-id').value;
+        const s = shiftsHistory.find(item => String(item.id) === String(id));
+        if (!s) return;
+
+        const dateKey = document.getElementById('edit-shift-fecha').value;
+        const vueltas = parseInt(document.getElementById('edit-shift-vueltas').value, 10) || 0;
+        const startTime = document.getElementById('edit-shift-inicio').value;
+        const endTime = document.getElementById('edit-shift-fin').value;
+        const income = parseFloat(document.getElementById('edit-shift-ingreso').value) || 0;
+        const expense = parseFloat(document.getElementById('edit-shift-gasto').value) || 0;
+
+        if (!dateKey || !startTime || !endTime) return alert("Por favor completa los campos requeridos.");
+
+        s.dateKey = dateKey;
+        s.vueltas = vueltas;
+        s.startTime = startTime;
+        s.endTime = endTime;
+        s.income = income;
+        s.expense = expense;
+        s.net = income - expense;
+
+        // Recalcular duración
+        const [h1, m1] = startTime.split(':').map(Number);
+        const [h2, m2] = endTime.split(':').map(Number);
+        let minDiff = (h2 * 60 + m2) - (h1 * 60 + m1);
+        if (minDiff < 0) minDiff += 24 * 60; // cruce de medianoche
+        s.durationText = `${Math.floor(minDiff / 60)}h ${minDiff % 60}m`;
+
+        saveAll();
+        closeShiftEditModal();
+        renderShiftsHistoryList();
+        calculateStats();
+        showToast("Jornada actualizada");
+    }
+
+    function deleteShiftRecord(shiftId) {
+        if (!confirm("¿Borrar este registro de jornada?")) return;
+        shiftsHistory = shiftsHistory.filter(s => String(s.id) !== String(shiftId));
+        saveAll();
+        renderShiftsHistoryList();
+        calculateStats();
+        showToast("Jornada eliminada");
+    }
+
+    /* ==========================================================
+       CONTROL DE RUTAS Y COBRO
+       ========================================================== */
     function renderRoutes() {
         const container = document.getElementById('route-selector');
         container.innerHTML = '';
@@ -582,7 +982,7 @@
     }
 
     function addNewRoute() {
-        let name = prompt("Nombre de la ruta:"); if (!name) return;
+        let name = prompt("Nombre de la ruta (Ej: Chimbote ➔ Santa):"); if (!name) return;
         let km = prompt("Kilómetros aprox:"); let min = prompt("Minutos aprox:");
         if(km && min) { customRoutes.push({ name: name, km: parseFloat(km), min: parseInt(min) }); renderRoutes(); saveAll(); }
     }
@@ -659,6 +1059,12 @@
         if (!amount && amount !== 0) return;
         let numAmount = parseFloat(String(amount).replace(',', '.'));
         if (isNaN(numAmount)) return;
+
+        // Auto-iniciar turno si no está activo
+        if (!activeShift) {
+            startShift();
+        }
+
         let now = new Date();
         let dateKey = toDateKey(now);
         let timeKey = toTimeKey(now);
@@ -718,12 +1124,14 @@
     function manualExpense() { let amt = prompt("Monto del gasto en S/:"); if (amt) { let cat = prompt("Detalle:") || 'Operativo'; addTransaction('Gasto', cat, amt); } }
 
     function startVuelta(rutaIndex) {
+        if (!activeShift) startShift();
         isVueltaActive = true;
         currentRutaIdx = rutaIndex;
         currentVueltaIncome = 0;
         let rutaObj = customRoutes[rutaIndex];
         currentVueltaId = "V-" + Math.floor(Math.random() * 10000);
         document.getElementById('route-selector').style.display = 'none';
+        document.getElementById('vueltas-banner').style.display = 'none';
         document.querySelector('.card-panel .section-title').style.display = 'none';
         document.getElementById('active-vuelta').classList.add('active');
         document.getElementById('ui-vuelta-name').innerText = rutaObj.name;
@@ -740,8 +1148,10 @@
         currentVueltaId = "";
         currentVueltaIncome = 0;
         document.getElementById('route-selector').style.display = 'grid';
+        document.getElementById('vueltas-banner').style.display = 'flex';
         document.querySelector('.card-panel .section-title').style.display = 'flex';
         document.getElementById('active-vuelta').classList.remove('active');
+        updateShiftUI();
     }
 
     function updateShiftUI() {
@@ -751,6 +1161,9 @@
         document.getElementById('ui-net').innerText = `S/ ${(inc - exp).toFixed(2)}`;
         document.getElementById('ui-income').innerText = `S/ ${inc.toFixed(2)}`;
         document.getElementById('ui-expense').innerText = `S/ ${exp.toFixed(2)}`;
+        updateVueltasBanner();
+        const liveVueltas = document.getElementById('shift-live-vueltas');
+        if (liveVueltas) liveVueltas.innerText = calculateVueltas(currentShift).fullVueltas;
     }
 
     function saveDashboardData() {
@@ -770,7 +1183,11 @@
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
         document.getElementById('view-' + tab).classList.add('active');
         btnElement.classList.add('active');
-        if(tab === 'stats') { calculateStats(); renderChart(); }
+        if(tab === 'stats') { 
+            calculateStats(); 
+            renderChart(); 
+            renderShiftsHistoryList();
+        }
         if(tab === 'calendar') renderDiary();
     }
 
@@ -956,12 +1373,6 @@
             if(route.name === currentName) option.selected = true;
             select.appendChild(option);
         });
-        if(customRoutes.length === 0) {
-            const option = document.createElement('option');
-            option.value = '-1';
-            option.textContent = currentName;
-            select.appendChild(option);
-        }
 
         const passengerList = document.getElementById('summary-passenger-list');
         const incomeItems = items.filter(t => t.tipo === 'Ingreso');
@@ -1043,7 +1454,7 @@
         selectedDateKey = newDate;
         calendarCursor = new Date(`${newDate}T00:00:00`);
         renderDiary();
-        showToast('Ruta, fecha, hora y pasajes actualizados');
+        showToast('Ruta y pasajes actualizados');
     }
 
     function deleteRouteSummary(vueltaId) {
@@ -1120,7 +1531,7 @@
         const now = new Date();
         const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
         const startOfWeek = startOfToday - (7 * 24 * 60 * 60 * 1000);
-        let stats = { hoy: { inc: 0, exp: 0 }, sem: { inc: 0, exp: 0 }, horas: {} };
+        let stats = { hoy: { inc: 0, exp: 0 }, sem: { inc: 0, exp: 0 } };
         masterHistory.forEach(t => {
             let tTime = getRecordTimestamp(t);
             if (tTime >= startOfToday) {
@@ -1128,12 +1539,8 @@
                 else if(t.tipo === 'Gasto') stats.hoy.exp += parseFloat(t.monto || 0);
             }
             if (tTime >= startOfWeek) {
-                if(t.tipo === 'Ingreso') {
-                    stats.sem.inc += parseFloat(t.monto || 0);
-                    let hour = new Date(tTime).getHours();
-                    let h12 = (hour % 12 || 12) + (hour >= 12 ? ' PM' : ' AM');
-                    stats.horas[h12] = (stats.horas[h12] || 0) + parseFloat(t.monto || 0);
-                } else if(t.tipo === 'Gasto') stats.sem.exp += parseFloat(t.monto || 0);
+                if(t.tipo === 'Ingreso') stats.sem.inc += parseFloat(t.monto || 0);
+                else if(t.tipo === 'Gasto') stats.sem.exp += parseFloat(t.monto || 0);
             }
         });
         document.getElementById('st-hoy-ingreso').innerText = `S/ ${stats.hoy.inc.toFixed(2)}`;
@@ -1141,11 +1548,6 @@
         document.getElementById('st-hoy-neta').innerText = `S/ ${(stats.hoy.inc - stats.hoy.exp).toFixed(2)}`;
         document.getElementById('st-sem-ingreso').innerText = `S/ ${stats.sem.inc.toFixed(2)}`;
         document.getElementById('st-sem-gasto').innerText = `S/ ${stats.sem.exp.toFixed(2)}`;
-        let horasHtml = '';
-        let sortedHours = Object.entries(stats.horas).sort((a,b) => b[1] - a[1]).slice(0,5);
-        if (sortedHours.length === 0) horasHtml = `<div style="font-size:12px; color:var(--text-muted);">Sin datos esta semana.</div>`;
-        else sortedHours.forEach(([h, g], idx) => { horasHtml += `<div class="peak-hour-bar"><span>${idx + 1}. ${h}</span> <strong>S/ ${g.toFixed(2)}</strong></div>`; });
-        document.getElementById('st-horas').innerHTML = horasHtml;
     }
 
     function renderChart() {
@@ -1177,11 +1579,17 @@
     }
 
     function exportData() {
-        let exportObj = { history: masterHistory, buttons: customAmounts, routes: customRoutes };
+        let exportObj = { 
+            history: masterHistory, 
+            buttons: customAmounts, 
+            routes: customRoutes,
+            activeShift: activeShift,
+            shiftsHistory: shiftsHistory
+        };
         let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj));
         let downloadAnchorNode = document.createElement('a');
         downloadAnchorNode.setAttribute("href", dataStr);
-        downloadAnchorNode.setAttribute("download", `TaxiTracker_Respaldo.json`);
+        downloadAnchorNode.setAttribute("download", `TaxiTracker_v2.7_Respaldo.json`);
         document.body.appendChild(downloadAnchorNode);
         downloadAnchorNode.click();
         downloadAnchorNode.remove();
@@ -1198,11 +1606,13 @@
                 if(importedData.history) masterHistory = importedData.history;
                 if(importedData.buttons) customAmounts = importedData.buttons;
                 if(importedData.routes) customRoutes = importedData.routes;
+                if(importedData.activeShift !== undefined) activeShift = importedData.activeShift;
+                if(importedData.shiftsHistory) shiftsHistory = importedData.shiftsHistory;
                 normalizeStoredRecords();
                 saveAll();
                 init();
                 renderDiary();
-                alert("✅ ¡Datos restaurados!");
+                alert("✅ ¡Datos restaurados con éxito!");
             } catch(err) { alert("❌ Error: Archivo inválido."); }
         };
         reader.readAsText(file);
@@ -1211,6 +1621,13 @@
     async function syncData() {
         if (currentShift.length === 0) return alert("Nada nuevo para subir hoy.");
         if (isVueltaActive) return alert("⚠️ Termina la vuelta antes de subir.");
+        
+        if (activeShift) {
+            if (confirm("¿Deseas finalizar la jornada de trabajo actual antes de subir los datos a la nube?")) {
+                finishShift();
+            }
+        }
+
         const btn = document.getElementById('btn-sync');
         btn.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i> Subiendo...";
         btn.style.opacity = "0.7";
@@ -1238,16 +1655,18 @@
         setTimeout(() => t.style.opacity = 0, 2500);
     }
 
+    // Modal click-outside handlers
     document.getElementById('edit-modal').addEventListener('click', function(e) {
         if(e.target.id === 'edit-modal') closeEditModal();
     });
-
     document.getElementById('summary-edit-modal').addEventListener('click', function(e) {
         if(e.target.id === 'summary-edit-modal') closeSummaryEditModal();
     });
-
     document.getElementById('fuel-modal').addEventListener('click', function(e) {
         if(e.target.id === 'fuel-modal') closeFuelModal();
+    });
+    document.getElementById('shift-edit-modal').addEventListener('click', function(e) {
+        if(e.target.id === 'shift-edit-modal') closeShiftEditModal();
     });
 
     init();

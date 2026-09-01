@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="TaxiTracker">
-    <title>TaxiTracker v2.7</title>
+    <title>TaxiTracker v2.8</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -69,10 +69,14 @@
         .btn-shift-end { background: var(--red); color: #fff; font-family: var(--font-title); font-weight: 700; border: none; padding: 10px 14px; border-radius: 10px; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 6px; }
         .btn-shift-adjust { background: #2c2c35; color: white; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 10px 12px; font-size: 12px; cursor: pointer; font-weight: 600; }
 
-        /* Vueltas Counter Banner */
-        .vueltas-counter-card { background: rgba(191, 90, 242, 0.12); border: 1px solid rgba(191, 90, 242, 0.3); border-radius: 14px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        /* Vueltas Counter Banner & Detail List */
+        .vueltas-counter-card { background: rgba(191, 90, 242, 0.12); border: 1px solid rgba(191, 90, 242, 0.3); border-radius: 14px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; cursor: pointer; }
         .vueltas-pill { font-family: var(--font-title); font-size: 14px; font-weight: 800; color: var(--purple); display: flex; align-items: center; gap: 6px; }
         .vueltas-sub { font-size: 11px; color: var(--text-muted); }
+        .vueltas-details-box { display: none; background: rgba(0,0,0,0.25); border: 1px dashed rgba(191,90,242,0.3); border-radius: 12px; padding: 10px; margin-bottom: 12px; font-size: 12px; }
+        .vueltas-details-box.show { display: block; }
+        .leg-row-item { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .leg-row-item:last-child { border-bottom: none; }
 
         .route-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 5px; position: relative; }
         .route-card-wrap { position: relative; display: flex; flex-direction: column; gap: 7px; }
@@ -119,6 +123,7 @@
         .editing .btn-income, .editing .btn-route { animation: shake 0.4s infinite; border: 1px dashed var(--yellow); opacity: 0.8; }
         @keyframes shake { 0% { transform: rotate(0deg); } 25% { transform: rotate(1deg); } 50% { transform: rotate(0deg); } 75% { transform: rotate(-1deg); } 100% { transform: rotate(0deg); } }
 
+        /* Diario / Calendario Hero */
         .diary-hero { position: relative; overflow: hidden; background: linear-gradient(135deg, rgba(10,132,255,0.24), rgba(191,90,242,0.25), rgba(255,214,10,0.12)); border-radius: 20px; padding: 16px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 10px 28px rgba(0,0,0,0.25); }
         .diary-hero:before { content: ""; position: absolute; width: 150px; height: 150px; right: -45px; top: -55px; background: radial-gradient(circle, rgba(255,214,10,0.28), transparent 68%); }
         .diary-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; position: relative; z-index: 1; }
@@ -181,9 +186,17 @@
         .shift-history-meta { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
         .shift-history-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
 
-        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.68); z-index: 2000; padding: 18px; align-items: center; justify-content: center; }
+        /* Shift Legs Manager in Edit Modal */
+        .shift-legs-manager { background: rgba(0,0,0,0.22); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 10px; margin-top: 8px; }
+        .shift-legs-list { display: flex; flex-direction: column; gap: 6px; max-height: 180px; overflow-y: auto; margin-top: 8px; }
+        .shift-leg-row { display: flex; justify-content: space-between; align-items: center; background: #2c2c35; padding: 6px 10px; border-radius: 8px; font-size: 11px; }
+        .shift-leg-btns { display: flex; gap: 4px; }
+        .shift-leg-mini-btn { border: none; background: #3e3e4a; color: white; border-radius: 6px; padding: 4px 8px; font-size: 10px; cursor: pointer; }
+        .shift-leg-mini-btn.del { background: var(--red); }
+
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.72); z-index: 2000; padding: 18px; align-items: center; justify-content: center; overflow-y: auto; }
         .modal-overlay.show { display: flex; }
-        .modal-card { width: 100%; max-width: 420px; background: var(--card-bg); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; box-shadow: 0 16px 60px rgba(0,0,0,0.45); }
+        .modal-card { width: 100%; max-width: 420px; background: var(--card-bg); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; box-shadow: 0 16px 60px rgba(0,0,0,0.45); max-height: 90vh; overflow-y: auto; }
         .modal-title { font-family: var(--font-title); font-size: 17px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .form-grid .full { grid-column: span 2; }
@@ -219,7 +232,7 @@
 
 <div class="app-container">
     <div class="app-header">
-        <div class="app-title"><i class="fa-solid fa-car" style="color:var(--yellow)"></i> TaxiTracker <span class="badge-v2">v2.7</span></div>
+        <div class="app-title"><i class="fa-solid fa-car" style="color:var(--yellow)"></i> TaxiTracker <span class="badge-v2">v2.8</span></div>
     </div>
 
     <!-- VISTA TURNO -->
@@ -236,11 +249,18 @@
             </div>
 
             <!-- Vueltas Counter Banner -->
-            <div class="vueltas-counter-card" id="vueltas-banner">
+            <div class="vueltas-counter-card" id="vueltas-banner" onclick="toggleVueltasDetailView()" title="Toca para ver u ocultar las rutas completadas">
                 <div>
                     <div class="vueltas-pill"><i class="fa-solid fa-arrows-rotate"></i> <span id="ui-vueltas-count">0</span> Vueltas Completas</div>
                     <div class="vueltas-sub" id="ui-vueltas-sub">0 tramos completados (Ida y Vuelta)</div>
                 </div>
+                <i class="fa-solid fa-chevron-down" style="color:var(--purple); font-size:12px;"></i>
+            </div>
+
+            <!-- Detalle desplegable de rutas de la jornada actual -->
+            <div id="vueltas-details-box" class="vueltas-details-box">
+                <div style="font-weight:700; color:var(--text-muted); margin-bottom:6px; text-transform:uppercase; font-size:10px;">Rutas realizadas en este turno:</div>
+                <div id="vueltas-legs-list">Sin rutas completadas aún</div>
             </div>
 
             <div id="route-selector" class="route-selector"></div>
@@ -330,13 +350,16 @@
             <div class="stat-row" style="color: var(--text-muted);"><span>Gastos Últimos 7 Días:</span> <strong style="color:var(--text-main)" id="st-sem-gasto">S/ 0.00</strong></div>
         </div>
 
-        <!-- SECCIÓN GANANCIAS POR TURNO (V2.7) -->
+        <!-- SECCIÓN GANANCIAS POR TURNO (V2.8) -->
         <div class="card-panel" style="border-left: 4px solid var(--green);">
             <div class="section-title" style="color: var(--green);">
-                <span><i class="fa-solid fa-clock-rotate-left"></i> Ganancias por Turno</span>
+                <span><i class="fa-solid fa-clock-rotate-left"></i> Ganancias por Turno (Últimas 7)</span>
                 <span id="st-shift-total-count" style="font-size:11px; color:var(--text-muted); text-transform:none;">0 jornadas</span>
             </div>
             <div id="shift-history-list"></div>
+            <button class="btn-backup" style="background:var(--card-soft); border:1px solid rgba(255,255,255,0.1); margin-top:12px;" onclick="openShiftsCalendarModal()">
+                <i class="fa-regular fa-calendar-days" style="color:var(--yellow)"></i> Ver Histórico de Jornadas en Calendario
+            </button>
         </div>
 
         <div class="backup-panel">
@@ -446,7 +469,7 @@
     </div>
 </div>
 
-<!-- MODAL EDITAR TURNO / JORNADA (V2.7) -->
+<!-- MODAL EDITAR TURNO / JORNADA (V2.8 con gestión completa de rutas) -->
 <div id="shift-edit-modal" class="modal-overlay">
     <div class="modal-card">
         <div class="modal-title"><i class="fa-solid fa-clock-rotate-left" style="color:var(--green)"></i> Editar Jornada / Turno</div>
@@ -457,8 +480,8 @@
                 <input type="date" id="edit-shift-fecha" class="edit-input">
             </div>
             <div>
-                <label class="field-label">Vueltas</label>
-                <input type="number" id="edit-shift-vueltas" class="edit-input" placeholder="0">
+                <label class="field-label">Vueltas Completas</label>
+                <input type="number" id="edit-shift-vueltas" class="edit-input" placeholder="0" readonly style="opacity:0.8; background:#1c1c21;">
             </div>
             <div>
                 <label class="field-label">Hora Inicio</label>
@@ -476,11 +499,43 @@
                 <label class="field-label">Gastos (S/)</label>
                 <input type="number" step="0.01" id="edit-shift-gasto" class="edit-input">
             </div>
+
+            <!-- Gestión interactiva de rutas/tramos de la jornada -->
+            <div class="full shift-legs-manager">
+                <label class="field-label" style="color:var(--purple);">Tramos y Rutas Realizadas (<span id="edit-shift-legs-count">0</span>)</label>
+                <div style="display:flex; gap:6px; margin-top:5px;">
+                    <select id="edit-shift-add-select" class="edit-select" style="text-align:left; font-size:12px; padding:8px;"></select>
+                    <button class="small-action edit" onclick="addLegToEditingShift()" style="white-space:nowrap; padding:8px 12px;"><i class="fa-solid fa-plus"></i> Añadir</button>
+                </div>
+                <div class="shift-legs-list" id="edit-shift-legs-container"></div>
+            </div>
         </div>
         <div class="modal-actions">
             <button class="modal-btn cancel" onclick="closeShiftEditModal()">Cancelar</button>
             <button class="modal-btn save" onclick="saveEditedShift()">Guardar</button>
         </div>
+    </div>
+</div>
+
+<!-- MODAL HISTÓRICO DE JORNADAS EN CALENDARIO (V2.8) -->
+<div id="shifts-calendar-modal" class="modal-overlay">
+    <div class="modal-card" style="max-width: 440px;">
+        <div class="diary-top" style="margin-bottom: 10px;">
+            <div>
+                <div class="diary-month" id="shift-cal-month-label" style="font-size:16px;">Jornadas</div>
+                <div class="diary-subtitle" id="shift-cal-selected-label">Selecciona un día</div>
+            </div>
+            <div class="calendar-nav">
+                <button class="round-btn" onclick="changeShiftsCalMonth(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+                <button class="round-btn" onclick="changeShiftsCalMonth(1)"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+        </div>
+        <div class="month-grid" id="shift-month-grid"></div>
+        <div style="margin-top:14px;">
+            <div class="section-title" style="margin-bottom:8px;"><span>Jornadas en este día</span><span id="shift-cal-day-count">0</span></div>
+            <div id="shift-cal-day-list" style="max-height:220px; overflow-y:auto;"></div>
+        </div>
+        <button class="modal-btn cancel" style="width:100%; margin-top:14px;" onclick="closeShiftsCalendarModal()">Cerrar Calendario</button>
     </div>
 </div>
 
@@ -501,7 +556,7 @@
     let masterHistory = JSON.parse(localStorage.getItem('taxiHistory')) || [];
     let currentShift = JSON.parse(localStorage.getItem('taxiCurrentShift')) || [];
     
-    // V2.7 - Gestión de Turnos y Jornadas
+    // V2.8 - Gestión estricta de Turnos y Jornadas
     let activeShift = JSON.parse(localStorage.getItem('taxiActiveShift')) || null;
     let shiftsHistory = JSON.parse(localStorage.getItem('taxiShiftsHistory')) || [];
 
@@ -517,6 +572,11 @@
     let selectedFuelCategory = '';
     let editingSummaryId = '';
     let shiftTimerInterval = null;
+
+    // Temporal para edición de rutas en modal de jornada
+    let tempEditingShiftLegs = [];
+    let shiftCalCursor = new Date();
+    let shiftCalSelectedDateKey = toDateKey(new Date());
 
     function init() {
         normalizeStoredRecords();
@@ -548,6 +608,12 @@
                 changed = true;
             }
         });
+        shiftsHistory.forEach(s => {
+            if (!s.legs) {
+                s.legs = [];
+                changed = true;
+            }
+        });
         if (changed) saveAll();
     }
 
@@ -568,6 +634,7 @@
     }
 
     function displayDate(dateKey) {
+        if(!dateKey) return '';
         const [y, m, d] = dateKey.split('-');
         return `${d}/${m}/${y}`;
     }
@@ -626,63 +693,111 @@
     }
 
     /* ==========================================================
-       V2.7: CÁLCULO DE VUELTAS (IDA Y VUELTA)
+       V2.8: CÁLCULO DE VUELTAS BIDIRECCIONAL (IDA Y VUELTA)
        ========================================================== */
-    function calculateVueltas(records) {
-        const legs = [];
-        records.forEach(r => {
-            if (r.tipo === 'Info' && r.categoria === 'RutaKM' && r.ruta) {
-                legs.push(r.ruta);
-            }
+    function parseRouteDirection(routeName) {
+        if (!routeName) return null;
+        let parts = routeName.split(/➔|->|-->|\ba\b/i).map(s => s.trim().toLowerCase());
+        if (parts.length >= 2 && parts[0] && parts[1]) {
+            return { from: parts[0], to: parts[1], raw: routeName };
+        }
+        return { from: routeName.trim().toLowerCase(), to: '', raw: routeName };
+    }
+
+    function calculateVueltasFromLegsList(legs) {
+        const parsedLegs = legs.map((leg, idx) => {
+            const name = typeof leg === 'string' ? leg : (leg.name || leg.ruta || '');
+            const dir = parseRouteDirection(name);
+            return { index: idx, name, dir, matched: false, legObj: leg };
         });
 
         let fullVueltas = 0;
-        let unmatched = [...legs];
+        const pairs = [];
 
-        for (let i = 0; i < unmatched.length; i++) {
-            const legA = unmatched[i];
-            if (!legA) continue;
-            const partsA = legA.split(/➔|->| a /i).map(s => s.trim().toLowerCase());
+        for (let i = 0; i < parsedLegs.length; i++) {
+            const legA = parsedLegs[i];
+            if (legA.matched || !legA.dir || !legA.dir.to) continue;
 
-            if (partsA.length === 2) {
-                const reverseIdx = unmatched.findIndex((legB, j) => {
-                    if (j <= i || !legB) return false;
-                    const partsB = legB.split(/➔|->| a /i).map(s => s.trim().toLowerCase());
-                    return partsB.length === 2 && partsB[0] === partsA[1] && partsB[1] === partsA[0];
-                });
+            for (let j = i + 1; j < parsedLegs.length; j++) {
+                const legB = parsedLegs[j];
+                if (legB.matched || !legB.dir || !legB.dir.to) continue;
 
-                if (reverseIdx !== -1) {
+                // Match exacto Ida (A->B) y Retorno (B->A)
+                if (legA.dir.from === legB.dir.to && legA.dir.to === legB.dir.from) {
+                    legA.matched = true;
+                    legB.matched = true;
                     fullVueltas++;
-                    unmatched[i] = null;
-                    unmatched[reverseIdx] = null;
+                    pairs.push({ ida: legA.name, vuelta: legB.name, idxA: i, idxB: j });
+                    break;
                 }
             }
         }
 
-        const halfLegs = unmatched.filter(x => x !== null).length;
+        const unmatched = parsedLegs.filter(l => !l.matched);
         return {
             fullVueltas,
-            halfLegs,
-            totalLegs: legs.length
+            halfLegs: unmatched.length,
+            totalLegs: parsedLegs.length,
+            pairs,
+            parsedLegs
         };
     }
 
+    function getActiveShiftLegs() {
+        if (activeShift && Array.isArray(activeShift.legs)) {
+            return activeShift.legs;
+        }
+        const legs = [];
+        currentShift.forEach(r => {
+            if (r.tipo === 'Info' && r.categoria === 'RutaKM' && r.ruta) {
+                legs.push({ name: r.ruta, time: r.timeKey || '', monto: r.monto });
+            }
+        });
+        return legs;
+    }
+
+    function toggleVueltasDetailView() {
+        const box = document.getElementById('vueltas-details-box');
+        if (box) box.classList.toggle('show');
+    }
+
     function updateVueltasBanner() {
-        const stats = calculateVueltas(currentShift);
+        const currentLegs = getActiveShiftLegs();
+        const stats = calculateVueltasFromLegsList(currentLegs);
         const countEl = document.getElementById('ui-vueltas-count');
         const subEl = document.getElementById('ui-vueltas-sub');
+        const listEl = document.getElementById('vueltas-legs-list');
+
         if (countEl && subEl) {
             countEl.innerText = stats.fullVueltas;
             let subText = `${stats.totalLegs} tramos completados`;
             if (stats.halfLegs > 0) {
-                subText += ` (+${stats.halfLegs} ida sin retorno)`;
+                subText += ` (${stats.halfLegs} ida sin retorno)`;
             }
             subEl.innerText = subText;
+        }
+
+        if (listEl) {
+            if (stats.parsedLegs.length === 0) {
+                listEl.innerHTML = '<span style="color:var(--text-muted)">Sin rutas completadas aún</span>';
+            } else {
+                listEl.innerHTML = stats.parsedLegs.map((item, idx) => {
+                    const statusBadge = item.matched 
+                        ? `<span style="color:var(--green); font-size:10px; font-weight:700;"><i class="fa-solid fa-check"></i> Vuelta Par</span>` 
+                        : `<span style="color:var(--yellow); font-size:10px;">(Solo ida)</span>`;
+                    return `
+                        <div class="leg-row-item">
+                            <span><strong>${idx + 1}.</strong> ${item.name}</span>
+                            <span>${statusBadge}</span>
+                        </div>
+                    `;
+                }).join('');
+            }
         }
     }
 
     /* ==========================================================
-       V2.7: GESTIÓN DE TURNO Y JORNADA
+       V2.8: GESTIÓN DE TURNO Y JORNADA
        ========================================================== */
     function renderShiftUI() {
         const container = document.getElementById('shift-container');
@@ -732,7 +847,7 @@
                 const el = document.getElementById('live-shift-timer');
                 if (el) el.innerText = formatDuration(Date.now() - activeShift.startTimestamp);
             }
-        }, 30000); // actualiza cada 30 segs
+        }, 30000);
     }
 
     function startShift() {
@@ -741,11 +856,12 @@
             id: Date.now(),
             dateKey: toDateKey(now),
             startTime: toTimeKey(now),
-            startTimestamp: now.getTime()
+            startTimestamp: now.getTime(),
+            legs: []
         };
         saveAll();
         renderShiftUI();
-        showToast("🚀 ¡Turno iniciado con éxito!");
+        showToast("🚀 ¡Jornada de trabajo iniciada!");
     }
 
     function adjustShiftStartTime() {
@@ -764,7 +880,7 @@
     }
 
     function cancelActiveShift() {
-        if (confirm("¿Descartar el turno actual en curso sin guardarlo en el historial de jornadas?")) {
+        if (confirm("¿Descartar la jornada en curso sin registrarla en Ganancias por Turno?")) {
             activeShift = null;
             saveAll();
             renderShiftUI();
@@ -784,7 +900,8 @@
         const endNow = new Date();
         const endTimeStr = toTimeKey(endNow);
         const durationMs = endNow.getTime() - activeShift.startTimestamp;
-        const vueltasData = calculateVueltas(currentShift);
+        const currentLegs = getActiveShiftLegs();
+        const vueltasData = calculateVueltasFromLegsList(currentLegs);
 
         const summaryText = `🏁 FINALIZAR JORNADA\n\n` +
             `⏱️ Duración: ${formatDuration(durationMs)} (${activeShift.startTime} - ${endTimeStr})\n` +
@@ -808,7 +925,8 @@
             expense: exp,
             net: inc - exp,
             vueltas: vueltasData.fullVueltas,
-            tramos: vueltasData.totalLegs
+            tramos: vueltasData.totalLegs,
+            legs: currentLegs.map(l => ({ name: l.name || l.ruta || '', time: l.time || '' }))
         };
 
         shiftsHistory.unshift(shiftEntry);
@@ -819,22 +937,28 @@
     }
 
     /* ==========================================================
-       V2.7: GANANCIAS POR TURNO (SECCIÓN STATS)
+       V2.8: GANANCIAS POR TURNO (7 ÚLTIMAS + HISTORIAL MODAL)
        ========================================================== */
     function renderShiftsHistoryList() {
         const list = document.getElementById('shift-history-list');
         const countLabel = document.getElementById('st-shift-total-count');
         if (!list) return;
 
-        if (countLabel) countLabel.innerText = `${shiftsHistory.length} jornadas`;
+        if (countLabel) countLabel.innerText = `${shiftsHistory.length} total`;
 
         if (shiftsHistory.length === 0) {
             list.innerHTML = `<div style="font-size:12px; color:var(--text-muted); text-align:center; padding:15px 0;">No hay jornadas finalizadas registradas aún.</div>`;
             return;
         }
 
-        list.innerHTML = shiftsHistory.map(s => {
+        // Mostrar únicamente las 7 últimas jornadas
+        const latestShifts = shiftsHistory.slice(0, 7);
+
+        list.innerHTML = latestShifts.map(s => {
             const netClass = s.net >= 0 ? '' : 'neg';
+            const legsStr = (s.legs && s.legs.length > 0)
+                ? s.legs.map(l => l.name || l).join(' | ')
+                : 'Sin tramos especificados';
             return `
                 <div class="shift-history-card">
                     <div class="shift-history-header">
@@ -845,7 +969,9 @@
                     </div>
                     <div class="shift-history-meta">
                         <i class="fa-regular fa-clock"></i> ${s.startTime} - ${s.endTime} · <strong>${s.durationText || 'N/A'}</strong><br>
-                        <i class="fa-solid fa-arrows-rotate"></i> ${s.vueltas || 0} vueltas (${s.tramos || 0} tramos) · Ingresos: S/ ${parseFloat(s.income||0).toFixed(2)} · Gastos: S/ ${parseFloat(s.expense||0).toFixed(2)}
+                        <i class="fa-solid fa-arrows-rotate"></i> ${s.vueltas || 0} vueltas completas (${s.tramos || (s.legs ? s.legs.length : 0)} tramos)<br>
+                        <span style="font-size:10px; color:rgba(255,255,255,0.65);">${legsStr}</span><br>
+                        Ingresos: S/ ${parseFloat(s.income||0).toFixed(2)} · Gastos: S/ ${parseFloat(s.expense||0).toFixed(2)}
                     </div>
                     <div class="shift-history-actions">
                         <button class="small-action edit" onclick="openShiftEditModal(${s.id})"><i class="fa-solid fa-pen"></i> Editar</button>
@@ -856,17 +982,76 @@
         }).join('');
     }
 
+    /* EDICIÓN Y GESTIÓN DE RUTAS DENTRO DE UNA JORNADA */
     function openShiftEditModal(shiftId) {
         const s = shiftsHistory.find(item => String(item.id) === String(shiftId));
         if (!s) return;
         document.getElementById('edit-shift-id').value = s.id;
         document.getElementById('edit-shift-fecha').value = s.dateKey;
-        document.getElementById('edit-shift-vueltas').value = s.vueltas || 0;
         document.getElementById('edit-shift-inicio').value = s.startTime;
         document.getElementById('edit-shift-fin').value = s.endTime;
         document.getElementById('edit-shift-ingreso').value = parseFloat(s.income || 0).toFixed(2);
         document.getElementById('edit-shift-gasto').value = parseFloat(s.expense || 0).toFixed(2);
+
+        // Copia temporal de las piernas/tramos para manipular
+        tempEditingShiftLegs = s.legs ? JSON.parse(JSON.stringify(s.legs)) : [];
+
+        // Rellenar select de añadir ruta
+        const select = document.getElementById('edit-shift-add-select');
+        select.innerHTML = customRoutes.map((r, i) => `<option value="${i}">${r.name}</option>`).join('');
+
+        renderEditingShiftLegs();
         document.getElementById('shift-edit-modal').classList.add('show');
+    }
+
+    function renderEditingShiftLegs() {
+        const container = document.getElementById('edit-shift-legs-container');
+        const countLabel = document.getElementById('edit-shift-legs-count');
+        const vueltasInput = document.getElementById('edit-shift-vueltas');
+
+        const vueltasData = calculateVueltasFromLegsList(tempEditingShiftLegs);
+        if (countLabel) countLabel.innerText = `${tempEditingShiftLegs.length} tramos`;
+        if (vueltasInput) vueltasInput.value = vueltasData.fullVueltas;
+
+        if (tempEditingShiftLegs.length === 0) {
+            container.innerHTML = `<div style="text-align:center; color:var(--text-muted); font-size:11px; padding:6px;">No hay rutas en este turno</div>`;
+            return;
+        }
+
+        container.innerHTML = tempEditingShiftLegs.map((leg, idx) => {
+            const name = leg.name || leg;
+            return `
+                <div class="shift-leg-row">
+                    <span><strong>${idx + 1}.</strong> ${name}</span>
+                    <div class="shift-leg-btns">
+                        <button class="shift-leg-mini-btn" onclick="moveShiftLeg(${idx}, -1)" ${idx === 0 ? 'disabled' : ''}><i class="fa-solid fa-arrow-up"></i></button>
+                        <button class="shift-leg-mini-btn" onclick="moveShiftLeg(${idx}, 1)" ${idx === tempEditingShiftLegs.length - 1 ? 'disabled' : ''}><i class="fa-solid fa-arrow-down"></i></button>
+                        <button class="shift-leg-mini-btn del" onclick="removeShiftLeg(${idx})"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function addLegToEditingShift() {
+        const select = document.getElementById('edit-shift-add-select');
+        const routeObj = customRoutes[parseInt(select.value, 10)];
+        if (!routeObj) return;
+        tempEditingShiftLegs.push({ name: routeObj.name, time: '' });
+        renderEditingShiftLegs();
+    }
+
+    function removeShiftLeg(index) {
+        tempEditingShiftLegs.splice(index, 1);
+        renderEditingShiftLegs();
+    }
+
+    function moveShiftLeg(index, dir) {
+        const target = index + dir;
+        if (target < 0 || target >= tempEditingShiftLegs.length) return;
+        const item = tempEditingShiftLegs.splice(index, 1)[0];
+        tempEditingShiftLegs.splice(target, 0, item);
+        renderEditingShiftLegs();
     }
 
     function closeShiftEditModal() {
@@ -879,7 +1064,6 @@
         if (!s) return;
 
         const dateKey = document.getElementById('edit-shift-fecha').value;
-        const vueltas = parseInt(document.getElementById('edit-shift-vueltas').value, 10) || 0;
         const startTime = document.getElementById('edit-shift-inicio').value;
         const endTime = document.getElementById('edit-shift-fin').value;
         const income = parseFloat(document.getElementById('edit-shift-ingreso').value) || 0;
@@ -887,24 +1071,29 @@
 
         if (!dateKey || !startTime || !endTime) return alert("Por favor completa los campos requeridos.");
 
+        const vueltasData = calculateVueltasFromLegsList(tempEditingShiftLegs);
+
         s.dateKey = dateKey;
-        s.vueltas = vueltas;
         s.startTime = startTime;
         s.endTime = endTime;
         s.income = income;
         s.expense = expense;
         s.net = income - expense;
+        s.legs = tempEditingShiftLegs;
+        s.vueltas = vueltasData.fullVueltas;
+        s.tramos = tempEditingShiftLegs.length;
 
         // Recalcular duración
         const [h1, m1] = startTime.split(':').map(Number);
         const [h2, m2] = endTime.split(':').map(Number);
         let minDiff = (h2 * 60 + m2) - (h1 * 60 + m1);
-        if (minDiff < 0) minDiff += 24 * 60; // cruce de medianoche
+        if (minDiff < 0) minDiff += 24 * 60;
         s.durationText = `${Math.floor(minDiff / 60)}h ${minDiff % 60}m`;
 
         saveAll();
         closeShiftEditModal();
         renderShiftsHistoryList();
+        renderShiftsCalendarView();
         calculateStats();
         showToast("Jornada actualizada");
     }
@@ -914,12 +1103,113 @@
         shiftsHistory = shiftsHistory.filter(s => String(s.id) !== String(shiftId));
         saveAll();
         renderShiftsHistoryList();
+        renderShiftsCalendarView();
         calculateStats();
         showToast("Jornada eliminada");
     }
 
     /* ==========================================================
-       CONTROL DE RUTAS Y COBRO
+       CALENDARIO HISTÓRICO DE JORNADAS
+       ========================================================== */
+    function openShiftsCalendarModal() {
+        shiftCalCursor = new Date();
+        shiftCalSelectedDateKey = toDateKey(new Date());
+        renderShiftsCalendarView();
+        document.getElementById('shifts-calendar-modal').classList.add('show');
+    }
+
+    function closeShiftsCalendarModal() {
+        document.getElementById('shifts-calendar-modal').classList.remove('show');
+    }
+
+    function changeShiftsCalMonth(delta) {
+        shiftCalCursor.setMonth(shiftCalCursor.getMonth() + delta);
+        renderShiftsCalendarView();
+    }
+
+    function selectShiftsCalDate(dateKey) {
+        shiftCalSelectedDateKey = dateKey;
+        renderShiftsCalendarView();
+    }
+
+    function renderShiftsCalendarView() {
+        const grid = document.getElementById('shift-month-grid');
+        if (!grid) return;
+        grid.innerHTML = '';
+
+        const monthName = shiftCalCursor.toLocaleDateString('es-PE', { month: 'long', year: 'numeric' });
+        document.getElementById('shift-cal-month-label').innerText = `Jornadas: ${monthName}`;
+        document.getElementById('shift-cal-selected-label').innerText = `Día: ${displayDate(shiftCalSelectedDateKey)}`;
+
+        ['L', 'M', 'M', 'J', 'V', 'S', 'D'].forEach(w => grid.innerHTML += `<div class="weekday">${w}</div>`);
+
+        const year = shiftCalCursor.getFullYear();
+        const month = shiftCalCursor.getMonth();
+        const first = new Date(year, month, 1);
+        const last = new Date(year, month + 1, 0);
+        const firstOffset = (first.getDay() + 6) % 7;
+
+        for (let i = 0; i < firstOffset; i++) grid.innerHTML += `<div class="day-cell empty"></div>`;
+
+        for (let day = 1; day <= last.getDate(); day++) {
+            const dateObj = new Date(year, month, day);
+            const dateKey = toDateKey(dateObj);
+            const dayShifts = shiftsHistory.filter(s => s.dateKey === dateKey);
+            const hasData = dayShifts.length > 0;
+            const isSelected = dateKey === shiftCalSelectedDateKey;
+            const isToday = dateKey === toDateKey(new Date());
+
+            let netDay = 0;
+            dayShifts.forEach(s => netDay += parseFloat(s.net || 0));
+            const tone = netDay >= 0 ? 'positive' : 'negative';
+            const netText = hasData ? `S/ ${Math.abs(netDay).toFixed(0)}` : '';
+
+            grid.innerHTML += `
+                <button class="day-cell ${hasData ? 'has-data' : ''} ${tone} ${isSelected ? 'selected' : ''} ${isToday ? 'today' : ''}" onclick="selectShiftsCalDate('${dateKey}')">
+                    <span class="day-number">${day}</span>
+                    <span class="day-net">${netText}</span>
+                </button>`;
+        }
+
+        // Listado de jornadas del día seleccionado
+        const dayList = document.getElementById('shift-cal-day-list');
+        const dayCount = document.getElementById('shift-cal-day-count');
+        const selectedShifts = shiftsHistory.filter(s => s.dateKey === shiftCalSelectedDateKey);
+
+        if (dayCount) dayCount.innerText = `${selectedShifts.length} jornada(s)`;
+
+        if (selectedShifts.length === 0) {
+            dayList.innerHTML = `<div class="empty-note" style="padding:12px;">No se registraron jornadas en este día</div>`;
+            return;
+        }
+
+        dayList.innerHTML = selectedShifts.map(s => {
+            const netClass = s.net >= 0 ? '' : 'neg';
+            const legsStr = (s.legs && s.legs.length > 0)
+                ? s.legs.map(l => l.name || l).join(' ➔ ')
+                : 'Sin tramos';
+            return `
+                <div class="shift-history-card" style="margin-bottom:8px;">
+                    <div class="shift-history-header">
+                        <strong style="font-size:12px;"><i class="fa-regular fa-clock"></i> ${s.startTime} - ${s.endTime} (${s.durationText})</strong>
+                        <span class="shift-history-net ${netClass}">S/ ${parseFloat(s.net || 0).toFixed(2)}</span>
+                    </div>
+                    <div class="shift-history-meta" style="font-size:10px;">
+                        <i class="fa-solid fa-arrows-rotate"></i> ${s.vueltas || 0} vueltas (${s.tramos || (s.legs?s.legs.length:0)} tramos)<br>
+                        <span style="color:var(--text-muted);">${legsStr}</span><br>
+                        Ingresos: S/ ${parseFloat(s.income||0).toFixed(2)} · Gastos: S/ ${parseFloat(s.expense||0).toFixed(2)}
+                    </div>
+                    <div class="shift-history-actions" style="margin-top:6px;">
+                        <button class="small-action edit" onclick="openShiftEditModal(${s.id})"><i class="fa-solid fa-pen"></i> Editar</button>
+                        <button class="small-action delete" onclick="deleteShiftRecord(${s.id})"><i class="fa-solid fa-trash"></i> Borrar</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    /* ==========================================================
+       CONTROL DE RUTAS Y COBRO RÁPIDO
        ========================================================== */
     function renderRoutes() {
         const container = document.getElementById('route-selector');
@@ -982,7 +1272,7 @@
     }
 
     function addNewRoute() {
-        let name = prompt("Nombre de la ruta (Ej: Chimbote ➔ Santa):"); if (!name) return;
+        let name = prompt("Nombre de la ruta (Ej: Santa ➔ Chimbote):"); if (!name) return;
         let km = prompt("Kilómetros aprox:"); let min = prompt("Minutos aprox:");
         if(km && min) { customRoutes.push({ name: name, km: parseFloat(km), min: parseInt(min) }); renderRoutes(); saveAll(); }
     }
@@ -1060,11 +1350,7 @@
         let numAmount = parseFloat(String(amount).replace(',', '.'));
         if (isNaN(numAmount)) return;
 
-        // Auto-iniciar turno si no está activo
-        if (!activeShift) {
-            startShift();
-        }
-
+        // V2.8: NO auto-iniciar jornada automáticamente
         let now = new Date();
         let dateKey = toDateKey(now);
         let timeKey = toTimeKey(now);
@@ -1124,7 +1410,7 @@
     function manualExpense() { let amt = prompt("Monto del gasto en S/:"); if (amt) { let cat = prompt("Detalle:") || 'Operativo'; addTransaction('Gasto', cat, amt); } }
 
     function startVuelta(rutaIndex) {
-        if (!activeShift) startShift();
+        // V2.8: NO auto-iniciar jornada automáticamente
         isVueltaActive = true;
         currentRutaIdx = rutaIndex;
         currentVueltaIncome = 0;
@@ -1132,6 +1418,7 @@
         currentVueltaId = "V-" + Math.floor(Math.random() * 10000);
         document.getElementById('route-selector').style.display = 'none';
         document.getElementById('vueltas-banner').style.display = 'none';
+        document.getElementById('vueltas-details-box').classList.remove('show');
         document.querySelector('.card-panel .section-title').style.display = 'none';
         document.getElementById('active-vuelta').classList.add('active');
         document.getElementById('ui-vuelta-name').innerText = rutaObj.name;
@@ -1142,6 +1429,14 @@
     function endVuelta() {
         let rutaObj = customRoutes[currentRutaIdx];
         addTransaction('Info', 'RutaKM', rutaObj.km, rutaObj.name);
+
+        // Si la jornada está activa, registrar el tramo en la jornada
+        if (activeShift) {
+            if (!activeShift.legs) activeShift.legs = [];
+            activeShift.legs.push({ name: rutaObj.name, time: toTimeKey(new Date()) });
+            saveAll();
+        }
+
         alert(`🏁 Vuelta terminada.\nTrayecto: ${rutaObj.name}\nTotal: S/ ${currentVueltaIncome.toFixed(2)}`);
         isVueltaActive = false;
         currentRutaIdx = -1;
@@ -1163,7 +1458,7 @@
         document.getElementById('ui-expense').innerText = `S/ ${exp.toFixed(2)}`;
         updateVueltasBanner();
         const liveVueltas = document.getElementById('shift-live-vueltas');
-        if (liveVueltas) liveVueltas.innerText = calculateVueltas(currentShift).fullVueltas;
+        if (liveVueltas) liveVueltas.innerText = calculateVueltasFromLegsList(getActiveShiftLegs()).fullVueltas;
     }
 
     function saveDashboardData() {
@@ -1589,7 +1884,7 @@
         let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj));
         let downloadAnchorNode = document.createElement('a');
         downloadAnchorNode.setAttribute("href", dataStr);
-        downloadAnchorNode.setAttribute("download", `TaxiTracker_v2.7_Respaldo.json`);
+        downloadAnchorNode.setAttribute("download", `TaxiTracker_v2.8_Respaldo.json`);
         document.body.appendChild(downloadAnchorNode);
         downloadAnchorNode.click();
         downloadAnchorNode.remove();
@@ -1668,8 +1963,12 @@
     document.getElementById('shift-edit-modal').addEventListener('click', function(e) {
         if(e.target.id === 'shift-edit-modal') closeShiftEditModal();
     });
+    document.getElementById('shifts-calendar-modal').addEventListener('click', function(e) {
+        if(e.target.id === 'shifts-calendar-modal') closeShiftsCalendarModal();
+    });
 
     init();
 </script>
 </body>
 </html>
+```

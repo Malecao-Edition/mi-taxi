@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="TaxiTracker">
-    <title>TaxiTracker v2.8</title>
+    <title>TaxiTracker v1.9</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -107,7 +107,13 @@
         .btn-income { background-color: var(--green-bg); color: var(--green); border: 1px solid rgba(52, 199, 89, 0.3); position: relative; }
         .btn-expense { background-color: var(--red-bg); color: var(--red); border: 1px solid rgba(255, 59, 48, 0.3); width: 100%; padding: 16px; font-size: 14px; gap: 10px; margin-top: 5px; font-weight: 600; }
         .btn-expense-alt { background: #2c2c35; color: var(--text-muted); border: none; }
-        .btn-sync { background-color: var(--text-main); color: #000; width: 100%; padding: 16px; border-radius: 14px; font-size: 15px; font-weight: 700; margin-top: 10px; display: flex; justify-content: center; gap: 10px; align-items: center; }
+        
+        /* Botones de Sincronización Mejorados */
+        .sync-actions-container { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+        .btn-sync { width: 100%; padding: 15px; border-radius: 14px; font-size: 15px; font-weight: 700; display: flex; justify-content: center; gap: 10px; align-items: center; border: none; cursor: pointer; font-family: var(--font-title); transition: transform 0.1s, opacity 0.2s; }
+        .btn-sync:active { transform: scale(0.98); }
+        .btn-sync-shift { background: linear-gradient(135deg, #34c759, #28a745); color: #000; box-shadow: 0 4px 15px rgba(52, 199, 89, 0.25); }
+        .btn-sync-cloud { background: #2c2c35; color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.12); }
 
         .stats { display: flex; justify-content: space-between; margin-top: 15px; }
         .stat-item { width: 33%; text-align: center; }
@@ -232,7 +238,7 @@
 
 <div class="app-container">
     <div class="app-header">
-        <div class="app-title"><i class="fa-solid fa-car" style="color:var(--yellow)"></i> TaxiTracker <span class="badge-v2">v2.8</span></div>
+        <div class="app-title"><i class="fa-solid fa-car" style="color:var(--yellow)"></i> TaxiTracker <span class="badge-v2">v1.9</span></div>
     </div>
 
     <!-- VISTA TURNO -->
@@ -287,7 +293,7 @@
         </div>
 
         <div class="card-panel" style="text-align: center; border-color: rgba(10, 132, 255, 0.3);">
-            <div class="section-title" style="justify-content: center; color: var(--text-main);">Resumen del Turno</div>
+            <div class="section-title" style="justify-content: center; color: var(--text-main);" id="ui-resumen-title">Resumen del Turno</div>
             <div class="stats">
                 <div class="stat-item stat-net"><span>Neta</span><strong id="ui-net">S/ 0.00</strong></div>
                 <div class="stat-item stat-income"><span>Ingresos</span><strong id="ui-income">S/ 0.00</strong></div>
@@ -295,7 +301,15 @@
             </div>
         </div>
 
-        <button class="btn-sync" onclick="syncData()" id="btn-sync"><i class="fa-solid fa-cloud"></i> Cerrar Turno y Subir</button>
+        <!-- Botones Solicitados: Subir Jornada Laboral y Subir a la Nube -->
+        <div class="sync-actions-container">
+            <button class="btn-sync btn-sync-shift" onclick="syncShiftData()" id="btn-sync-shift">
+                <i class="fa-solid fa-briefcase"></i> Subir Jornada Laboral
+            </button>
+            <button class="btn-sync btn-sync-cloud" onclick="syncCloudData()" id="btn-sync-cloud">
+                <i class="fa-solid fa-cloud-arrow-up"></i> Subir a la Nube
+            </button>
+        </div>
     </div>
 
     <!-- VISTA DIARIO / CALENDARIO -->
@@ -350,7 +364,7 @@
             <div class="stat-row" style="color: var(--text-muted);"><span>Gastos Últimos 7 Días:</span> <strong style="color:var(--text-main)" id="st-sem-gasto">S/ 0.00</strong></div>
         </div>
 
-        <!-- SECCIÓN GANANCIAS POR TURNO (V2.8) -->
+        <!-- SECCIÓN GANANCIAS POR TURNO -->
         <div class="card-panel" style="border-left: 4px solid var(--green);">
             <div class="section-title" style="color: var(--green);">
                 <span><i class="fa-solid fa-clock-rotate-left"></i> Ganancias por Turno (Últimas 7)</span>
@@ -469,7 +483,7 @@
     </div>
 </div>
 
-<!-- MODAL EDITAR TURNO / JORNADA (V2.8 con gestión completa de rutas) -->
+<!-- MODAL EDITAR TURNO / JORNADA -->
 <div id="shift-edit-modal" class="modal-overlay">
     <div class="modal-card">
         <div class="modal-title"><i class="fa-solid fa-clock-rotate-left" style="color:var(--green)"></i> Editar Jornada / Turno</div>
@@ -517,7 +531,7 @@
     </div>
 </div>
 
-<!-- MODAL HISTÓRICO DE JORNADAS EN CALENDARIO (V2.8) -->
+<!-- MODAL HISTÓRICO DE JORNADAS EN CALENDARIO -->
 <div id="shifts-calendar-modal" class="modal-overlay">
     <div class="modal-card" style="max-width: 440px;">
         <div class="diary-top" style="margin-bottom: 10px;">
@@ -556,7 +570,7 @@
     let masterHistory = JSON.parse(localStorage.getItem('taxiHistory')) || [];
     let currentShift = JSON.parse(localStorage.getItem('taxiCurrentShift')) || [];
     
-    // V2.8 - Gestión estricta de Turnos y Jornadas
+    // Gestión de Turnos y Jornadas
     let activeShift = JSON.parse(localStorage.getItem('taxiActiveShift')) || null;
     let shiftsHistory = JSON.parse(localStorage.getItem('taxiShiftsHistory')) || [];
 
@@ -573,7 +587,6 @@
     let editingSummaryId = '';
     let shiftTimerInterval = null;
 
-    // Temporal para edición de rutas en modal de jornada
     let tempEditingShiftLegs = [];
     let shiftCalCursor = new Date();
     let shiftCalSelectedDateKey = toDateKey(new Date());
@@ -585,6 +598,14 @@
         renderShiftUI();
         updateShiftUI();
         startShiftTimer();
+    }
+
+    function isNextDay(dateKey1, dateKey2) {
+        if (!dateKey1 || !dateKey2) return false;
+        const d1 = new Date(dateKey1 + 'T00:00:00');
+        const d2 = new Date(dateKey2 + 'T00:00:00');
+        const diffDays = Math.round((d2 - d1) / (1000 * 60 * 60 * 24));
+        return diffDays === 1;
     }
 
     function normalizeStoredRecords() {
@@ -599,6 +620,7 @@
                 changed = true;
             }
         });
+
         currentShift.forEach(t => {
             if (!t.dateKey || !t.timeKey) {
                 const parsed = parseRecordDate(t);
@@ -607,7 +629,17 @@
                 t.fecha = formatFecha(t.dateKey, t.timeKey);
                 changed = true;
             }
+            // Limpieza inteligente: si el turno activo existe, verificar concordancia de fecha
+            if (activeShift) {
+                if (t.shift_id === activeShift.id) {
+                    if (t.dateKey !== activeShift.dateKey && !isNextDay(activeShift.dateKey, t.dateKey)) {
+                        t.shift_id = null;
+                        changed = true;
+                    }
+                }
+            }
         });
+
         shiftsHistory.forEach(s => {
             if (!s.legs) {
                 s.legs = [];
@@ -693,8 +725,52 @@
     }
 
     /* ==========================================================
-       V2.8: CÁLCULO DE VUELTAS BIDIRECCIONAL (IDA Y VUELTA)
+       GESTIÓN INTELIGENTE DE TRANSACCIONES DEL TURNO ACTIVO
        ========================================================== */
+    function getActiveShiftTransactions() {
+        if (!activeShift) return [];
+        return masterHistory.filter(t => {
+            if (String(t.shift_id) !== String(activeShift.id)) return false;
+            // Valida que pertenezca a la fecha de inicio del turno o a la madrugada siguiente (trasnochadas)
+            const matchesDay = t.dateKey === activeShift.dateKey || isNextDay(activeShift.dateKey, t.dateKey);
+            return matchesDay;
+        });
+    }
+
+    function getActiveShiftTotals() {
+        if (!activeShift) {
+            let inc = 0, exp = 0;
+            currentShift.filter(t => !t.shift_id).forEach(t => {
+                if (t.tipo === 'Ingreso') inc += parseFloat(t.monto || 0);
+                else if (t.tipo === 'Gasto') exp += parseFloat(t.monto || 0);
+            });
+            return { inc, exp, net: inc - exp };
+        }
+        let inc = 0, exp = 0;
+        const validShiftRecords = getActiveShiftTransactions();
+        validShiftRecords.forEach(t => {
+            if (t.tipo === 'Ingreso') inc += parseFloat(t.monto || 0);
+            else if (t.tipo === 'Gasto') exp += parseFloat(t.monto || 0);
+        });
+        return { inc, exp, net: inc - exp };
+    }
+
+    function recalculateShiftHistoryTotals(shiftId) {
+        if (!shiftId) return;
+        const s = shiftsHistory.find(item => String(item.id) === String(shiftId));
+        if (!s) return;
+        const records = masterHistory.filter(t => String(t.shift_id) === String(shiftId) && (t.dateKey === s.dateKey || isNextDay(s.dateKey, t.dateKey)));
+        let inc = 0, exp = 0;
+        records.forEach(t => {
+            if (t.tipo === 'Ingreso') inc += parseFloat(t.monto || 0);
+            else if (t.tipo === 'Gasto') exp += parseFloat(t.monto || 0);
+        });
+        s.income = inc;
+        s.expense = exp;
+        s.net = inc - exp;
+    }
+
+    /* CÁLCULO DE VUELTAS BIDIRECCIONAL */
     function parseRouteDirection(routeName) {
         if (!routeName) return null;
         let parts = routeName.split(/➔|->|-->|\ba\b/i).map(s => s.trim().toLowerCase());
@@ -722,7 +798,6 @@
                 const legB = parsedLegs[j];
                 if (legB.matched || !legB.dir || !legB.dir.to) continue;
 
-                // Match exacto Ida (A->B) y Retorno (B->A)
                 if (legA.dir.from === legB.dir.to && legA.dir.to === legB.dir.from) {
                     legA.matched = true;
                     legB.matched = true;
@@ -797,7 +872,7 @@
     }
 
     /* ==========================================================
-       V2.8: GESTIÓN DE TURNO Y JORNADA
+       CONTROL DE JORNADA
        ========================================================== */
     function renderShiftUI() {
         const container = document.getElementById('shift-container');
@@ -861,6 +936,7 @@
         };
         saveAll();
         renderShiftUI();
+        updateShiftUI();
         showToast("🚀 ¡Jornada de trabajo iniciada!");
     }
 
@@ -884,18 +960,20 @@
             activeShift = null;
             saveAll();
             renderShiftUI();
+            updateShiftUI();
         }
     }
 
-    function finishShift() {
-        if (!activeShift) return;
-        if (isVueltaActive) return alert("⚠️ Por favor termina la vuelta en curso antes de finalizar la jornada.");
+    function finishShift(skipConfirm = false) {
+        if (!activeShift) return false;
+        if (isVueltaActive) {
+            alert("⚠️ Por favor termina la vuelta en curso antes de finalizar la jornada.");
+            return false;
+        }
 
-        let inc = 0, exp = 0;
-        currentShift.forEach(t => {
-            if (t.tipo === 'Ingreso') inc += parseFloat(t.monto || 0);
-            else if (t.tipo === 'Gasto') exp += parseFloat(t.monto || 0);
-        });
+        const totals = getActiveShiftTotals();
+        const inc = totals.inc;
+        const exp = totals.exp;
 
         const endNow = new Date();
         const endTimeStr = toTimeKey(endNow);
@@ -911,7 +989,7 @@
             `💰 Ganancia Neta: S/ ${(inc - exp).toFixed(2)}\n\n` +
             `¿Deseas guardar y cerrar este turno?`;
 
-        if (!confirm(summaryText)) return;
+        if (!skipConfirm && !confirm(summaryText)) return false;
 
         const shiftEntry = {
             id: activeShift.id || Date.now(),
@@ -933,11 +1011,94 @@
         activeShift = null;
         saveAll();
         renderShiftUI();
+        updateShiftUI();
+        renderShiftsHistoryList();
+        calculateStats();
         showToast("✅ Jornada finalizada y guardada");
+        return true;
     }
 
     /* ==========================================================
-       V2.8: GANANCIAS POR TURNO (7 ÚLTIMAS + HISTORIAL MODAL)
+       SUBIDAS DIFERENCIADAS (JORNADA LABORAL Y A LA NUBE)
+       ========================================================== */
+    async function syncShiftData() {
+        if (isVueltaActive) return alert("⚠️ Termina la vuelta activa antes de subir la jornada.");
+
+        // Si la jornada está activa, finalizar primero con confirmación
+        if (activeShift) {
+            const accept = confirm("¿Deseas finalizar la jornada laboral actual y subir sus datos a la nube?");
+            if (!accept) return;
+            const closed = finishShift(true);
+            if (!closed) return;
+        }
+
+        // Transacciones de jornada en currentShift
+        const shiftRecords = currentShift.filter(t => t.shift_id);
+        if (shiftRecords.length === 0) {
+            return alert("No hay registros de jornada laboral pendientes para subir.");
+        }
+
+        const btn = document.getElementById('btn-sync-shift');
+        const origHtml = btn.innerHTML;
+        btn.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i> Subiendo Jornada...";
+        btn.style.opacity = "0.7";
+
+        try {
+            await fetch(GOOGLE_SHEET_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(shiftRecords)
+            });
+            showToast("✅ Jornada laboral subida con éxito");
+            // Remover registros de jornada subidos
+            currentShift = currentShift.filter(t => !t.shift_id);
+            localStorage.setItem('taxiCurrentShift', JSON.stringify(currentShift));
+            updateShiftUI();
+        } catch (error) {
+            alert("Error de conexión al subir la jornada laboral.");
+        } finally {
+            btn.innerHTML = origHtml;
+            btn.style.opacity = "1";
+        }
+    }
+
+    async function syncCloudData() {
+        if (isVueltaActive) return alert("⚠️ Termina la vuelta activa antes de subir.");
+
+        // Transacciones independientes (sin jornada activa vinculada)
+        const independentRecords = currentShift.filter(t => !t.shift_id);
+        if (independentRecords.length === 0) {
+            return alert("No hay rutas ni registros independientes pendientes para subir a la nube.");
+        }
+
+        const btn = document.getElementById('btn-sync-cloud');
+        const origHtml = btn.innerHTML;
+        btn.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i> Subiendo a la nube...";
+        btn.style.opacity = "0.7";
+
+        try {
+            await fetch(GOOGLE_SHEET_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(independentRecords)
+            });
+            showToast("✅ Registros independientes subidos");
+            // Remover registros independientes subidos
+            currentShift = currentShift.filter(t => t.shift_id);
+            localStorage.setItem('taxiCurrentShift', JSON.stringify(currentShift));
+            updateShiftUI();
+        } catch (error) {
+            alert("Error de conexión al subir a la nube.");
+        } finally {
+            btn.innerHTML = origHtml;
+            btn.style.opacity = "1";
+        }
+    }
+
+    /* ==========================================================
+       GANANCIAS POR TURNO (7 ÚLTIMAS)
        ========================================================== */
     function renderShiftsHistoryList() {
         const list = document.getElementById('shift-history-list');
@@ -951,7 +1112,6 @@
             return;
         }
 
-        // Mostrar únicamente las 7 últimas jornadas
         const latestShifts = shiftsHistory.slice(0, 7);
 
         list.innerHTML = latestShifts.map(s => {
@@ -982,7 +1142,6 @@
         }).join('');
     }
 
-    /* EDICIÓN Y GESTIÓN DE RUTAS DENTRO DE UNA JORNADA */
     function openShiftEditModal(shiftId) {
         const s = shiftsHistory.find(item => String(item.id) === String(shiftId));
         if (!s) return;
@@ -993,10 +1152,8 @@
         document.getElementById('edit-shift-ingreso').value = parseFloat(s.income || 0).toFixed(2);
         document.getElementById('edit-shift-gasto').value = parseFloat(s.expense || 0).toFixed(2);
 
-        // Copia temporal de las piernas/tramos para manipular
         tempEditingShiftLegs = s.legs ? JSON.parse(JSON.stringify(s.legs)) : [];
 
-        // Rellenar select de añadir ruta
         const select = document.getElementById('edit-shift-add-select');
         select.innerHTML = customRoutes.map((r, i) => `<option value="${i}">${r.name}</option>`).join('');
 
@@ -1083,7 +1240,6 @@
         s.vueltas = vueltasData.fullVueltas;
         s.tramos = tempEditingShiftLegs.length;
 
-        // Recalcular duración
         const [h1, m1] = startTime.split(':').map(Number);
         const [h2, m2] = endTime.split(':').map(Number);
         let minDiff = (h2 * 60 + m2) - (h1 * 60 + m1);
@@ -1108,9 +1264,7 @@
         showToast("Jornada eliminada");
     }
 
-    /* ==========================================================
-       CALENDARIO HISTÓRICO DE JORNADAS
-       ========================================================== */
+    /* HISTÓRICO DE JORNADAS EN CALENDARIO */
     function openShiftsCalendarModal() {
         shiftCalCursor = new Date();
         shiftCalSelectedDateKey = toDateKey(new Date());
@@ -1171,7 +1325,6 @@
                 </button>`;
         }
 
-        // Listado de jornadas del día seleccionado
         const dayList = document.getElementById('shift-cal-day-list');
         const dayCount = document.getElementById('shift-cal-day-count');
         const selectedShifts = shiftsHistory.filter(s => s.dateKey === shiftCalSelectedDateKey);
@@ -1209,7 +1362,7 @@
     }
 
     /* ==========================================================
-       CONTROL DE RUTAS Y COBRO RÁPIDO
+       RUTAS Y COBRO RÁPIDO
        ========================================================== */
     function renderRoutes() {
         const container = document.getElementById('route-selector');
@@ -1350,7 +1503,6 @@
         let numAmount = parseFloat(String(amount).replace(',', '.'));
         if (isNaN(numAmount)) return;
 
-        // V2.8: NO auto-iniciar jornada automáticamente
         let now = new Date();
         let dateKey = toDateKey(now);
         let timeKey = toTimeKey(now);
@@ -1364,7 +1516,8 @@
             categoria: category,
             monto: numAmount,
             ruta: rutaNombre,
-            vuelta_id: isVueltaActive ? currentVueltaId : '-'
+            vuelta_id: isVueltaActive ? currentVueltaId : '-',
+            shift_id: activeShift ? activeShift.id : null // Vinculado a la jornada activa
         };
         if (type === 'Ingreso' && isVueltaActive) currentVueltaIncome += numAmount;
         currentShift.push(record);
@@ -1410,7 +1563,6 @@
     function manualExpense() { let amt = prompt("Monto del gasto en S/:"); if (amt) { let cat = prompt("Detalle:") || 'Operativo'; addTransaction('Gasto', cat, amt); } }
 
     function startVuelta(rutaIndex) {
-        // V2.8: NO auto-iniciar jornada automáticamente
         isVueltaActive = true;
         currentRutaIdx = rutaIndex;
         currentVueltaIncome = 0;
@@ -1430,7 +1582,6 @@
         let rutaObj = customRoutes[currentRutaIdx];
         addTransaction('Info', 'RutaKM', rutaObj.km, rutaObj.name);
 
-        // Si la jornada está activa, registrar el tramo en la jornada
         if (activeShift) {
             if (!activeShift.legs) activeShift.legs = [];
             activeShift.legs.push({ name: rutaObj.name, time: toTimeKey(new Date()) });
@@ -1450,12 +1601,17 @@
     }
 
     function updateShiftUI() {
-        let inc = 0, exp = 0;
-        currentShift.forEach(t => { if(t.tipo === 'Ingreso') inc += parseFloat(t.monto || 0); else if(t.tipo === 'Gasto') exp += parseFloat(t.monto || 0); });
+        const totals = getActiveShiftTotals();
         document.getElementById('ui-vuelta-income').innerText = `S/ ${currentVueltaIncome.toFixed(2)}`;
-        document.getElementById('ui-net').innerText = `S/ ${(inc - exp).toFixed(2)}`;
-        document.getElementById('ui-income').innerText = `S/ ${inc.toFixed(2)}`;
-        document.getElementById('ui-expense').innerText = `S/ ${exp.toFixed(2)}`;
+        document.getElementById('ui-net').innerText = `S/ ${totals.net.toFixed(2)}`;
+        document.getElementById('ui-income').innerText = `S/ ${totals.inc.toFixed(2)}`;
+        document.getElementById('ui-expense').innerText = `S/ ${totals.exp.toFixed(2)}`;
+        
+        const titleEl = document.getElementById('ui-resumen-title');
+        if (titleEl) {
+            titleEl.innerText = activeShift ? "Resumen de la Jornada en Curso" : "Resumen de Rutas Independientes";
+        }
+
         updateVueltasBanner();
         const liveVueltas = document.getElementById('shift-live-vueltas');
         if (liveVueltas) liveVueltas.innerText = calculateVueltasFromLegsList(getActiveShiftLegs()).fullVueltas;
@@ -1729,6 +1885,18 @@
             record.timeKey = newTime;
             record.fecha = formatFecha(newDate, newTime);
             if(record.tipo === 'Info' && record.categoria === 'RutaKM') record.monto = selectedRoute.km;
+
+            // Desvincular si se cambió la fecha fuera de la jornada
+            if (record.shift_id) {
+                const shiftRef = (activeShift && String(activeShift.id) === String(record.shift_id))
+                    ? activeShift
+                    : shiftsHistory.find(s => String(s.id) === String(record.shift_id));
+                if (shiftRef) {
+                    if (record.dateKey !== shiftRef.dateKey && !isNextDay(shiftRef.dateKey, record.dateKey)) {
+                        record.shift_id = null;
+                    }
+                }
+            }
         };
 
         masterHistory.forEach(t => { if(String(t.vuelta_id) === String(vueltaId)) updateRecord(t); });
@@ -1754,11 +1922,23 @@
 
     function deleteRouteSummary(vueltaId) {
         if(!confirm('¿Borrar esta ruta y todos sus pasajes registrados?')) return;
+        const shiftIds = new Set();
+        masterHistory.forEach(t => {
+            if (String(t.vuelta_id) === String(vueltaId) && t.shift_id) {
+                shiftIds.add(t.shift_id);
+            }
+        });
+
         masterHistory = masterHistory.filter(t => String(t.vuelta_id) !== String(vueltaId));
         currentShift = currentShift.filter(t => String(t.vuelta_id) !== String(vueltaId));
+
+        shiftIds.forEach(sId => recalculateShiftHistoryTotals(sId));
+
         saveAll();
         updateShiftUI();
         renderDiary();
+        renderShiftsHistoryList();
+        calculateStats();
         showToast('Ruta y pasajes borrados');
     }
 
@@ -1796,6 +1976,8 @@
         const newDate = document.getElementById('edit-fecha').value;
         const newTime = document.getElementById('edit-hora').value || '00:00';
         const newAmount = parseFloat(document.getElementById('edit-monto').value || 0);
+        const oldShiftId = record.shift_id;
+
         record.ruta = document.getElementById('edit-ruta').value || 'Libre';
         record.dateKey = newDate;
         record.timeKey = newTime;
@@ -1804,21 +1986,54 @@
         record.monto = isNaN(newAmount) ? 0 : newAmount;
         record.categoria = document.getElementById('edit-categoria').value || 'General';
 
+        // COMPORTAMIENTO INTELIGENTE:
+        // Si el registro pertenecía a una jornada y se le cambia la fecha fuera del rango de la jornada,
+        // se desvincula para que no altere las ganancias de ese turno
+        if (record.shift_id) {
+            const shiftRef = (activeShift && String(activeShift.id) === String(record.shift_id))
+                ? activeShift
+                : shiftsHistory.find(s => String(s.id) === String(record.shift_id));
+
+            if (shiftRef) {
+                const isSameDate = record.dateKey === shiftRef.dateKey;
+                const isOvernight = isNextDay(shiftRef.dateKey, record.dateKey);
+                if (!isSameDate && !isOvernight) {
+                    record.shift_id = null; // Desvincular de la jornada
+                }
+            } else {
+                record.shift_id = null;
+            }
+        }
+
         currentShift = currentShift.map(t => String(t.id) === String(id) ? { ...record } : t);
+
+        if (oldShiftId) recalculateShiftHistoryTotals(oldShiftId);
+        if (record.shift_id && record.shift_id !== oldShiftId) recalculateShiftHistoryTotals(record.shift_id);
+
         saveAll();
         updateShiftUI();
         closeEditModal();
         renderDiary();
+        calculateStats();
+        renderShiftsHistoryList();
         showToast('Registro actualizado');
     }
 
     function deleteRecord(id) {
         if(!confirm('¿Borrar este registro?')) return;
+        const target = findRecord(id);
+        const oldShiftId = target ? target.shift_id : null;
+
         masterHistory = masterHistory.filter(t => String(t.id) !== String(id));
         currentShift = currentShift.filter(t => String(t.id) !== String(id));
+
+        if (oldShiftId) recalculateShiftHistoryTotals(oldShiftId);
+
         saveAll();
         updateShiftUI();
         renderDiary();
+        calculateStats();
+        renderShiftsHistoryList();
         showToast('Registro borrado');
     }
 
@@ -1884,7 +2099,7 @@
         let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj));
         let downloadAnchorNode = document.createElement('a');
         downloadAnchorNode.setAttribute("href", dataStr);
-        downloadAnchorNode.setAttribute("download", `TaxiTracker_v2.8_Respaldo.json`);
+        downloadAnchorNode.setAttribute("download", `TaxiTracker_v1.9_Respaldo.json`);
         document.body.appendChild(downloadAnchorNode);
         downloadAnchorNode.click();
         downloadAnchorNode.remove();
@@ -1911,36 +2126,6 @@
             } catch(err) { alert("❌ Error: Archivo inválido."); }
         };
         reader.readAsText(file);
-    }
-
-    async function syncData() {
-        if (currentShift.length === 0) return alert("Nada nuevo para subir hoy.");
-        if (isVueltaActive) return alert("⚠️ Termina la vuelta antes de subir.");
-        
-        if (activeShift) {
-            if (confirm("¿Deseas finalizar la jornada de trabajo actual antes de subir los datos a la nube?")) {
-                finishShift();
-            }
-        }
-
-        const btn = document.getElementById('btn-sync');
-        btn.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i> Subiendo...";
-        btn.style.opacity = "0.7";
-        try {
-            await fetch(GOOGLE_SHEET_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(currentShift) });
-            showToast("✅ Subido a la nube");
-            setTimeout(() => {
-                currentShift = [];
-                localStorage.setItem('taxiCurrentShift', JSON.stringify([]));
-                updateShiftUI();
-                btn.innerHTML = "<i class='fa-solid fa-cloud'></i> Cerrar Turno y Subir";
-                btn.style.opacity = "1";
-            }, 1000);
-        } catch (error) {
-            alert("Error de red.");
-            btn.innerHTML = "<i class='fa-solid fa-cloud'></i> Reintentar";
-            btn.style.opacity = "1";
-        }
     }
 
     function showToast(msg) {

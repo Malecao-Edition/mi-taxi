@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="TaxiTracker">
-    <title>TaxiTracker v1.9</title>
+    <title>TaxiTracker v3.0</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,8 +29,9 @@
             --blue-bg: rgba(10, 132, 255, 0.15);
             --yellow: #ffd60a;
             --yellow-bg: rgba(255, 214, 10, 0.15);
-            --purple: #bf5af2;
-            --purple-bg: rgba(191, 90, 242, 0.16);
+            /* COLOR CELESTE PASTEL */
+            --pastel-blue: #7ad1f5;
+            --pastel-blue-bg: rgba(122, 209, 245, 0.16);
             --font-text: 'Inter', sans-serif;
             --font-title: 'Montserrat', sans-serif;
         }
@@ -56,12 +57,11 @@
 
         .card-panel { background-color: var(--card-bg); border-radius: 16px; padding: 16px; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
         
-        /* Turno Shift Status Banner */
-        .shift-status-box { background: linear-gradient(135deg, rgba(10,132,255,0.18), rgba(52,199,89,0.12)); border-radius: 16px; padding: 14px; border: 1px solid rgba(10,132,255,0.3); margin-bottom: 5px; }
+        /* Shift Status Banner */
+        .shift-status-box { background: linear-gradient(135deg, rgba(10,132,255,0.18), rgba(52,199,89,0.12)); border-radius: 16px; padding: 14px; border: 1px solid rgba(10,132,255,0.3); }
         .shift-status-box.inactive { background: #23232b; border-color: rgba(255,255,255,0.08); text-align: center; }
         .shift-status-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
         .shift-badge { background: var(--green); color: black; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .shift-badge.off { background: #444; color: #bbb; }
         .shift-timer { font-family: var(--font-title); font-size: 24px; font-weight: 800; color: var(--text-main); }
         .shift-meta { font-size: 12px; color: var(--text-muted); margin-top: 4px; display: flex; gap: 12px; flex-wrap: wrap; }
         .shift-actions { display: grid; grid-template-columns: 1fr auto; gap: 8px; margin-top: 12px; }
@@ -69,11 +69,64 @@
         .btn-shift-end { background: var(--red); color: #fff; font-family: var(--font-title); font-weight: 700; border: none; padding: 10px 14px; border-radius: 10px; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 6px; }
         .btn-shift-adjust { background: #2c2c35; color: white; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 10px 12px; font-size: 12px; cursor: pointer; font-weight: 600; }
 
-        /* Vueltas Counter Banner & Detail List */
-        .vueltas-counter-card { background: rgba(191, 90, 242, 0.12); border: 1px solid rgba(191, 90, 242, 0.3); border-radius: 14px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; cursor: pointer; }
-        .vueltas-pill { font-family: var(--font-title); font-size: 14px; font-weight: 800; color: var(--purple); display: flex; align-items: center; gap: 6px; }
+        /* Ganancias por Turno en Sección Turno */
+        .shift-earnings-card {
+            background: linear-gradient(135deg, rgba(28, 28, 33, 0.95), rgba(35, 35, 43, 0.9));
+            border: 1px solid rgba(122, 209, 245, 0.25);
+            border-radius: 16px;
+            padding: 14px 16px;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+        }
+        .shift-earnings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .shift-earnings-title {
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--pastel-blue);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .shift-earnings-status-tag {
+            font-size: 10px;
+            padding: 2px 7px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.06);
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+        .shift-earnings-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            text-align: center;
+        }
+        .shift-earnings-item {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        .shift-earnings-item span {
+            font-size: 10px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+        .shift-earnings-item strong {
+            font-size: 15px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Vueltas Counter Banner & Detail List (Celeste Pastel) */
+        .vueltas-counter-card { background: var(--pastel-blue-bg); border: 1px solid rgba(122, 209, 245, 0.35); border-radius: 14px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; cursor: pointer; }
+        .vueltas-pill { font-family: var(--font-title); font-size: 14px; font-weight: 800; color: var(--pastel-blue); display: flex; align-items: center; gap: 6px; }
         .vueltas-sub { font-size: 11px; color: var(--text-muted); }
-        .vueltas-details-box { display: none; background: rgba(0,0,0,0.25); border: 1px dashed rgba(191,90,242,0.3); border-radius: 12px; padding: 10px; margin-bottom: 12px; font-size: 12px; }
+        .vueltas-details-box { display: none; background: rgba(0,0,0,0.25); border: 1px dashed rgba(122, 209, 245, 0.35); border-radius: 12px; padding: 10px; margin-bottom: 12px; font-size: 12px; }
         .vueltas-details-box.show { display: block; }
         .leg-row-item { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .leg-row-item:last-child { border-bottom: none; }
@@ -108,20 +161,32 @@
         .btn-expense { background-color: var(--red-bg); color: var(--red); border: 1px solid rgba(255, 59, 48, 0.3); width: 100%; padding: 16px; font-size: 14px; gap: 10px; margin-top: 5px; font-weight: 600; }
         .btn-expense-alt { background: #2c2c35; color: var(--text-muted); border: none; }
         
-        /* Botones de Sincronización Mejorados */
-        .sync-actions-container { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
-        .btn-sync { width: 100%; padding: 15px; border-radius: 14px; font-size: 15px; font-weight: 700; display: flex; justify-content: center; gap: 10px; align-items: center; border: none; cursor: pointer; font-family: var(--font-title); transition: transform 0.1s, opacity 0.2s; }
+        /* Botones de Sincronización */
+        .sync-actions-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .btn-sync {
+            width: 100%;
+            padding: 14px 10px;
+            border-radius: 14px;
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            align-items: center;
+            border: none;
+            cursor: pointer;
+            font-family: var(--font-title);
+            transition: transform 0.1s, opacity 0.2s;
+            text-align: center;
+        }
         .btn-sync:active { transform: scale(0.98); }
-        .btn-sync-shift { background: linear-gradient(135deg, #34c759, #28a745); color: #000; box-shadow: 0 4px 15px rgba(52, 199, 89, 0.25); }
         .btn-sync-cloud { background: #2c2c35; color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.12); }
-
-        .stats { display: flex; justify-content: space-between; margin-top: 15px; }
-        .stat-item { width: 33%; text-align: center; }
-        .stat-item span { display: block; font-size: 10px; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase; }
-        .stat-item strong { font-size: 16px; font-variant-numeric: tabular-nums; }
-        .stat-net { color: var(--text-main); border-right: 1px solid #333; }
-        .stat-income { color: var(--green); border-right: 1px solid #333; }
-        .stat-expense { color: var(--red); }
+        .btn-sync-shift { background: linear-gradient(135deg, #34c759, #28a745); color: #000; box-shadow: 0 4px 15px rgba(52, 199, 89, 0.25); }
 
         .edit-mode-btn { background: none; border: none; color: var(--blue); font-size: 12px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 5px; }
         .delete-badge { display: none; position: absolute; top: -6px; right: -6px; background: var(--red); color: white; border-radius: 50%; width: 22px; height: 22px; font-size: 12px; line-height: 22px; text-align: center; font-weight: bold; }
@@ -130,8 +195,8 @@
         @keyframes shake { 0% { transform: rotate(0deg); } 25% { transform: rotate(1deg); } 50% { transform: rotate(0deg); } 75% { transform: rotate(-1deg); } 100% { transform: rotate(0deg); } }
 
         /* Diario / Calendario Hero */
-        .diary-hero { position: relative; overflow: hidden; background: linear-gradient(135deg, rgba(10,132,255,0.24), rgba(191,90,242,0.25), rgba(255,214,10,0.12)); border-radius: 20px; padding: 16px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 10px 28px rgba(0,0,0,0.25); }
-        .diary-hero:before { content: ""; position: absolute; width: 150px; height: 150px; right: -45px; top: -55px; background: radial-gradient(circle, rgba(255,214,10,0.28), transparent 68%); }
+        .diary-hero { position: relative; overflow: hidden; background: linear-gradient(135deg, rgba(10,132,255,0.22), rgba(122, 209, 245, 0.2), rgba(255,214,10,0.12)); border-radius: 20px; padding: 16px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 10px 28px rgba(0,0,0,0.25); }
+        .diary-hero:before { content: ""; position: absolute; width: 150px; height: 150px; right: -45px; top: -55px; background: radial-gradient(circle, rgba(122,209,245,0.25), transparent 68%); }
         .diary-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; position: relative; z-index: 1; }
         .diary-month { font-family: var(--font-title); font-size: 19px; font-weight: 800; text-transform: capitalize; }
         .diary-subtitle { color: rgba(255,255,255,0.74); font-size: 12px; margin-top: 3px; }
@@ -170,7 +235,7 @@
         .record-amount.info { color: var(--blue); }
         .record-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
         .record-actions.summary-actions { grid-template-columns: repeat(3, 1fr); }
-        .route-summary-card { background: linear-gradient(135deg, rgba(10,132,255,0.16), rgba(191,90,242,0.14)); border: 1px solid rgba(10,132,255,0.22); }
+        .route-summary-card { background: linear-gradient(135deg, rgba(10,132,255,0.16), rgba(122,209,245,0.15)); border: 1px solid rgba(10,132,255,0.22); }
         .route-total-pill { background: rgba(52,199,89,0.14); color: var(--green); border-radius: 999px; padding: 7px 10px; font-family: var(--font-title); font-weight: 800; white-space: nowrap; }
         .route-detail-list { display: none; margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.07); padding-top: 10px; }
         .route-detail-list.show { display: block; }
@@ -184,13 +249,53 @@
         .small-action.delete { background: var(--red); }
         .empty-note { text-align: center; color: var(--text-muted); padding: 18px 8px; font-size: 13px; }
 
-        /* Shifts list in stats */
+        /* Shifts list */
         .shift-history-card { background: #24242c; border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 12px; margin-bottom: 10px; }
         .shift-history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
         .shift-history-net { font-family: var(--font-title); font-size: 16px; font-weight: 800; color: var(--green); }
         .shift-history-net.neg { color: var(--red); }
         .shift-history-meta { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
         .shift-history-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+
+        /* Shift scrollable container */
+        .shift-scroll-box {
+            max-height: 250px;
+            overflow-y: auto;
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            margin-top: 10px;
+            padding-right: 4px;
+        }
+        .shift-scroll-box.show { display: flex; }
+        .btn-toggle-shifts {
+            background: #2c2c35;
+            color: var(--pastel-blue);
+            border: 1px dashed rgba(122,209,245,0.3);
+            border-radius: 12px;
+            padding: 10px;
+            width: 100%;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        /* Minimalist Month Card */
+        .month-minimal-card {
+            background: linear-gradient(135deg, rgba(28, 28, 33, 0.95), rgba(35, 35, 43, 0.9));
+            border-left: 4px solid var(--pastel-blue);
+            border-radius: 16px;
+            padding: 16px;
+            cursor: pointer;
+            transition: transform 0.15s ease, border-color 0.2s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .month-minimal-card:active { transform: scale(0.98); }
 
         /* Shift Legs Manager in Edit Modal */
         .shift-legs-manager { background: rgba(0,0,0,0.22); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 10px; margin-top: 8px; }
@@ -224,11 +329,10 @@
         .summary-passenger-meta { color: var(--text-muted); font-size: 10px; margin-bottom: 5px; }
         .summary-passenger-input { text-align: left; }
 
-        .stat-card { background: var(--card-bg); border-radius: 16px; padding: 16px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); }
         .stat-row { display: flex; justify-content: space-between; margin-top: 10px; font-size: 13px; align-items: center; }
         .chart-container { position: relative; height: 180px; width: 100%; margin-top: 15px; }
 
-        .backup-panel { background: #1c1c21; border: 1px dashed #444; padding: 20px; border-radius: 16px; text-align: center; margin-top: 10px; }
+        .backup-panel { background: #1c1c21; border: 1px dashed #444; padding: 20px; border-radius: 16px; text-align: center; }
         .btn-backup { background: #2c2c35; color: white; border: none; padding: 12px; width: 100%; border-radius: 10px; margin-top: 10px; font-size: 13px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; font-weight: 600; }
         #file-input { display: none; }
         #toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: rgba(52, 199, 89, 0.9); color: white; padding: 12px 24px; border-radius: 25px; font-size: 14px; opacity: 0; pointer-events: none; z-index: 9999; transition: 0.3s; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.3); backdrop-filter: blur(5px); white-space: nowrap; }
@@ -238,32 +342,54 @@
 
 <div class="app-container">
     <div class="app-header">
-        <div class="app-title"><i class="fa-solid fa-car" style="color:var(--yellow)"></i> TaxiTracker <span class="badge-v2">v1.9</span></div>
+        <div class="app-title"><i class="fa-solid fa-car" style="color:var(--yellow)"></i> TaxiTracker <span class="badge-v2">v3.0</span></div>
     </div>
 
     <!-- VISTA TURNO -->
     <div id="view-turno" class="view active">
         
-        <!-- Shift Control Box -->
+        <!-- Control de Jornada -->
         <div id="shift-container"></div>
 
-        <!-- Route Control Card -->
+        <!-- Módulo Ganancias por Turno -->
+        <div class="shift-earnings-card">
+            <div class="shift-earnings-header">
+                <div class="shift-earnings-title"><i class="fa-solid fa-gauge-high"></i> Ganancias por Turno</div>
+                <div class="shift-earnings-status-tag" id="ui-shift-earnings-status">Sin Jornada</div>
+            </div>
+            <div class="shift-earnings-grid">
+                <div class="shift-earnings-item">
+                    <span>Ingresos</span>
+                    <strong style="color:var(--green);" id="turn-ingresos">S/ 0.00</strong>
+                </div>
+                <div class="shift-earnings-item">
+                    <span>Gastos</span>
+                    <strong style="color:var(--red);" id="turn-gastos">S/ 0.00</strong>
+                </div>
+                <div class="shift-earnings-item">
+                    <span>Total Neto</span>
+                    <strong style="color:var(--text-main);" id="turn-total">S/ 0.00</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- Control de Ruta -->
         <div class="card-panel">
             <div class="section-title">
                 <span>Control de Ruta</span>
                 <button class="edit-mode-btn" id="btn-edit-routes" onclick="toggleEditRoutes()"><i class="fa-solid fa-gear"></i> Editar</button>
             </div>
 
-            <!-- Vueltas Counter Banner -->
+            <!-- Vueltas Counter Banner en Celeste Pastel -->
             <div class="vueltas-counter-card" id="vueltas-banner" onclick="toggleVueltasDetailView()" title="Toca para ver u ocultar las rutas completadas">
                 <div>
                     <div class="vueltas-pill"><i class="fa-solid fa-arrows-rotate"></i> <span id="ui-vueltas-count">0</span> Vueltas Completas</div>
                     <div class="vueltas-sub" id="ui-vueltas-sub">0 tramos completados (Ida y Vuelta)</div>
                 </div>
-                <i class="fa-solid fa-chevron-down" style="color:var(--purple); font-size:12px;"></i>
+                <i class="fa-solid fa-chevron-down" style="color:var(--pastel-blue); font-size:12px;"></i>
             </div>
 
-            <!-- Detalle desplegable de rutas de la jornada actual -->
+            <!-- Detalle desplegable de rutas -->
             <div id="vueltas-details-box" class="vueltas-details-box">
                 <div style="font-weight:700; color:var(--text-muted); margin-bottom:6px; text-transform:uppercase; font-size:10px;">Rutas realizadas en este turno:</div>
                 <div id="vueltas-legs-list">Sin rutas completadas aún</div>
@@ -292,22 +418,13 @@
             <button class="btn btn-expense btn-expense-alt" onclick="manualExpense()"><i class="fa-solid fa-money-bill-1"></i> Otros Gastos Múltiples</button>
         </div>
 
-        <div class="card-panel" style="text-align: center; border-color: rgba(10, 132, 255, 0.3);">
-            <div class="section-title" style="justify-content: center; color: var(--text-main);" id="ui-resumen-title">Resumen del Turno</div>
-            <div class="stats">
-                <div class="stat-item stat-net"><span>Neta</span><strong id="ui-net">S/ 0.00</strong></div>
-                <div class="stat-item stat-income"><span>Ingresos</span><strong id="ui-income">S/ 0.00</strong></div>
-                <div class="stat-item stat-expense"><span>Gastos</span><strong id="ui-expense">S/ 0.00</strong></div>
-            </div>
-        </div>
-
-        <!-- Botones Solicitados: Subir Jornada Laboral y Subir a la Nube -->
+        <!-- Botones de Sincronización -->
         <div class="sync-actions-container">
-            <button class="btn-sync btn-sync-shift" onclick="syncShiftData()" id="btn-sync-shift">
-                <i class="fa-solid fa-briefcase"></i> Subir Jornada Laboral
-            </button>
             <button class="btn-sync btn-sync-cloud" onclick="syncCloudData()" id="btn-sync-cloud">
                 <i class="fa-solid fa-cloud-arrow-up"></i> Subir a la Nube
+            </button>
+            <button class="btn-sync btn-sync-shift" onclick="syncShiftData()" id="btn-sync-shift">
+                <i class="fa-solid fa-briefcase"></i> Subir Jornada Laboral
             </button>
         </div>
     </div>
@@ -350,38 +467,77 @@
 
     <!-- VISTA STATS -->
     <div id="view-stats" class="view">
+        
+        <!-- BLOQUE 1: Rendimiento Semanal (Gráfico) -->
         <div class="card-panel">
             <div class="section-title"><i class="fa-solid fa-chart-bar"></i> Rendimiento Semanal</div>
             <div class="chart-container"><canvas id="myChart"></canvas></div>
         </div>
 
+        <!-- BLOQUE 2: Ganancias Semanal -->
         <div class="card-panel" style="border-left: 4px solid var(--blue);">
-            <div class="section-title" style="color: var(--blue);">Resumen Global</div>
-            <div class="stat-row"><span>Ingresos Hoy:</span> <strong style="color:var(--green)" id="st-hoy-ingreso">S/ 0.00</strong></div>
-            <div class="stat-row"><span>Gastos Hoy:</span> <strong style="color:var(--red)" id="st-hoy-gasto">S/ 0.00</strong></div>
-            <div class="stat-row" style="border-top: 1px solid #333; padding-top: 8px; margin-top: 8px;"><span>Ganancia Neta Hoy:</span> <strong id="st-hoy-neta">S/ 0.00</strong></div>
-            <div class="stat-row" style="margin-top: 20px; color: var(--text-muted);"><span>Ingresos Últimos 7 Días:</span> <strong style="color:var(--text-main)" id="st-sem-ingreso">S/ 0.00</strong></div>
-            <div class="stat-row" style="color: var(--text-muted);"><span>Gastos Últimos 7 Días:</span> <strong style="color:var(--text-main)" id="st-sem-gasto">S/ 0.00</strong></div>
+            <div class="section-title" style="color: var(--blue);">
+                <span><i class="fa-solid fa-calendar-week"></i> Ganancias Semanal</span>
+                <span style="font-size:10px; color:var(--text-muted); text-transform:none;">Últimos 7 días</span>
+            </div>
+            <div class="stat-row"><span>Ingresos Semanales:</span> <strong style="color:var(--green)" id="st-sem-ingreso">S/ 0.00</strong></div>
+            <div class="stat-row"><span>Gastos Semanales:</span> <strong style="color:var(--red)" id="st-sem-gasto">S/ 0.00</strong></div>
+            <div class="stat-row" style="border-top: 1px solid #333; padding-top: 8px; margin-top: 8px;">
+                <span>Ganancia Neta Semanal:</span> <strong id="st-sem-neta" style="color:var(--yellow); font-size:15px;">S/ 0.00</strong>
+            </div>
         </div>
 
-        <!-- SECCIÓN GANANCIAS POR TURNO -->
+        <!-- BLOQUE 3: Ganancias por Turno (Semanal) -->
         <div class="card-panel" style="border-left: 4px solid var(--green);">
             <div class="section-title" style="color: var(--green);">
-                <span><i class="fa-solid fa-clock-rotate-left"></i> Ganancias por Turno (Últimas 7)</span>
-                <span id="st-shift-total-count" style="font-size:11px; color:var(--text-muted); text-transform:none;">0 jornadas</span>
+                <span><i class="fa-solid fa-clock-rotate-left"></i> Ganancias por Turno (Semanal)</span>
+                <span id="st-shift-total-count" style="font-size:11px; color:var(--text-muted); text-transform:none;">0 turnos</span>
             </div>
-            <div id="shift-history-list"></div>
+            
+            <div id="shift-latest-day-list"></div>
+
+            <button id="btn-toggle-shift-history" class="btn-toggle-shifts" onclick="toggleOlderShifts()" style="display:none;">
+                <i class="fa-solid fa-chevron-down"></i> <span id="toggle-shifts-label">Ver turnos anteriores de la semana</span>
+            </button>
+
+            <div id="shift-older-days-box" class="shift-scroll-box"></div>
+
             <button class="btn-backup" style="background:var(--card-soft); border:1px solid rgba(255,255,255,0.1); margin-top:12px;" onclick="openShiftsCalendarModal()">
                 <i class="fa-regular fa-calendar-days" style="color:var(--yellow)"></i> Ver Histórico de Jornadas en Calendario
             </button>
         </div>
 
+        <!-- BLOQUE 4: Ganancias por Mes (Minimalista) -->
+        <div class="month-minimal-card" onclick="openMonthlyModal()">
+            <div class="section-title" style="color: var(--pastel-blue); margin-bottom: 8px;">
+                <span><i class="fa-solid fa-calendar-days"></i> Ganancias por Mes</span>
+                <span style="font-size:11px; color:var(--pastel-blue); text-transform:none; font-weight:700;">Ver detalle <i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+            </div>
+            <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 10px;" id="st-mes-nombre">Mes actual</div>
+            <div style="display:grid; grid-template-columns: repeat(3, 1fr); text-align: center; gap: 8px;">
+                <div>
+                    <span style="display:block; font-size:10px; color:var(--text-muted); text-transform:uppercase;">Ingresos</span>
+                    <strong style="color:var(--green); font-size:14px;" id="st-mes-ingreso">S/ 0.00</strong>
+                </div>
+                <div>
+                    <span style="display:block; font-size:10px; color:var(--text-muted); text-transform:uppercase;">Gastos</span>
+                    <strong style="color:var(--red); font-size:14px;" id="st-mes-gasto">S/ 0.00</strong>
+                </div>
+                <div>
+                    <span style="display:block; font-size:10px; color:var(--text-muted); text-transform:uppercase;">Neto</span>
+                    <strong style="color:var(--pastel-blue); font-size:14px;" id="st-mes-neta">S/ 0.00</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- BLOQUE 5: Respaldo de Datos (AL FINAL) -->
         <div class="backup-panel">
             <div class="section-title" style="justify-content: center;"><i class="fa-solid fa-download"></i> Respaldo de Datos</div>
             <button class="btn-backup" style="background: var(--blue);" onclick="exportData()"><i class="fa-solid fa-circle-up"></i> Descargar Datos</button>
             <button class="btn-backup" onclick="document.getElementById('file-input').click()"><i class="fa-solid fa-circle-down"></i> Importar Datos</button>
             <input type="file" id="file-input" accept=".json" onchange="importData(event)">
         </div>
+
     </div>
 </div>
 
@@ -389,6 +545,16 @@
     <button class="nav-btn active" onclick="switchTab('turno', this)"><i class="fa-solid fa-car nav-icon"></i><span>Turno</span></button>
     <button class="nav-btn" onclick="switchTab('calendar', this)"><i class="fa-regular fa-calendar nav-icon"></i><span>Diario</span></button>
     <button class="nav-btn" onclick="switchTab('stats', this)"><i class="fa-solid fa-chart-bar nav-icon"></i><span>Stats</span></button>
+</div>
+
+<!-- MODAL GANANCIAS POR MES -->
+<div id="monthly-modal" class="modal-overlay">
+    <div class="modal-card">
+        <div class="modal-title"><i class="fa-solid fa-calendar-days" style="color:var(--pastel-blue)"></i> Detalle de Ganancias por Mes</div>
+        <div style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">Histórico mensual consolidado de todas tus jornadas y operaciones:</div>
+        <div id="monthly-breakdown-list" style="display:flex; flex-direction:column; gap:10px; max-height:350px; overflow-y:auto; padding-right:2px;"></div>
+        <button class="modal-btn cancel" style="width:100%; margin-top:14px;" onclick="closeMonthlyModal()">Cerrar</button>
+    </div>
 </div>
 
 <!-- MODAL EDITAR REGISTRO INDIVIDUAL -->
@@ -514,9 +680,8 @@
                 <input type="number" step="0.01" id="edit-shift-gasto" class="edit-input">
             </div>
 
-            <!-- Gestión interactiva de rutas/tramos de la jornada -->
             <div class="full shift-legs-manager">
-                <label class="field-label" style="color:var(--purple);">Tramos y Rutas Realizadas (<span id="edit-shift-legs-count">0</span>)</label>
+                <label class="field-label" style="color:var(--pastel-blue);">Tramos y Rutas Realizadas (<span id="edit-shift-legs-count">0</span>)</label>
                 <div style="display:flex; gap:6px; margin-top:5px;">
                     <select id="edit-shift-add-select" class="edit-select" style="text-align:left; font-size:12px; padding:8px;"></select>
                     <button class="small-action edit" onclick="addLegToEditingShift()" style="white-space:nowrap; padding:8px 12px;"><i class="fa-solid fa-plus"></i> Añadir</button>
@@ -629,7 +794,6 @@
                 t.fecha = formatFecha(t.dateKey, t.timeKey);
                 changed = true;
             }
-            // Limpieza inteligente: si el turno activo existe, verificar concordancia de fecha
             if (activeShift) {
                 if (t.shift_id === activeShift.id) {
                     if (t.dateKey !== activeShift.dateKey && !isNextDay(activeShift.dateKey, t.dateKey)) {
@@ -682,31 +846,44 @@
     function parseRecordDate(record) {
         if (record.dateKey && record.timeKey) return { dateKey: record.dateKey, timeKey: record.timeKey };
         const raw = String(record.fecha || '').trim();
-        const parts = raw.split(',');
-        const datePart = (parts[0] || '').trim();
-        let timePart = (parts[1] || '').trim();
-        let dateKey = toDateKey(new Date(record.id || Date.now()));
-        let timeKey = toTimeKey(new Date(record.id || Date.now()));
-        const dateMatch = datePart.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/);
-        if (dateMatch) {
-            const d = dateMatch[1].padStart(2, '0');
-            const m = dateMatch[2].padStart(2, '0');
-            const y = dateMatch[3].length === 2 ? `20${dateMatch[3]}` : dateMatch[3];
+        let dateKey = '';
+        let timeKey = '';
+
+        // Formato ISO: YYYY-MM-DD
+        const isoMatch = raw.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
+        if (isoMatch) {
+            dateKey = `${isoMatch[1]}-${isoMatch[2].padStart(2, '0')}-${isoMatch[3].padStart(2, '0')}`;
+        }
+
+        // Formato latino: DD/MM/YYYY o DD-MM-YYYY
+        const dmyMatch = raw.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})/);
+        if (!dateKey && dmyMatch) {
+            const d = dmyMatch[1].padStart(2, '0');
+            const m = dmyMatch[2].padStart(2, '0');
+            const y = dmyMatch[3].length === 2 ? `20${dmyMatch[3]}` : dmyMatch[3];
             dateKey = `${y}-${m}-${d}`;
         }
-        if (timePart) {
-            timePart = timePart.replace(/\./g, '').toUpperCase();
-            const isPM = timePart.includes('PM');
-            const isAM = timePart.includes('AM');
-            const match = timePart.match(/(\d{1,2}):(\d{2})/);
-            if (match) {
-                let h = parseInt(match[1], 10);
-                const min = match[2];
-                if (isPM && h < 12) h += 12;
-                if (isAM && h === 12) h = 0;
-                timeKey = `${String(h).padStart(2, '0')}:${min}`;
-            }
+
+        // Formato Hora: HH:MM con posible AM/PM
+        const timeMatch = raw.match(/(\d{1,2}):(\d{2})/);
+        if (timeMatch) {
+            let h = parseInt(timeMatch[1], 10);
+            const min = timeMatch[2];
+            const isPM = /PM/i.test(raw);
+            const isAM = /AM/i.test(raw);
+            if (isPM && h < 12) h += 12;
+            if (isAM && h === 12) h = 0;
+            timeKey = `${String(h).padStart(2, '0')}:${min}`;
         }
+
+        // Respaldo seguro por id numérico timestamp o fecha actual
+        if (!dateKey || !timeKey) {
+            const ts = Number(record.id);
+            const dObj = (!isNaN(ts) && ts > 1000000000000) ? new Date(ts) : new Date();
+            if (!dateKey) dateKey = toDateKey(dObj);
+            if (!timeKey) timeKey = toTimeKey(dObj);
+        }
+
         return { dateKey, timeKey };
     }
 
@@ -724,27 +901,17 @@
         localStorage.setItem('taxiShiftsHistory', JSON.stringify(shiftsHistory));
     }
 
-    /* ==========================================================
-       GESTIÓN INTELIGENTE DE TRANSACCIONES DEL TURNO ACTIVO
-       ========================================================== */
     function getActiveShiftTransactions() {
         if (!activeShift) return [];
         return masterHistory.filter(t => {
             if (String(t.shift_id) !== String(activeShift.id)) return false;
-            // Valida que pertenezca a la fecha de inicio del turno o a la madrugada siguiente (trasnochadas)
-            const matchesDay = t.dateKey === activeShift.dateKey || isNextDay(activeShift.dateKey, t.dateKey);
-            return matchesDay;
+            return (t.dateKey === activeShift.dateKey || isNextDay(activeShift.dateKey, t.dateKey));
         });
     }
 
     function getActiveShiftTotals() {
         if (!activeShift) {
-            let inc = 0, exp = 0;
-            currentShift.filter(t => !t.shift_id).forEach(t => {
-                if (t.tipo === 'Ingreso') inc += parseFloat(t.monto || 0);
-                else if (t.tipo === 'Gasto') exp += parseFloat(t.monto || 0);
-            });
-            return { inc, exp, net: inc - exp };
+            return { inc: 0, exp: 0, net: 0 };
         }
         let inc = 0, exp = 0;
         const validShiftRecords = getActiveShiftTransactions();
@@ -770,7 +937,6 @@
         s.net = inc - exp;
     }
 
-    /* CÁLCULO DE VUELTAS BIDIRECCIONAL */
     function parseRouteDirection(routeName) {
         if (!routeName) return null;
         let parts = routeName.split(/➔|->|-->|\ba\b/i).map(s => s.trim().toLowerCase());
@@ -871,9 +1037,6 @@
         }
     }
 
-    /* ==========================================================
-       CONTROL DE JORNADA
-       ========================================================== */
     function renderShiftUI() {
         const container = document.getElementById('shift-container');
         if (!container) return;
@@ -1012,61 +1175,15 @@
         saveAll();
         renderShiftUI();
         updateShiftUI();
-        renderShiftsHistoryList();
+        renderWeeklyShiftsList();
         calculateStats();
         showToast("✅ Jornada finalizada y guardada");
         return true;
     }
 
-    /* ==========================================================
-       SUBIDAS DIFERENCIADAS (JORNADA LABORAL Y A LA NUBE)
-       ========================================================== */
-    async function syncShiftData() {
-        if (isVueltaActive) return alert("⚠️ Termina la vuelta activa antes de subir la jornada.");
-
-        // Si la jornada está activa, finalizar primero con confirmación
-        if (activeShift) {
-            const accept = confirm("¿Deseas finalizar la jornada laboral actual y subir sus datos a la nube?");
-            if (!accept) return;
-            const closed = finishShift(true);
-            if (!closed) return;
-        }
-
-        // Transacciones de jornada en currentShift
-        const shiftRecords = currentShift.filter(t => t.shift_id);
-        if (shiftRecords.length === 0) {
-            return alert("No hay registros de jornada laboral pendientes para subir.");
-        }
-
-        const btn = document.getElementById('btn-sync-shift');
-        const origHtml = btn.innerHTML;
-        btn.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i> Subiendo Jornada...";
-        btn.style.opacity = "0.7";
-
-        try {
-            await fetch(GOOGLE_SHEET_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(shiftRecords)
-            });
-            showToast("✅ Jornada laboral subida con éxito");
-            // Remover registros de jornada subidos
-            currentShift = currentShift.filter(t => !t.shift_id);
-            localStorage.setItem('taxiCurrentShift', JSON.stringify(currentShift));
-            updateShiftUI();
-        } catch (error) {
-            alert("Error de conexión al subir la jornada laboral.");
-        } finally {
-            btn.innerHTML = origHtml;
-            btn.style.opacity = "1";
-        }
-    }
-
     async function syncCloudData() {
         if (isVueltaActive) return alert("⚠️ Termina la vuelta activa antes de subir.");
 
-        // Transacciones independientes (sin jornada activa vinculada)
         const independentRecords = currentShift.filter(t => !t.shift_id);
         if (independentRecords.length === 0) {
             return alert("No hay rutas ni registros independientes pendientes para subir a la nube.");
@@ -1074,7 +1191,7 @@
 
         const btn = document.getElementById('btn-sync-cloud');
         const origHtml = btn.innerHTML;
-        btn.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i> Subiendo a la nube...";
+        btn.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i> Subiendo...";
         btn.style.opacity = "0.7";
 
         try {
@@ -1085,7 +1202,6 @@
                 body: JSON.stringify(independentRecords)
             });
             showToast("✅ Registros independientes subidos");
-            // Remover registros independientes subidos
             currentShift = currentShift.filter(t => t.shift_id);
             localStorage.setItem('taxiCurrentShift', JSON.stringify(currentShift));
             updateShiftUI();
@@ -1097,49 +1213,297 @@
         }
     }
 
-    /* ==========================================================
-       GANANCIAS POR TURNO (7 ÚLTIMAS)
-       ========================================================== */
-    function renderShiftsHistoryList() {
-        const list = document.getElementById('shift-history-list');
+    async function syncShiftData() {
+        if (isVueltaActive) return alert("⚠️ Termina la vuelta activa antes de subir la jornada.");
+
+        if (activeShift) {
+            const accept = confirm("¿Deseas finalizar la jornada laboral actual y subir sus datos a la nube?");
+            if (!accept) return;
+            const closed = finishShift(true);
+            if (!closed) return;
+        }
+
+        const shiftRecords = currentShift.filter(t => t.shift_id);
+        if (shiftRecords.length === 0) {
+            return alert("No hay registros de jornada laboral pendientes para subir.");
+        }
+
+        const btn = document.getElementById('btn-sync-shift');
+        const origHtml = btn.innerHTML;
+        btn.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i> Subiendo...";
+        btn.style.opacity = "0.7";
+
+        try {
+            await fetch(GOOGLE_SHEET_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(shiftRecords)
+            });
+            showToast("✅ Jornada laboral subida con éxito");
+            currentShift = currentShift.filter(t => !t.shift_id);
+            localStorage.setItem('taxiCurrentShift', JSON.stringify(currentShift));
+            updateShiftUI();
+        } catch (error) {
+            alert("Error de conexión al subir la jornada laboral.");
+        } finally {
+            btn.innerHTML = origHtml;
+            btn.style.opacity = "1";
+        }
+    }
+
+    function updateShiftUI() {
+        const totals = getActiveShiftTotals();
+        document.getElementById('ui-vuelta-income').innerText = `S/ ${currentVueltaIncome.toFixed(2)}`;
+
+        document.getElementById('turn-ingresos').innerText = `S/ ${totals.inc.toFixed(2)}`;
+        document.getElementById('turn-gastos').innerText = `S/ ${totals.exp.toFixed(2)}`;
+        document.getElementById('turn-total').innerText = `S/ ${totals.net.toFixed(2)}`;
+        document.getElementById('turn-total').style.color = totals.net >= 0 ? 'var(--text-main)' : 'var(--red)';
+        
+        const statusTag = document.getElementById('ui-shift-earnings-status');
+        if (statusTag) {
+            if (activeShift) {
+                statusTag.innerText = "Jornada Activa";
+                statusTag.style.color = "var(--green)";
+                statusTag.style.background = "var(--green-bg)";
+            } else {
+                statusTag.innerText = "Sin Jornada";
+                statusTag.style.color = "var(--text-muted)";
+                statusTag.style.background = "rgba(255,255,255,0.06)";
+            }
+        }
+
+        updateVueltasBanner();
+        const liveVueltas = document.getElementById('shift-live-vueltas');
+        if (liveVueltas) liveVueltas.innerText = calculateVueltasFromLegsList(getActiveShiftLegs()).fullVueltas;
+    }
+
+    function isWithinLast7Days(dateKey) {
+        if (!dateKey) return false;
+        const now = new Date();
+        const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+        const startOfWeek = startOfToday - (6 * 24 * 60 * 60 * 1000);
+        const d = new Date(dateKey + 'T23:59:59').getTime();
+        return d >= startOfWeek;
+    }
+
+    function renderWeeklyShiftsList() {
+        const latestContainer = document.getElementById('shift-latest-day-list');
+        const olderContainer = document.getElementById('shift-older-days-box');
+        const toggleBtn = document.getElementById('btn-toggle-shift-history');
         const countLabel = document.getElementById('st-shift-total-count');
-        if (!list) return;
+        if (!latestContainer || !olderContainer) return;
 
-        if (countLabel) countLabel.innerText = `${shiftsHistory.length} total`;
+        const weeklyShifts = shiftsHistory.filter(s => isWithinLast7Days(s.dateKey));
+        if (countLabel) countLabel.innerText = `${weeklyShifts.length} turnos (semana)`;
 
-        if (shiftsHistory.length === 0) {
-            list.innerHTML = `<div style="font-size:12px; color:var(--text-muted); text-align:center; padding:15px 0;">No hay jornadas finalizadas registradas aún.</div>`;
+        if (weeklyShifts.length === 0) {
+            latestContainer.innerHTML = `<div style="font-size:12px; color:var(--text-muted); text-align:center; padding:12px 0;">No hay turnos registrados en los últimos 7 días.</div>`;
+            olderContainer.innerHTML = '';
+            olderContainer.classList.remove('show');
+            if (toggleBtn) toggleBtn.style.display = 'none';
             return;
         }
 
-        const latestShifts = shiftsHistory.slice(0, 7);
+        const daysPresent = [...new Set(weeklyShifts.map(s => s.dateKey))].sort().reverse();
+        const latestDayKey = daysPresent[0];
 
-        list.innerHTML = latestShifts.map(s => {
-            const netClass = s.net >= 0 ? '' : 'neg';
-            const legsStr = (s.legs && s.legs.length > 0)
-                ? s.legs.map(l => l.name || l).join(' | ')
-                : 'Sin tramos especificados';
-            return `
-                <div class="shift-history-card">
-                    <div class="shift-history-header">
-                        <div>
-                            <strong style="font-size:13px; font-family:var(--font-title);"><i class="fa-regular fa-calendar"></i> ${displayDate(s.dateKey)}</strong>
-                        </div>
-                        <div class="shift-history-net ${netClass}">S/ ${parseFloat(s.net || 0).toFixed(2)}</div>
+        const latestDayShifts = weeklyShifts.filter(s => s.dateKey === latestDayKey);
+        const olderShifts = weeklyShifts.filter(s => s.dateKey !== latestDayKey);
+
+        latestContainer.innerHTML = `
+            <div style="font-size:11px; font-weight:700; color:var(--pastel-blue); margin-bottom:6px; display:flex; justify-content:space-between;">
+                <span><i class="fa-regular fa-calendar-check"></i> Último día: ${displayDate(latestDayKey)}</span>
+                <span>${latestDayShifts.length} turno(s)</span>
+            </div>
+            ${latestDayShifts.map(s => renderShiftCardHtml(s)).join('')}
+        `;
+
+        if (olderShifts.length > 0) {
+            olderContainer.innerHTML = olderShifts.map(s => renderShiftCardHtml(s)).join('');
+            if (toggleBtn) {
+                toggleBtn.style.display = 'flex';
+                document.getElementById('toggle-shifts-label').innerText = `Ver ${olderShifts.length} turnos de días anteriores`;
+            }
+        } else {
+            olderContainer.innerHTML = '';
+            olderContainer.classList.remove('show');
+            if (toggleBtn) toggleBtn.style.display = 'none';
+        }
+    }
+
+    function renderShiftCardHtml(s) {
+        const netClass = s.net >= 0 ? '' : 'neg';
+        const legsStr = (s.legs && s.legs.length > 0)
+            ? s.legs.map(l => l.name || l).join(' | ')
+            : 'Sin tramos';
+        return `
+            <div class="shift-history-card">
+                <div class="shift-history-header">
+                    <div>
+                        <strong style="font-size:13px; font-family:var(--font-title);"><i class="fa-regular fa-calendar"></i> ${displayDate(s.dateKey)}</strong>
                     </div>
-                    <div class="shift-history-meta">
-                        <i class="fa-regular fa-clock"></i> ${s.startTime} - ${s.endTime} · <strong>${s.durationText || 'N/A'}</strong><br>
-                        <i class="fa-solid fa-arrows-rotate"></i> ${s.vueltas || 0} vueltas completas (${s.tramos || (s.legs ? s.legs.length : 0)} tramos)<br>
-                        <span style="font-size:10px; color:rgba(255,255,255,0.65);">${legsStr}</span><br>
-                        Ingresos: S/ ${parseFloat(s.income||0).toFixed(2)} · Gastos: S/ ${parseFloat(s.expense||0).toFixed(2)}
-                    </div>
-                    <div class="shift-history-actions">
-                        <button class="small-action edit" onclick="openShiftEditModal(${s.id})"><i class="fa-solid fa-pen"></i> Editar</button>
-                        <button class="small-action delete" onclick="deleteShiftRecord(${s.id})"><i class="fa-solid fa-trash"></i> Borrar</button>
-                    </div>
+                    <div class="shift-history-net ${netClass}">S/ ${parseFloat(s.net || 0).toFixed(2)}</div>
                 </div>
-            `;
-        }).join('');
+                <div class="shift-history-meta">
+                    <i class="fa-regular fa-clock"></i> ${s.startTime} - ${s.endTime} · <strong>${s.durationText || 'N/A'}</strong><br>
+                    <i class="fa-solid fa-arrows-rotate"></i> ${s.vueltas || 0} vueltas completas (${s.tramos || (s.legs ? s.legs.length : 0)} tramos)<br>
+                    <span style="font-size:10px; color:rgba(255,255,255,0.65);">${legsStr}</span><br>
+                    Ingresos: S/ ${parseFloat(s.income||0).toFixed(2)} · Gastos: S/ ${parseFloat(s.expense||0).toFixed(2)}
+                </div>
+                <div class="shift-history-actions">
+                    <button class="small-action edit" onclick="openShiftEditModal(${s.id})"><i class="fa-solid fa-pen"></i> Editar</button>
+                    <button class="small-action delete" onclick="deleteShiftRecord(${s.id})"><i class="fa-solid fa-trash"></i> Borrar</button>
+                </div>
+            </div>
+        `;
+    }
+
+    function toggleOlderShifts() {
+        const box = document.getElementById('shift-older-days-box');
+        const btnLabel = document.getElementById('toggle-shifts-label');
+        if (!box) return;
+        const isShown = box.classList.toggle('show');
+        if (btnLabel) {
+            btnLabel.innerText = isShown ? "Ocultar turnos anteriores" : "Ver turnos de días anteriores";
+        }
+    }
+
+    function getMonthKey(dateKey) {
+        if (!dateKey) return '';
+        return dateKey.slice(0, 7);
+    }
+
+    function getMonthName(yearMonthStr) {
+        if (!yearMonthStr) return '';
+        const [y, m] = yearMonthStr.split('-');
+        const dateObj = new Date(parseInt(y, 10), parseInt(m, 10) - 1, 1);
+        return dateObj.toLocaleDateString('es-PE', { month: 'long', year: 'numeric' });
+    }
+
+    function openMonthlyModal() {
+        const list = document.getElementById('monthly-breakdown-list');
+        if (!list) return;
+
+        const monthsData = {};
+        masterHistory.forEach(t => {
+            const parsed = parseRecordDate(t);
+            const mKey = getMonthKey(parsed.dateKey);
+            if (!monthsData[mKey]) {
+                monthsData[mKey] = { inc: 0, exp: 0, count: 0 };
+            }
+            if (t.tipo === 'Ingreso') monthsData[mKey].inc += parseFloat(t.monto || 0);
+            if (t.tipo === 'Gasto') monthsData[mKey].exp += parseFloat(t.monto || 0);
+            monthsData[mKey].count++;
+        });
+
+        const sortedKeys = Object.keys(monthsData).sort().reverse();
+
+        if (sortedKeys.length === 0) {
+            list.innerHTML = `<div class="empty-note">No hay registros mensuales aún.</div>`;
+        } else {
+            list.innerHTML = sortedKeys.map(key => {
+                const data = monthsData[key];
+                const net = data.inc - data.exp;
+                const mName = getMonthName(key);
+                return `
+                    <div style="background:#24242c; border:1px solid rgba(255,255,255,0.06); border-radius:14px; padding:12px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                            <strong style="text-transform:capitalize; font-size:14px; color:var(--text-main); font-family:var(--font-title);">${mName}</strong>
+                            <span style="font-family:var(--font-title); font-weight:800; font-size:14px; color:${net >= 0 ? 'var(--green)' : 'var(--red)'};">
+                                Net: S/ ${net.toFixed(2)}
+                            </span>
+                        </div>
+                        <div style="display:grid; grid-template-columns: repeat(3, 1fr); text-align:center; font-size:11px;">
+                            <div>
+                                <span style="color:var(--text-muted); display:block;">Ingresos</span>
+                                <strong style="color:var(--green);">S/ ${data.inc.toFixed(2)}</strong>
+                            </div>
+                            <div>
+                                <span style="color:var(--text-muted); display:block;">Gastos</span>
+                                <strong style="color:var(--red);">S/ ${data.exp.toFixed(2)}</strong>
+                            </div>
+                            <div>
+                                <span style="color:var(--text-muted); display:block;">Movimientos</span>
+                                <strong style="color:var(--text-main);">${data.count}</strong>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        document.getElementById('monthly-modal').classList.add('show');
+    }
+
+    function closeMonthlyModal() {
+        document.getElementById('monthly-modal').classList.remove('show');
+    }
+
+    function calculateStats() {
+        const now = new Date();
+        const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+        const startOfWeek = startOfToday - (6 * 24 * 60 * 60 * 1000);
+        const currentMonthKey = toDateKey(now).slice(0, 7);
+
+        let sem = { inc: 0, exp: 0 };
+        let mes = { inc: 0, exp: 0 };
+
+        masterHistory.forEach(t => {
+            let tTime = getRecordTimestamp(t);
+            let parsed = parseRecordDate(t);
+
+            if (tTime >= startOfWeek) {
+                if (t.tipo === 'Ingreso') sem.inc += parseFloat(t.monto || 0);
+                else if (t.tipo === 'Gasto') sem.exp += parseFloat(t.monto || 0);
+            }
+
+            if (getMonthKey(parsed.dateKey) === currentMonthKey) {
+                if (t.tipo === 'Ingreso') mes.inc += parseFloat(t.monto || 0);
+                else if (t.tipo === 'Gasto') mes.exp += parseFloat(t.monto || 0);
+            }
+        });
+
+        document.getElementById('st-sem-ingreso').innerText = `S/ ${sem.inc.toFixed(2)}`;
+        document.getElementById('st-sem-gasto').innerText = `S/ ${sem.exp.toFixed(2)}`;
+        document.getElementById('st-sem-neta').innerText = `S/ ${(sem.inc - sem.exp).toFixed(2)}`;
+
+        const mesNombre = now.toLocaleDateString('es-PE', { month: 'long', year: 'numeric' });
+        document.getElementById('st-mes-nombre').innerText = `Mes en curso: ${mesNombre.charAt(0).toUpperCase() + mesNombre.slice(1)}`;
+        document.getElementById('st-mes-ingreso').innerText = `S/ ${mes.inc.toFixed(2)}`;
+        document.getElementById('st-mes-gasto').innerText = `S/ ${mes.exp.toFixed(2)}`;
+        document.getElementById('st-mes-neta').innerText = `S/ ${(mes.inc - mes.exp).toFixed(2)}`;
+
+        renderWeeklyShiftsList();
+    }
+
+    function renderChart() {
+        let daysMap = {};
+        for(let i = 6; i >= 0; i--) {
+            let d = new Date();
+            d.setDate(d.getDate() - i);
+            let dateKey = toDateKey(d);
+            daysMap[dateKey] = { label: d.toLocaleDateString('es-PE', {weekday: 'short', day: 'numeric'}), inc: 0, exp: 0 };
+        }
+        masterHistory.forEach(t => {
+            const parsed = parseRecordDate(t);
+            if(daysMap[parsed.dateKey]) {
+                if(t.tipo === 'Ingreso') daysMap[parsed.dateKey].inc += parseFloat(t.monto || 0);
+                if(t.tipo === 'Gasto') daysMap[parsed.dateKey].exp += parseFloat(t.monto || 0);
+            }
+        });
+        let labels = [], dataInc = [], dataExp = [];
+        Object.values(daysMap).forEach(val => { labels.push(val.label); dataInc.push(val.inc); dataExp.push(val.exp); });
+        const ctx = document.getElementById('myChart').getContext('2d');
+        if(myChartInstance) myChartInstance.destroy();
+        Chart.defaults.color = '#8e8e93';
+        Chart.defaults.font.family = "'Inter', sans-serif";
+        myChartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: { labels: labels, datasets: [ { label: 'Ingresos', data: dataInc, backgroundColor: '#34c759', borderRadius: 4 }, { label: 'Gastos', data: dataExp, backgroundColor: '#ff3b30', borderRadius: 4 } ] },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } }, y: { grid: { color: 'rgba(255,255,255,0.05)' }, border: { display: false } } } }
+        });
     }
 
     function openShiftEditModal(shiftId) {
@@ -1248,7 +1612,7 @@
 
         saveAll();
         closeShiftEditModal();
-        renderShiftsHistoryList();
+        renderWeeklyShiftsList();
         renderShiftsCalendarView();
         calculateStats();
         showToast("Jornada actualizada");
@@ -1258,13 +1622,12 @@
         if (!confirm("¿Borrar este registro de jornada?")) return;
         shiftsHistory = shiftsHistory.filter(s => String(s.id) !== String(shiftId));
         saveAll();
-        renderShiftsHistoryList();
+        renderWeeklyShiftsList();
         renderShiftsCalendarView();
         calculateStats();
         showToast("Jornada eliminada");
     }
 
-    /* HISTÓRICO DE JORNADAS EN CALENDARIO */
     function openShiftsCalendarModal() {
         shiftCalCursor = new Date();
         shiftCalSelectedDateKey = toDateKey(new Date());
@@ -1361,9 +1724,6 @@
         }).join('');
     }
 
-    /* ==========================================================
-       RUTAS Y COBRO RÁPIDO
-       ========================================================== */
     function renderRoutes() {
         const container = document.getElementById('route-selector');
         container.innerHTML = '';
@@ -1517,7 +1877,7 @@
             monto: numAmount,
             ruta: rutaNombre,
             vuelta_id: isVueltaActive ? currentVueltaId : '-',
-            shift_id: activeShift ? activeShift.id : null // Vinculado a la jornada activa
+            shift_id: activeShift ? activeShift.id : null
         };
         if (type === 'Ingreso' && isVueltaActive) currentVueltaIncome += numAmount;
         currentShift.push(record);
@@ -1600,23 +1960,6 @@
         updateShiftUI();
     }
 
-    function updateShiftUI() {
-        const totals = getActiveShiftTotals();
-        document.getElementById('ui-vuelta-income').innerText = `S/ ${currentVueltaIncome.toFixed(2)}`;
-        document.getElementById('ui-net').innerText = `S/ ${totals.net.toFixed(2)}`;
-        document.getElementById('ui-income').innerText = `S/ ${totals.inc.toFixed(2)}`;
-        document.getElementById('ui-expense').innerText = `S/ ${totals.exp.toFixed(2)}`;
-        
-        const titleEl = document.getElementById('ui-resumen-title');
-        if (titleEl) {
-            titleEl.innerText = activeShift ? "Resumen de la Jornada en Curso" : "Resumen de Rutas Independientes";
-        }
-
-        updateVueltasBanner();
-        const liveVueltas = document.getElementById('shift-live-vueltas');
-        if (liveVueltas) liveVueltas.innerText = calculateVueltasFromLegsList(getActiveShiftLegs()).fullVueltas;
-    }
-
     function saveDashboardData() {
         let odo = document.getElementById('input-odo').value;
         let hrs = document.getElementById('input-hrs').value;
@@ -1637,7 +1980,6 @@
         if(tab === 'stats') { 
             calculateStats(); 
             renderChart(); 
-            renderShiftsHistoryList();
         }
         if(tab === 'calendar') renderDiary();
     }
@@ -1886,7 +2228,6 @@
             record.fecha = formatFecha(newDate, newTime);
             if(record.tipo === 'Info' && record.categoria === 'RutaKM') record.monto = selectedRoute.km;
 
-            // Desvincular si se cambió la fecha fuera de la jornada
             if (record.shift_id) {
                 const shiftRef = (activeShift && String(activeShift.id) === String(record.shift_id))
                     ? activeShift
@@ -1937,7 +2278,7 @@
         saveAll();
         updateShiftUI();
         renderDiary();
-        renderShiftsHistoryList();
+        renderWeeklyShiftsList();
         calculateStats();
         showToast('Ruta y pasajes borrados');
     }
@@ -1986,9 +2327,6 @@
         record.monto = isNaN(newAmount) ? 0 : newAmount;
         record.categoria = document.getElementById('edit-categoria').value || 'General';
 
-        // COMPORTAMIENTO INTELIGENTE:
-        // Si el registro pertenecía a una jornada y se le cambia la fecha fuera del rango de la jornada,
-        // se desvincula para que no altere las ganancias de ese turno
         if (record.shift_id) {
             const shiftRef = (activeShift && String(activeShift.id) === String(record.shift_id))
                 ? activeShift
@@ -1998,7 +2336,7 @@
                 const isSameDate = record.dateKey === shiftRef.dateKey;
                 const isOvernight = isNextDay(shiftRef.dateKey, record.dateKey);
                 if (!isSameDate && !isOvernight) {
-                    record.shift_id = null; // Desvincular de la jornada
+                    record.shift_id = null;
                 }
             } else {
                 record.shift_id = null;
@@ -2015,7 +2353,7 @@
         closeEditModal();
         renderDiary();
         calculateStats();
-        renderShiftsHistoryList();
+        renderWeeklyShiftsList();
         showToast('Registro actualizado');
     }
 
@@ -2033,64 +2371,14 @@
         updateShiftUI();
         renderDiary();
         calculateStats();
-        renderShiftsHistoryList();
+        renderWeeklyShiftsList();
         showToast('Registro borrado');
-    }
-
-    function calculateStats() {
-        const now = new Date();
-        const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-        const startOfWeek = startOfToday - (7 * 24 * 60 * 60 * 1000);
-        let stats = { hoy: { inc: 0, exp: 0 }, sem: { inc: 0, exp: 0 } };
-        masterHistory.forEach(t => {
-            let tTime = getRecordTimestamp(t);
-            if (tTime >= startOfToday) {
-                if(t.tipo === 'Ingreso') stats.hoy.inc += parseFloat(t.monto || 0);
-                else if(t.tipo === 'Gasto') stats.hoy.exp += parseFloat(t.monto || 0);
-            }
-            if (tTime >= startOfWeek) {
-                if(t.tipo === 'Ingreso') stats.sem.inc += parseFloat(t.monto || 0);
-                else if(t.tipo === 'Gasto') stats.sem.exp += parseFloat(t.monto || 0);
-            }
-        });
-        document.getElementById('st-hoy-ingreso').innerText = `S/ ${stats.hoy.inc.toFixed(2)}`;
-        document.getElementById('st-hoy-gasto').innerText = `S/ ${stats.hoy.exp.toFixed(2)}`;
-        document.getElementById('st-hoy-neta').innerText = `S/ ${(stats.hoy.inc - stats.hoy.exp).toFixed(2)}`;
-        document.getElementById('st-sem-ingreso').innerText = `S/ ${stats.sem.inc.toFixed(2)}`;
-        document.getElementById('st-sem-gasto').innerText = `S/ ${stats.sem.exp.toFixed(2)}`;
-    }
-
-    function renderChart() {
-        let daysMap = {};
-        for(let i = 6; i >= 0; i--) {
-            let d = new Date();
-            d.setDate(d.getDate() - i);
-            let dateKey = toDateKey(d);
-            daysMap[dateKey] = { label: d.toLocaleDateString('es-PE', {weekday: 'short', day: 'numeric'}), inc: 0, exp: 0 };
-        }
-        masterHistory.forEach(t => {
-            const parsed = parseRecordDate(t);
-            if(daysMap[parsed.dateKey]) {
-                if(t.tipo === 'Ingreso') daysMap[parsed.dateKey].inc += parseFloat(t.monto || 0);
-                if(t.tipo === 'Gasto') daysMap[parsed.dateKey].exp += parseFloat(t.monto || 0);
-            }
-        });
-        let labels = [], dataInc = [], dataExp = [];
-        Object.values(daysMap).forEach(val => { labels.push(val.label); dataInc.push(val.inc); dataExp.push(val.exp); });
-        const ctx = document.getElementById('myChart').getContext('2d');
-        if(myChartInstance) myChartInstance.destroy();
-        Chart.defaults.color = '#8e8e93';
-        Chart.defaults.font.family = "'Inter', sans-serif";
-        myChartInstance = new Chart(ctx, {
-            type: 'bar',
-            data: { labels: labels, datasets: [ { label: 'Ingresos', data: dataInc, backgroundColor: '#34c759', borderRadius: 4 }, { label: 'Gastos', data: dataExp, backgroundColor: '#ff3b30', borderRadius: 4 } ] },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } }, y: { grid: { color: 'rgba(255,255,255,0.05)' }, border: { display: false } } } }
-        });
     }
 
     function exportData() {
         let exportObj = { 
             history: masterHistory, 
+            currentShift: currentShift,
             buttons: customAmounts, 
             routes: customRoutes,
             activeShift: activeShift,
@@ -2099,7 +2387,7 @@
         let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj));
         let downloadAnchorNode = document.createElement('a');
         downloadAnchorNode.setAttribute("href", dataStr);
-        downloadAnchorNode.setAttribute("download", `TaxiTracker_v1.9_Respaldo.json`);
+        downloadAnchorNode.setAttribute("download", `TaxiTracker_v3.0_Respaldo.json`);
         document.body.appendChild(downloadAnchorNode);
         downloadAnchorNode.click();
         downloadAnchorNode.remove();
@@ -2113,17 +2401,69 @@
         reader.onload = function(e) {
             try {
                 let importedData = JSON.parse(e.target.result);
-                if(importedData.history) masterHistory = importedData.history;
-                if(importedData.buttons) customAmounts = importedData.buttons;
-                if(importedData.routes) customRoutes = importedData.routes;
-                if(importedData.activeShift !== undefined) activeShift = importedData.activeShift;
-                if(importedData.shiftsHistory) shiftsHistory = importedData.shiftsHistory;
+                
+                // 1. Detectar si el archivo es un Array plano (backups directos) o un Objeto completo
+                if (Array.isArray(importedData)) {
+                    masterHistory = importedData;
+                } else if (typeof importedData === 'object' && importedData !== null) {
+                    if (Array.isArray(importedData.history)) masterHistory = importedData.history;
+                    else if (Array.isArray(importedData.masterHistory)) masterHistory = importedData.masterHistory;
+                    else if (Array.isArray(importedData.taxiHistory)) masterHistory = importedData.taxiHistory;
+                    else if (Array.isArray(importedData.records)) masterHistory = importedData.records;
+                    else if (Array.isArray(importedData.data)) masterHistory = importedData.data;
+
+                    if (Array.isArray(importedData.buttons)) customAmounts = importedData.buttons;
+                    else if (Array.isArray(importedData.taxiButtons)) customAmounts = importedData.taxiButtons;
+
+                    if (Array.isArray(importedData.routes)) customRoutes = importedData.routes;
+                    else if (Array.isArray(importedData.taxiRoutes)) customRoutes = importedData.taxiRoutes;
+
+                    if (importedData.activeShift !== undefined) activeShift = importedData.activeShift;
+                    else if (importedData.taxiActiveShift !== undefined) activeShift = importedData.taxiActiveShift;
+
+                    if (Array.isArray(importedData.shiftsHistory)) shiftsHistory = importedData.shiftsHistory;
+                    else if (Array.isArray(importedData.taxiShiftsHistory)) shiftsHistory = importedData.taxiShiftsHistory;
+
+                    if (Array.isArray(importedData.currentShift)) currentShift = importedData.currentShift;
+                    else if (Array.isArray(importedData.taxiCurrentShift)) currentShift = importedData.taxiCurrentShift;
+                } else {
+                    throw new Error("Formato no reconocido");
+                }
+
+                // Normalizar registros y asegurar que todos tengan dateKey y timeKey válidos
                 normalizeStoredRecords();
                 saveAll();
-                init();
+
+                // Re-renderizar componentes de todas las vistas
+                renderButtons();
+                renderRoutes();
+                renderShiftUI();
+                updateShiftUI();
+
+                // Posicionar calendario en la fecha del registro más reciente para ver los datos de inmediato
+                if (masterHistory.length > 0) {
+                    const sorted = masterHistory.slice().sort((a,b) => getRecordTimestamp(b) - getRecordTimestamp(a));
+                    const latest = parseRecordDate(sorted[0]);
+                    selectedDateKey = latest.dateKey;
+                    calendarCursor = new Date(latest.dateKey + 'T00:00:00');
+                }
                 renderDiary();
-                alert("✅ ¡Datos restaurados con éxito!");
-            } catch(err) { alert("❌ Error: Archivo inválido."); }
+
+                // Actualizar inmediatamente estadísticas, listas de turnos y gráficos
+                calculateStats();
+                renderWeeklyShiftsList();
+                renderChart();
+
+                // Resetear el input file para permitir volver a importar el mismo archivo si se desea
+                event.target.value = '';
+
+                showToast("¡Datos restaurados con éxito!");
+                alert(`✅ ¡Datos restaurados con éxito!\n\nSe procesaron ${masterHistory.length} registros y ${shiftsHistory.length} jornadas.`);
+            } catch(err) { 
+                console.error("Error al importar datos:", err);
+                alert("❌ Error: Archivo inválido o incompatible.");
+                event.target.value = '';
+            }
         };
         reader.readAsText(file);
     }
@@ -2151,9 +2491,11 @@
     document.getElementById('shifts-calendar-modal').addEventListener('click', function(e) {
         if(e.target.id === 'shifts-calendar-modal') closeShiftsCalendarModal();
     });
+    document.getElementById('monthly-modal').addEventListener('click', function(e) {
+        if(e.target.id === 'monthly-modal') closeMonthlyModal();
+    });
 
     init();
 </script>
 </body>
 </html>
-```

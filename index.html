@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="TaxiTracker">
-    <title>TaxiTracker v3.1</title>
+    <title>TaxiTracker v3.2</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,6 +31,9 @@
             --yellow-bg: rgba(255, 214, 10, 0.15);
             --orange: #ff9f0a;
             --orange-bg: rgba(255, 159, 10, 0.15);
+            /* COLOR PLOMO PARA GLP */
+            --lead: #b0b7be;
+            --lead-bg: rgba(176, 183, 190, 0.16);
             /* COLOR CELESTE PASTEL */
             --pastel-blue: #7ad1f5;
             --pastel-blue-bg: rgba(122, 209, 245, 0.16);
@@ -42,7 +45,7 @@
         body { background-color: var(--bg-color); color: var(--text-main); display: flex; justify-content: center; overscroll-behavior-y: none; padding-top: env(safe-area-inset-top); padding-bottom: calc(80px + env(safe-area-inset-bottom)); }
         h1, h2, h3, strong, .vuelta-income, .section-title, .app-title { font-family: var(--font-title); }
 
-        /* Fallbacks estilizados para iconos de Gasolina y Aceite */
+        /* Fallbacks estilizados para iconos */
         .fa-gas-pump-right:before { content: "\f52f"; display: inline-block; transform: scaleX(-1); }
         .fa-oil-can-drip:before { content: "\f613"; }
 
@@ -109,8 +112,8 @@
             color: var(--red);
             border: 1px solid rgba(255, 59, 48, 0.35);
             border-radius: 8px;
-            padding: 3px 8px;
-            font-size: 10px;
+            padding: 4px 10px;
+            font-size: 11px;
             font-weight: 800;
             cursor: pointer;
             display: flex;
@@ -119,14 +122,6 @@
             font-family: var(--font-title);
         }
         .btn-turn-add-expense:active { transform: scale(0.95); background: rgba(255, 59, 48, 0.25); }
-        .shift-earnings-status-tag {
-            font-size: 10px;
-            padding: 2px 7px;
-            border-radius: 8px;
-            background: rgba(255,255,255,0.06);
-            color: var(--text-muted);
-            font-weight: 600;
-        }
         .shift-earnings-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -147,15 +142,6 @@
             font-size: 15px;
             font-variant-numeric: tabular-nums;
         }
-
-        /* Vueltas Counter Banner & Detail List (Celeste Pastel) */
-        .vueltas-counter-card { background: var(--pastel-blue-bg); border: 1px solid rgba(122, 209, 245, 0.35); border-radius: 14px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; cursor: pointer; }
-        .vueltas-pill { font-family: var(--font-title); font-size: 14px; font-weight: 800; color: var(--pastel-blue); display: flex; align-items: center; gap: 6px; }
-        .vueltas-sub { font-size: 11px; color: var(--text-muted); }
-        .vueltas-details-box { display: none; background: rgba(0,0,0,0.25); border: 1px dashed rgba(122, 209, 245, 0.35); border-radius: 12px; padding: 10px; margin-bottom: 12px; font-size: 12px; }
-        .vueltas-details-box.show { display: block; }
-        .leg-row-item { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .leg-row-item:last-child { border-bottom: none; }
 
         .route-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 5px; position: relative; }
         .route-card-wrap { position: relative; display: flex; flex-direction: column; gap: 7px; }
@@ -185,7 +171,7 @@
         .btn:active { transform: scale(0.95); }
         .btn-income { background-color: var(--green-bg); color: var(--green); border: 1px solid rgba(52, 199, 89, 0.3); position: relative; }
         
-        /* BOTONES DE GASTOS Y COMBUSTIBLES V3.1 */
+        /* BOTONES DE COMBUSTIBLES Y GASTOS (GLP PLOMO) */
         .fuel-buttons-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -208,9 +194,9 @@
         }
         .btn-fuel:active { transform: scale(0.97); }
         .btn-fuel-glp {
-            background-color: var(--orange-bg);
-            color: var(--orange);
-            border-color: rgba(255, 159, 10, 0.35);
+            background-color: var(--lead-bg);
+            color: var(--lead);
+            border-color: rgba(176, 183, 190, 0.35);
         }
         .btn-fuel-gasolina {
             background-color: var(--red-bg);
@@ -228,7 +214,6 @@
             font-weight: 600;
         }
 
-        /* Chips de Selección Rápida en Modales */
         .quick-chips-grid {
             display: flex;
             flex-wrap: wrap;
@@ -256,7 +241,6 @@
             color: var(--yellow);
         }
 
-        /* Botones de Sincronización */
         .sync-actions-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -432,7 +416,7 @@
 
 <div class="app-container">
     <div class="app-header">
-        <div class="app-title"><i class="fa-solid fa-car" style="color:var(--yellow)"></i> TaxiTracker <span class="badge-v2">v3.1</span></div>
+        <div class="app-title"><i class="fa-duotone fa-solid fa-car" style="color:var(--yellow)"></i> TaxiTracker <span class="badge-v2">v3.2</span></div>
     </div>
 
     <!-- VISTA TURNO -->
@@ -447,7 +431,6 @@
                 <div class="shift-earnings-title"><i class="fa-solid fa-gauge-high"></i> Ganancias por Turno</div>
                 <div class="shift-earnings-actions">
                     <button class="btn-turn-add-expense" onclick="openExpenseModal()" title="Registrar Gasto"><i class="fa-solid fa-plus"></i> Gasto</button>
-                    <div class="shift-earnings-status-tag" id="ui-shift-earnings-status">Sin Jornada</div>
                 </div>
             </div>
             <div class="shift-earnings-grid">
@@ -466,26 +449,11 @@
             </div>
         </div>
 
-        <!-- Control de Ruta -->
+        <!-- Control de Ruta (Limpio, sin banner de vueltas) -->
         <div class="card-panel">
             <div class="section-title">
                 <span>Control de Ruta</span>
                 <button class="edit-mode-btn" id="btn-edit-routes" onclick="toggleEditRoutes()"><i class="fa-solid fa-gear"></i> Editar</button>
-            </div>
-
-            <!-- Vueltas Counter Banner en Celeste Pastel -->
-            <div class="vueltas-counter-card" id="vueltas-banner" onclick="toggleVueltasDetailView()" title="Toca para ver u ocultar las rutas completadas">
-                <div>
-                    <div class="vueltas-pill"><i class="fa-solid fa-arrows-rotate"></i> <span id="ui-vueltas-count">0</span> Vueltas Completas</div>
-                    <div class="vueltas-sub" id="ui-vueltas-sub">0 tramos completados (Ida y Vuelta)</div>
-                </div>
-                <i class="fa-solid fa-chevron-down" style="color:var(--pastel-blue); font-size:12px;"></i>
-            </div>
-
-            <!-- Detalle desplegable de rutas -->
-            <div id="vueltas-details-box" class="vueltas-details-box">
-                <div style="font-weight:700; color:var(--text-muted); margin-bottom:6px; text-transform:uppercase; font-size:10px;">Rutas realizadas en este turno:</div>
-                <div id="vueltas-legs-list">Sin rutas completadas aún</div>
             </div>
 
             <div id="route-selector" class="route-selector"></div>
@@ -507,7 +475,7 @@
             <div class="quick-grid" id="buttons-container"></div>
         </div>
 
-        <!-- BOTONES DE GASTOS Y COMBUSTIBLES: V3.1 (Dos botones: GLP izq, Gasolina der) -->
+        <!-- BOTONES DE GASTOS Y COMBUSTIBLES: GLP Plomo y Gasolina Rojo -->
         <div>
             <div class="fuel-buttons-grid">
                 <button class="btn-fuel btn-fuel-glp" onclick="openDirectFuel('GLP')">
@@ -572,13 +540,13 @@
     <!-- VISTA STATS -->
     <div id="view-stats" class="view">
         
-        <!-- BLOQUE 1: Rendimiento Semanal (Gráfico) -->
+        <!-- Rendimiento Semanal (Gráfico) -->
         <div class="card-panel">
             <div class="section-title"><i class="fa-solid fa-chart-bar"></i> Rendimiento Semanal</div>
             <div class="chart-container"><canvas id="myChart"></canvas></div>
         </div>
 
-        <!-- BLOQUE 2: Ganancias Semanal -->
+        <!-- Ganancias Semanal -->
         <div class="card-panel" style="border-left: 4px solid var(--blue);">
             <div class="section-title" style="color: var(--blue);">
                 <span><i class="fa-solid fa-calendar-week"></i> Ganancias Semanal</span>
@@ -591,7 +559,7 @@
             </div>
         </div>
 
-        <!-- BLOQUE 3: Ganancias por Turno (Semanal) -->
+        <!-- Ganancias por Turno (Semanal) -->
         <div class="card-panel" style="border-left: 4px solid var(--green);">
             <div class="section-title" style="color: var(--green);">
                 <span><i class="fa-solid fa-clock-rotate-left"></i> Ganancias por Turno (Semanal)</span>
@@ -611,7 +579,7 @@
             </button>
         </div>
 
-        <!-- BLOQUE 4: Ganancias por Mes (Minimalista) -->
+        <!-- Ganancias por Mes (Minimalista) -->
         <div class="month-minimal-card" onclick="openMonthlyModal()">
             <div class="section-title" style="color: var(--pastel-blue); margin-bottom: 8px;">
                 <span><i class="fa-solid fa-calendar-days"></i> Ganancias por Mes</span>
@@ -634,7 +602,7 @@
             </div>
         </div>
 
-        <!-- BLOQUE 5: Respaldo de Datos (AL FINAL) -->
+        <!-- Respaldo de Datos -->
         <div class="backup-panel">
             <div class="section-title" style="justify-content: center;"><i class="fa-solid fa-download"></i> Respaldo de Datos</div>
             <button class="btn-backup" style="background: var(--blue);" onclick="exportData()"><i class="fa-solid fa-circle-up"></i> Descargar Datos</button>
@@ -646,7 +614,7 @@
 </div>
 
 <div class="bottom-nav">
-    <button class="nav-btn active" onclick="switchTab('turno', this)"><i class="fa-solid fa-car nav-icon"></i><span>Turno</span></button>
+    <button class="nav-btn active" onclick="switchTab('turno', this)"><i class="fa-duotone fa-solid fa-car nav-icon"></i><span>Turno</span></button>
     <button class="nav-btn" onclick="switchTab('calendar', this)"><i class="fa-regular fa-calendar nav-icon"></i><span>Diario</span></button>
     <button class="nav-btn" onclick="switchTab('stats', this)"><i class="fa-solid fa-chart-bar nav-icon"></i><span>Stats</span></button>
 </div>
@@ -734,10 +702,10 @@
     </div>
 </div>
 
-<!-- MODAL COMBUSTIBLE (GLP / GASOLINA DIRECTO V3.1) -->
+<!-- MODAL COMBUSTIBLE (GLP PLOMO / GASOLINA) -->
 <div id="fuel-modal" class="modal-overlay">
     <div class="modal-card">
-        <div class="modal-title" id="fuel-modal-title"><i class="fa-solid fa-gas-pump" style="color:var(--orange)"></i> Registrar Combustible</div>
+        <div class="modal-title" id="fuel-modal-title"><i class="fa-solid fa-gas-pump" style="color:var(--lead)"></i> Registrar Combustible</div>
         <input type="hidden" id="fuel-selected-type" value="GLP">
         
         <label class="field-label">Montos sugeridos:</label>
@@ -762,7 +730,7 @@
     </div>
 </div>
 
-<!-- MODAL OTROS GASTOS MÚLTIPLES V3.1 -->
+<!-- MODAL OTROS GASTOS MÚLTIPLES -->
 <div id="expense-modal" class="modal-overlay">
     <div class="modal-card">
         <div class="modal-title"><i class="fa-solid fa-receipt" style="color:var(--yellow)"></i> Registrar Gasto Múltiple</div>
@@ -940,7 +908,6 @@
                 t.fecha = formatFecha(t.dateKey, t.timeKey);
                 changed = true;
             }
-            // V3.1 Corregir registros antiguos que se hayan guardado como "Libre" siendo combustible o gasto
             if (t.tipo === 'Gasto' && (t.ruta === 'Libre' || !t.ruta)) {
                 t.ruta = t.categoria || 'Gasto';
                 changed = true;
@@ -1070,17 +1037,11 @@
         });
     }
 
+    /* MEJORA V3.2: Solo muestra números si hay jornada activa. Si no hay jornada, retorna 0 */
     function getActiveShiftTotals() {
         let inc = 0, exp = 0;
         if (!activeShift) {
-            // V3.1: Si aún no se inició turno formal, calcular de los movimientos sin turno de la sesión actual
-            currentShift.forEach(t => {
-                if (!t.shift_id) {
-                    if (t.tipo === 'Ingreso') inc += parseFloat(t.monto || 0);
-                    else if (t.tipo === 'Gasto') exp += parseFloat(t.monto || 0);
-                }
-            });
-            return { inc, exp, net: inc - exp };
+            return { inc: 0, exp: 0, net: 0 };
         }
         
         const validShiftRecords = getActiveShiftTransactions();
@@ -1166,46 +1127,6 @@
         return legs;
     }
 
-    function toggleVueltasDetailView() {
-        const box = document.getElementById('vueltas-details-box');
-        if (box) box.classList.toggle('show');
-    }
-
-    function updateVueltasBanner() {
-        const currentLegs = getActiveShiftLegs();
-        const stats = calculateVueltasFromLegsList(currentLegs);
-        const countEl = document.getElementById('ui-vueltas-count');
-        const subEl = document.getElementById('ui-vueltas-sub');
-        const listEl = document.getElementById('vueltas-legs-list');
-
-        if (countEl && subEl) {
-            countEl.innerText = stats.fullVueltas;
-            let subText = `${stats.totalLegs} tramos completados`;
-            if (stats.halfLegs > 0) {
-                subText += ` (${stats.halfLegs} ida sin retorno)`;
-            }
-            subEl.innerText = subText;
-        }
-
-        if (listEl) {
-            if (stats.parsedLegs.length === 0) {
-                listEl.innerHTML = '<span style="color:var(--text-muted)">Sin rutas completadas aún</span>';
-            } else {
-                listEl.innerHTML = stats.parsedLegs.map((item, idx) => {
-                    const statusBadge = item.matched 
-                        ? `<span style="color:var(--green); font-size:10px; font-weight:700;"><i class="fa-solid fa-check"></i> Vuelta Par</span>` 
-                        : `<span style="color:var(--yellow); font-size:10px;">(Solo ida)</span>`;
-                    return `
-                        <div class="leg-row-item">
-                            <span><strong>${idx + 1}.</strong> ${item.name}</span>
-                            <span>${statusBadge}</span>
-                        </div>
-                    `;
-                }).join('');
-            }
-        }
-    }
-
     function renderShiftUI() {
         const container = document.getElementById('shift-container');
         if (!container) return;
@@ -1244,7 +1165,6 @@
                 </div>
             `;
         }
-        updateVueltasBanner();
     }
 
     function startShiftTimer() {
@@ -1288,7 +1208,7 @@
     }
 
     function cancelActiveShift() {
-        if (confirm("¿Descartar la jornada en curso sin registrarla en Ganancias por Turno?")) {
+        if (confirm("¿Descartar la jornada en curso? El marcador volverá a 0.")) {
             activeShift = null;
             saveAll();
             renderShiftUI();
@@ -1340,13 +1260,13 @@
         };
 
         shiftsHistory.unshift(shiftEntry);
-        activeShift = null;
+        activeShift = null; // Al terminar vuelve a 0
         saveAll();
         renderShiftUI();
         updateShiftUI();
         renderWeeklyShiftsList();
         calculateStats();
-        showToast("✅ Jornada finalizada y guardada");
+        showToast("✅ Jornada finalizada y marcador restablecido a 0");
         return true;
     }
 
@@ -1429,21 +1349,7 @@
         document.getElementById('turn-gastos').innerText = `S/ ${totals.exp.toFixed(2)}`;
         document.getElementById('turn-total').innerText = `S/ ${totals.net.toFixed(2)}`;
         document.getElementById('turn-total').style.color = totals.net >= 0 ? 'var(--text-main)' : 'var(--red)';
-        
-        const statusTag = document.getElementById('ui-shift-earnings-status');
-        if (statusTag) {
-            if (activeShift) {
-                statusTag.innerText = "Jornada Activa";
-                statusTag.style.color = "var(--green)";
-                statusTag.style.background = "var(--green-bg)";
-            } else {
-                statusTag.innerText = "Sin Jornada";
-                statusTag.style.color = "var(--text-muted)";
-                statusTag.style.background = "rgba(255,255,255,0.06)";
-            }
-        }
 
-        updateVueltasBanner();
         const liveVueltas = document.getElementById('shift-live-vueltas');
         if (liveVueltas) liveVueltas.innerText = calculateVueltasFromLegsList(getActiveShiftLegs()).fullVueltas;
     }
@@ -2027,7 +1933,6 @@
         }
     }
 
-    // V3.1: Función centralizada con asignación adecuada de nombre para evitar "Libre" en gastos
     function addTransaction(type, category, amount, extraInfo = '') {
         if (!amount && amount !== 0) return;
         let numAmount = parseFloat(String(amount).replace(',', '.'));
@@ -2039,7 +1944,6 @@
         
         let rutaNombre = '';
         if (type === 'Gasto') {
-            // Un gasto NUNCA debe guardarse como 'Libre'; se guarda con su nombre o categoría
             rutaNombre = extraInfo || category || 'Gasto';
         } else {
             rutaNombre = isVueltaActive ? customRoutes[currentRutaIdx].name : (extraInfo || 'Libre');
@@ -2072,7 +1976,7 @@
 
     function manualIncome() { if(!isEditMode) { let amt = prompt("¿Cuánto cobraste en S/?"); if (amt) addTransaction('Ingreso', 'Pasaje', amt); } }
 
-    /* ====== SISTEMA COMBUSTIBLE DIRECTO (GLP / GASOLINA) V3.1 ====== */
+    /* ====== SISTEMA COMBUSTIBLE DIRECTO (GLP PLOMO / GASOLINA) ====== */
     function openDirectFuel(fuelType) {
         document.getElementById('fuel-selected-type').value = fuelType;
         const modalTitle = document.getElementById('fuel-modal-title');
@@ -2080,7 +1984,7 @@
         inputAmount.value = '';
 
         if (fuelType === 'GLP') {
-            modalTitle.innerHTML = `<i class="fa-solid fa-gas-pump-right" style="color:var(--orange)"></i> Registrar GLP`;
+            modalTitle.innerHTML = `<i class="fa-solid fa-gas-pump-right" style="color:var(--lead)"></i> Registrar GLP`;
         } else {
             modalTitle.innerHTML = `<i class="fa-solid fa-gas-pump" style="color:var(--red)"></i> Registrar Gasolina`;
         }
@@ -2103,12 +2007,11 @@
         if (!amt || isNaN(amt.replace(',', '.')) || parseFloat(amt.replace(',', '.')) <= 0) {
             return alert('Por favor ingresa un monto válido.');
         }
-        // Se guarda explícitamente con su nombre 'GLP' o 'Gasolina'
         addTransaction('Gasto', fuelType, amt, fuelType);
         closeFuelModal();
     }
 
-    /* ====== SISTEMA GASTOS MÚLTIPLES V3.1 ====== */
+    /* ====== SISTEMA GASTOS MÚLTIPLES ====== */
     function openExpenseModal() {
         document.getElementById('expense-name').value = '';
         document.getElementById('expense-amount').value = '';
@@ -2146,8 +2049,6 @@
         let rutaObj = customRoutes[rutaIndex];
         currentVueltaId = "V-" + Math.floor(Math.random() * 10000);
         document.getElementById('route-selector').style.display = 'none';
-        document.getElementById('vueltas-banner').style.display = 'none';
-        document.getElementById('vueltas-details-box').classList.remove('show');
         document.querySelector('.card-panel .section-title').style.display = 'none';
         document.getElementById('active-vuelta').classList.add('active');
         document.getElementById('ui-vuelta-name').innerText = rutaObj.name;
@@ -2171,7 +2072,6 @@
         currentVueltaId = "";
         currentVueltaIncome = 0;
         document.getElementById('route-selector').style.display = 'grid';
-        document.getElementById('vueltas-banner').style.display = 'flex';
         document.querySelector('.card-panel .section-title').style.display = 'flex';
         document.getElementById('active-vuelta').classList.remove('active');
         updateShiftUI();
@@ -2336,9 +2236,9 @@
             const prefix = t.tipo === 'Ingreso' ? '+' : (t.tipo === 'Gasto' ? '-' : '');
             const amountText = t.tipo === 'Info' ? `${t.monto}${t.categoria === 'RutaKM' ? ' km' : ''}` : `${prefix} S/ ${parseFloat(t.monto || 0).toFixed(2)}`;
             
-            // Iconos contextuales para lista del Diario
+            // Iconos contextuales con GLP en plomo
             let iconHeader = '<i class="fa-solid fa-receipt"></i>';
-            if (t.categoria === 'GLP' || t.ruta === 'GLP') iconHeader = '<i class="fa-solid fa-gas-pump-right" style="color:var(--orange)"></i>';
+            if (t.categoria === 'GLP' || t.ruta === 'GLP') iconHeader = '<i class="fa-solid fa-gas-pump-right" style="color:var(--lead)"></i>';
             else if (t.categoria === 'Gasolina' || t.ruta === 'Gasolina') iconHeader = '<i class="fa-solid fa-gas-pump" style="color:var(--red)"></i>';
             else if (t.categoria === 'Aceite' || t.ruta === 'Aceite') iconHeader = '<i class="fa-solid fa-oil-can-drip" style="color:var(--yellow)"></i>';
             else if (t.tipo === 'Ingreso') iconHeader = '<i class="fa-solid fa-money-bill-wave" style="color:var(--green)"></i>';
@@ -2620,7 +2520,7 @@
         let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj));
         let downloadAnchorNode = document.createElement('a');
         downloadAnchorNode.setAttribute("href", dataStr);
-        downloadAnchorNode.setAttribute("download", `TaxiTracker_v3.1_Respaldo.json`);
+        downloadAnchorNode.setAttribute("download", `TaxiTracker_v3.2_Respaldo.json`);
         document.body.appendChild(downloadAnchorNode);
         downloadAnchorNode.click();
         downloadAnchorNode.remove();

@@ -6,12 +6,12 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="TaxiTracker">
-    <title>TaxiTracker v3.0</title>
+    <title>TaxiTracker v3.1</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
@@ -29,6 +29,8 @@
             --blue-bg: rgba(10, 132, 255, 0.15);
             --yellow: #ffd60a;
             --yellow-bg: rgba(255, 214, 10, 0.15);
+            --orange: #ff9f0a;
+            --orange-bg: rgba(255, 159, 10, 0.15);
             /* COLOR CELESTE PASTEL */
             --pastel-blue: #7ad1f5;
             --pastel-blue-bg: rgba(122, 209, 245, 0.16);
@@ -39,6 +41,10 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-text); -webkit-tap-highlight-color: transparent; }
         body { background-color: var(--bg-color); color: var(--text-main); display: flex; justify-content: center; overscroll-behavior-y: none; padding-top: env(safe-area-inset-top); padding-bottom: calc(80px + env(safe-area-inset-bottom)); }
         h1, h2, h3, strong, .vuelta-income, .section-title, .app-title { font-family: var(--font-title); }
+
+        /* Fallbacks estilizados para iconos de Gasolina y Aceite */
+        .fa-gas-pump-right:before { content: "\f52f"; display: inline-block; transform: scaleX(-1); }
+        .fa-oil-can-drip:before { content: "\f613"; }
 
         .app-container { width: 100%; max-width: 450px; min-height: 100vh; padding: 15px; display: flex; flex-direction: column; gap: 15px; }
         .app-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; padding-top: 5px; }
@@ -93,6 +99,26 @@
             align-items: center;
             gap: 6px;
         }
+        .shift-earnings-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-turn-add-expense {
+            background: rgba(255, 59, 48, 0.15);
+            color: var(--red);
+            border: 1px solid rgba(255, 59, 48, 0.35);
+            border-radius: 8px;
+            padding: 3px 8px;
+            font-size: 10px;
+            font-weight: 800;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-family: var(--font-title);
+        }
+        .btn-turn-add-expense:active { transform: scale(0.95); background: rgba(255, 59, 48, 0.25); }
         .shift-earnings-status-tag {
             font-size: 10px;
             padding: 2px 7px;
@@ -158,15 +184,84 @@
         .btn { border: none; border-radius: 14px; padding: 16px 5px; font-size: 16px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; font-family: var(--font-title); }
         .btn:active { transform: scale(0.95); }
         .btn-income { background-color: var(--green-bg); color: var(--green); border: 1px solid rgba(52, 199, 89, 0.3); position: relative; }
-        .btn-expense { background-color: var(--red-bg); color: var(--red); border: 1px solid rgba(255, 59, 48, 0.3); width: 100%; padding: 16px; font-size: 14px; gap: 10px; margin-top: 5px; font-weight: 600; }
-        .btn-expense-alt { background: #2c2c35; color: var(--text-muted); border: none; }
         
+        /* BOTONES DE GASTOS Y COMBUSTIBLES V3.1 */
+        .fuel-buttons-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .btn-fuel {
+            border-radius: 14px;
+            padding: 15px 10px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: var(--font-title);
+            border: 1px solid transparent;
+            transition: transform 0.1s, opacity 0.2s;
+        }
+        .btn-fuel:active { transform: scale(0.97); }
+        .btn-fuel-glp {
+            background-color: var(--orange-bg);
+            color: var(--orange);
+            border-color: rgba(255, 159, 10, 0.35);
+        }
+        .btn-fuel-gasolina {
+            background-color: var(--red-bg);
+            color: var(--red);
+            border-color: rgba(255, 59, 48, 0.35);
+        }
+        .btn-expense-alt {
+            background: #2c2c35;
+            color: #d1d1d6;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            width: 100%;
+            padding: 14px;
+            font-size: 13px;
+            gap: 8px;
+            font-weight: 600;
+        }
+
+        /* Chips de Selección Rápida en Modales */
+        .quick-chips-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 10px;
+            margin-top: 4px;
+        }
+        .quick-chip-btn {
+            background: #2c2c35;
+            border: 1px solid rgba(255,255,255,0.08);
+            color: var(--text-muted);
+            border-radius: 8px;
+            padding: 6px 10px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.15s;
+        }
+        .quick-chip-btn:hover, .quick-chip-btn.active {
+            background: var(--yellow-bg);
+            border-color: var(--yellow);
+            color: var(--yellow);
+        }
+
         /* Botones de Sincronización */
         .sync-actions-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
-            margin-top: 10px;
+            margin-top: 5px;
         }
         .btn-sync {
             width: 100%;
@@ -316,11 +411,6 @@
         .modal-btn { border: none; border-radius: 12px; padding: 12px; font-weight: 800; cursor: pointer; }
         .modal-btn.cancel { background: #2c2c35; color: white; }
         .modal-btn.save { background: var(--yellow); color: #000; }
-        .fuel-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
-        .fuel-option { border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 14px 10px; background: #2c2c35; color: white; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .fuel-option.active { border-color: var(--yellow); background: var(--yellow-bg); color: var(--yellow); }
-        .fuel-amount-box { display: none; margin-top: 8px; }
-        .fuel-amount-box.show { display: block; }
 
         .summary-edit-info { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 10px; margin-top: 10px; color: var(--text-muted); font-size: 12px; line-height: 1.45; }
         .summary-passenger-list { display: flex; flex-direction: column; gap: 8px; max-height: 230px; overflow-y: auto; margin-top: 8px; padding-right: 2px; }
@@ -335,14 +425,14 @@
         .backup-panel { background: #1c1c21; border: 1px dashed #444; padding: 20px; border-radius: 16px; text-align: center; }
         .btn-backup { background: #2c2c35; color: white; border: none; padding: 12px; width: 100%; border-radius: 10px; margin-top: 10px; font-size: 13px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; font-weight: 600; }
         #file-input { display: none; }
-        #toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: rgba(52, 199, 89, 0.9); color: white; padding: 12px 24px; border-radius: 25px; font-size: 14px; opacity: 0; pointer-events: none; z-index: 9999; transition: 0.3s; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.3); backdrop-filter: blur(5px); white-space: nowrap; }
+        #toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: rgba(52, 199, 89, 0.95); color: white; padding: 12px 24px; border-radius: 25px; font-size: 14px; opacity: 0; pointer-events: none; z-index: 9999; transition: 0.3s; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.3); backdrop-filter: blur(5px); white-space: nowrap; }
     </style>
 </head>
 <body>
 
 <div class="app-container">
     <div class="app-header">
-        <div class="app-title"><i class="fa-solid fa-car" style="color:var(--yellow)"></i> TaxiTracker <span class="badge-v2">v3.0</span></div>
+        <div class="app-title"><i class="fa-solid fa-car" style="color:var(--yellow)"></i> TaxiTracker <span class="badge-v2">v3.1</span></div>
     </div>
 
     <!-- VISTA TURNO -->
@@ -355,7 +445,10 @@
         <div class="shift-earnings-card">
             <div class="shift-earnings-header">
                 <div class="shift-earnings-title"><i class="fa-solid fa-gauge-high"></i> Ganancias por Turno</div>
-                <div class="shift-earnings-status-tag" id="ui-shift-earnings-status">Sin Jornada</div>
+                <div class="shift-earnings-actions">
+                    <button class="btn-turn-add-expense" onclick="openExpenseModal()" title="Registrar Gasto"><i class="fa-solid fa-plus"></i> Gasto</button>
+                    <div class="shift-earnings-status-tag" id="ui-shift-earnings-status">Sin Jornada</div>
+                </div>
             </div>
             <div class="shift-earnings-grid">
                 <div class="shift-earnings-item">
@@ -405,6 +498,7 @@
             </div>
         </div>
 
+        <!-- Cobro Rápido -->
         <div class="card-panel">
             <div class="section-title">
                 <span>Cobro Rápido</span>
@@ -413,9 +507,19 @@
             <div class="quick-grid" id="buttons-container"></div>
         </div>
 
+        <!-- BOTONES DE GASTOS Y COMBUSTIBLES: V3.1 (Dos botones: GLP izq, Gasolina der) -->
         <div>
-            <button class="btn btn-expense" onclick="registerGas()"><i class="fa-solid fa-gas-pump"></i> Registrar Gasolina / GLP</button>
-            <button class="btn btn-expense btn-expense-alt" onclick="manualExpense()"><i class="fa-solid fa-money-bill-1"></i> Otros Gastos Múltiples</button>
+            <div class="fuel-buttons-grid">
+                <button class="btn-fuel btn-fuel-glp" onclick="openDirectFuel('GLP')">
+                    <i class="fa-solid fa-gas-pump-right"></i> GLP
+                </button>
+                <button class="btn-fuel btn-fuel-gasolina" onclick="openDirectFuel('Gasolina')">
+                    <i class="fa-solid fa-gas-pump"></i> Gasolina
+                </button>
+            </div>
+            <button class="btn btn-expense btn-expense-alt" onclick="openExpenseModal()">
+                <i class="fa-solid fa-money-bill-1"></i> Otros Gastos Múltiples
+            </button>
         </div>
 
         <!-- Botones de Sincronización -->
@@ -564,8 +668,8 @@
         <input type="hidden" id="edit-id">
         <div class="form-grid">
             <div class="full">
-                <label class="field-label">Ruta</label>
-                <input type="text" id="edit-ruta" class="edit-input" placeholder="Ruta o detalle">
+                <label class="field-label" id="edit-title-label">Nombre / Concepto</label>
+                <input type="text" id="edit-ruta" class="edit-input" placeholder="Nombre o detalle">
             </div>
             <div>
                 <label class="field-label">Fecha</label>
@@ -589,7 +693,7 @@
             </div>
             <div class="full">
                 <label class="field-label">Categoría</label>
-                <input type="text" id="edit-categoria" class="edit-input" placeholder="Pasaje, Gasolina, RutaKM">
+                <input type="text" id="edit-categoria" class="edit-input" placeholder="GLP, Gasolina, Aceite, Pasaje...">
             </div>
         </div>
         <div class="modal-actions">
@@ -630,21 +734,74 @@
     </div>
 </div>
 
-<!-- MODAL COMBUSTIBLE -->
+<!-- MODAL COMBUSTIBLE (GLP / GASOLINA DIRECTO V3.1) -->
 <div id="fuel-modal" class="modal-overlay">
     <div class="modal-card">
-        <div class="modal-title"><i class="fa-solid fa-gas-pump" style="color:var(--red)"></i> Registrar combustible</div>
-        <div class="fuel-options">
-            <button class="fuel-option" id="fuel-glp" onclick="chooseFuel('GLP')"><i class="fa-solid fa-fire-flame-simple"></i> GLP</button>
-            <button class="fuel-option" id="fuel-gasolina" onclick="chooseFuel('Gasolina')"><i class="fa-solid fa-gas-pump"></i> Gasolina</button>
+        <div class="modal-title" id="fuel-modal-title"><i class="fa-solid fa-gas-pump" style="color:var(--orange)"></i> Registrar Combustible</div>
+        <input type="hidden" id="fuel-selected-type" value="GLP">
+        
+        <label class="field-label">Montos sugeridos:</label>
+        <div class="quick-chips-grid" id="fuel-chips-container">
+            <button type="button" class="quick-chip-btn" onclick="setFuelAmount(10)">S/ 10</button>
+            <button type="button" class="quick-chip-btn" onclick="setFuelAmount(15)">S/ 15</button>
+            <button type="button" class="quick-chip-btn" onclick="setFuelAmount(20)">S/ 20</button>
+            <button type="button" class="quick-chip-btn" onclick="setFuelAmount(30)">S/ 30</button>
+            <button type="button" class="quick-chip-btn" onclick="setFuelAmount(40)">S/ 40</button>
+            <button type="button" class="quick-chip-btn" onclick="setFuelAmount(50)">S/ 50</button>
         </div>
-        <div class="fuel-amount-box" id="fuel-amount-box">
-            <label class="field-label">Monto</label>
-            <input type="number" step="0.01" id="fuel-amount" class="edit-input" placeholder="S/ 0.00">
+
+        <div style="margin-top: 8px;">
+            <label class="field-label">Monto a cargar (S/)</label>
+            <input type="number" step="0.01" id="fuel-amount" class="edit-input" placeholder="0.00" style="font-size:20px; font-weight:800;">
         </div>
+
         <div class="modal-actions">
             <button class="modal-btn cancel" onclick="closeFuelModal()">Cancelar</button>
-            <button class="modal-btn save" onclick="saveFuelExpense()">Guardar</button>
+            <button class="modal-btn save" onclick="saveDirectFuel()"><i class="fa-solid fa-check"></i> Guardar Carga</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL OTROS GASTOS MÚLTIPLES V3.1 -->
+<div id="expense-modal" class="modal-overlay">
+    <div class="modal-card">
+        <div class="modal-title"><i class="fa-solid fa-receipt" style="color:var(--yellow)"></i> Registrar Gasto Múltiple</div>
+        <div class="form-grid">
+            <div class="full">
+                <label class="field-label">Concepto / Nombre del Gasto</label>
+                <input type="text" id="expense-name" class="edit-input" placeholder="Ej: Aceite, Peaje, Lavado..." style="text-align:left;">
+            </div>
+            <div class="full">
+                <label class="field-label">Sugerencias rápidas:</label>
+                <div class="quick-chips-grid">
+                    <button type="button" class="quick-chip-btn" onclick="setExpenseConcept('Aceite')">
+                        <i class="fa-solid fa-oil-can-drip"></i> Aceite
+                    </button>
+                    <button type="button" class="quick-chip-btn" onclick="setExpenseConcept('Peaje')">
+                        <i class="fa-solid fa-road-barrier"></i> Peaje
+                    </button>
+                    <button type="button" class="quick-chip-btn" onclick="setExpenseConcept('Cochera')">
+                        <i class="fa-solid fa-warehouse"></i> Cochera
+                    </button>
+                    <button type="button" class="quick-chip-btn" onclick="setExpenseConcept('Lavado')">
+                        <i class="fa-solid fa-shower"></i> Lavado
+                    </button>
+                    <button type="button" class="quick-chip-btn" onclick="setExpenseConcept('Mecánico')">
+                        <i class="fa-solid fa-wrench"></i> Mecánico
+                    </button>
+                    <button type="button" class="quick-chip-btn" onclick="setExpenseConcept('Alimento')">
+                        <i class="fa-solid fa-utensils"></i> Alimento
+                    </button>
+                </div>
+            </div>
+            <div class="full">
+                <label class="field-label">Monto del gasto (S/)</label>
+                <input type="number" step="0.01" id="expense-amount" class="edit-input" placeholder="0.00" style="font-size:20px; font-weight:800;">
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button class="modal-btn cancel" onclick="closeExpenseModal()">Cancelar</button>
+            <button class="modal-btn save" onclick="saveCustomExpense()"><i class="fa-solid fa-floppy-disk"></i> Guardar Gasto</button>
         </div>
     </div>
 </div>
@@ -748,7 +905,6 @@
     let myChartInstance = null;
     let calendarCursor = new Date();
     let selectedDateKey = toDateKey(new Date());
-    let selectedFuelCategory = '';
     let editingSummaryId = '';
     let shiftTimerInterval = null;
 
@@ -784,6 +940,11 @@
                 t.fecha = formatFecha(t.dateKey, t.timeKey);
                 changed = true;
             }
+            // V3.1 Corregir registros antiguos que se hayan guardado como "Libre" siendo combustible o gasto
+            if (t.tipo === 'Gasto' && (t.ruta === 'Libre' || !t.ruta)) {
+                t.ruta = t.categoria || 'Gasto';
+                changed = true;
+            }
         });
 
         currentShift.forEach(t => {
@@ -792,6 +953,10 @@
                 t.dateKey = parsed.dateKey;
                 t.timeKey = parsed.timeKey;
                 t.fecha = formatFecha(t.dateKey, t.timeKey);
+                changed = true;
+            }
+            if (t.tipo === 'Gasto' && (t.ruta === 'Libre' || !t.ruta)) {
+                t.ruta = t.categoria || 'Gasto';
                 changed = true;
             }
             if (activeShift) {
@@ -849,13 +1014,11 @@
         let dateKey = '';
         let timeKey = '';
 
-        // Formato ISO: YYYY-MM-DD
         const isoMatch = raw.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
         if (isoMatch) {
             dateKey = `${isoMatch[1]}-${isoMatch[2].padStart(2, '0')}-${isoMatch[3].padStart(2, '0')}`;
         }
 
-        // Formato latino: DD/MM/YYYY o DD-MM-YYYY
         const dmyMatch = raw.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})/);
         if (!dateKey && dmyMatch) {
             const d = dmyMatch[1].padStart(2, '0');
@@ -864,7 +1027,6 @@
             dateKey = `${y}-${m}-${d}`;
         }
 
-        // Formato Hora: HH:MM con posible AM/PM
         const timeMatch = raw.match(/(\d{1,2}):(\d{2})/);
         if (timeMatch) {
             let h = parseInt(timeMatch[1], 10);
@@ -876,7 +1038,6 @@
             timeKey = `${String(h).padStart(2, '0')}:${min}`;
         }
 
-        // Respaldo seguro por id numérico timestamp o fecha actual
         if (!dateKey || !timeKey) {
             const ts = Number(record.id);
             const dObj = (!isNaN(ts) && ts > 1000000000000) ? new Date(ts) : new Date();
@@ -910,10 +1071,18 @@
     }
 
     function getActiveShiftTotals() {
-        if (!activeShift) {
-            return { inc: 0, exp: 0, net: 0 };
-        }
         let inc = 0, exp = 0;
+        if (!activeShift) {
+            // V3.1: Si aún no se inició turno formal, calcular de los movimientos sin turno de la sesión actual
+            currentShift.forEach(t => {
+                if (!t.shift_id) {
+                    if (t.tipo === 'Ingreso') inc += parseFloat(t.monto || 0);
+                    else if (t.tipo === 'Gasto') exp += parseFloat(t.monto || 0);
+                }
+            });
+            return { inc, exp, net: inc - exp };
+        }
+        
         const validShiftRecords = getActiveShiftTransactions();
         validShiftRecords.forEach(t => {
             if (t.tipo === 'Ingreso') inc += parseFloat(t.monto || 0);
@@ -1858,6 +2027,7 @@
         }
     }
 
+    // V3.1: Función centralizada con asignación adecuada de nombre para evitar "Libre" en gastos
     function addTransaction(type, category, amount, extraInfo = '') {
         if (!amount && amount !== 0) return;
         let numAmount = parseFloat(String(amount).replace(',', '.'));
@@ -1866,9 +2036,17 @@
         let now = new Date();
         let dateKey = toDateKey(now);
         let timeKey = toTimeKey(now);
-        let rutaNombre = isVueltaActive ? customRoutes[currentRutaIdx].name : (extraInfo || 'Libre');
+        
+        let rutaNombre = '';
+        if (type === 'Gasto') {
+            // Un gasto NUNCA debe guardarse como 'Libre'; se guarda con su nombre o categoría
+            rutaNombre = extraInfo || category || 'Gasto';
+        } else {
+            rutaNombre = isVueltaActive ? customRoutes[currentRutaIdx].name : (extraInfo || 'Libre');
+        }
+
         const record = {
-            id: Date.now(),
+            id: Date.now() + Math.floor(Math.random() * 1000),
             fecha: formatFecha(dateKey, timeKey),
             dateKey,
             timeKey,
@@ -1876,51 +2054,90 @@
             categoria: category,
             monto: numAmount,
             ruta: rutaNombre,
-            vuelta_id: isVueltaActive ? currentVueltaId : '-',
+            vuelta_id: (type === 'Ingreso' && isVueltaActive) ? currentVueltaId : '-',
             shift_id: activeShift ? activeShift.id : null
         };
+
         if (type === 'Ingreso' && isVueltaActive) currentVueltaIncome += numAmount;
+
         currentShift.push(record);
         masterHistory.push(record);
         saveAll();
         updateShiftUI();
+
         if(type === 'Ingreso') showToast(`+ S/ ${numAmount.toFixed(2)} registrado`);
-        if(type === 'Gasto') showToast(`- S/ ${numAmount.toFixed(2)} registrado`);
+        if(type === 'Gasto') showToast(`- S/ ${numAmount.toFixed(2)} registrado (${rutaNombre})`);
         if(document.getElementById('view-calendar').classList.contains('active')) renderDiary();
     }
 
     function manualIncome() { if(!isEditMode) { let amt = prompt("¿Cuánto cobraste en S/?"); if (amt) addTransaction('Ingreso', 'Pasaje', amt); } }
 
-    function registerGas() {
-        selectedFuelCategory = '';
-        document.getElementById('fuel-glp').classList.remove('active');
-        document.getElementById('fuel-gasolina').classList.remove('active');
-        document.getElementById('fuel-amount').value = '';
-        document.getElementById('fuel-amount-box').classList.remove('show');
+    /* ====== SISTEMA COMBUSTIBLE DIRECTO (GLP / GASOLINA) V3.1 ====== */
+    function openDirectFuel(fuelType) {
+        document.getElementById('fuel-selected-type').value = fuelType;
+        const modalTitle = document.getElementById('fuel-modal-title');
+        const inputAmount = document.getElementById('fuel-amount');
+        inputAmount.value = '';
+
+        if (fuelType === 'GLP') {
+            modalTitle.innerHTML = `<i class="fa-solid fa-gas-pump-right" style="color:var(--orange)"></i> Registrar GLP`;
+        } else {
+            modalTitle.innerHTML = `<i class="fa-solid fa-gas-pump" style="color:var(--red)"></i> Registrar Gasolina`;
+        }
+
         document.getElementById('fuel-modal').classList.add('show');
+        setTimeout(() => inputAmount.focus(), 150);
     }
 
-    function chooseFuel(category) {
-        selectedFuelCategory = category;
-        document.getElementById('fuel-glp').classList.toggle('active', category === 'GLP');
-        document.getElementById('fuel-gasolina').classList.toggle('active', category === 'Gasolina');
-        document.getElementById('fuel-amount-box').classList.add('show');
-        document.getElementById('fuel-amount').focus();
+    function setFuelAmount(amount) {
+        document.getElementById('fuel-amount').value = amount;
     }
 
     function closeFuelModal() {
         document.getElementById('fuel-modal').classList.remove('show');
     }
 
-    function saveFuelExpense() {
-        if(!selectedFuelCategory) return alert('Elige GLP o Gasolina.');
+    function saveDirectFuel() {
+        const fuelType = document.getElementById('fuel-selected-type').value;
         const amt = document.getElementById('fuel-amount').value;
-        if(!amt) return alert('Ingresa el monto.');
-        addTransaction('Gasto', selectedFuelCategory, amt);
+        if (!amt || isNaN(amt.replace(',', '.')) || parseFloat(amt.replace(',', '.')) <= 0) {
+            return alert('Por favor ingresa un monto válido.');
+        }
+        // Se guarda explícitamente con su nombre 'GLP' o 'Gasolina'
+        addTransaction('Gasto', fuelType, amt, fuelType);
         closeFuelModal();
     }
 
-    function manualExpense() { let amt = prompt("Monto del gasto en S/:"); if (amt) { let cat = prompt("Detalle:") || 'Operativo'; addTransaction('Gasto', cat, amt); } }
+    /* ====== SISTEMA GASTOS MÚLTIPLES V3.1 ====== */
+    function openExpenseModal() {
+        document.getElementById('expense-name').value = '';
+        document.getElementById('expense-amount').value = '';
+        document.querySelectorAll('.quick-chip-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('expense-modal').classList.add('show');
+        setTimeout(() => document.getElementById('expense-name').focus(), 150);
+    }
+
+    function setExpenseConcept(concept) {
+        document.getElementById('expense-name').value = concept;
+        document.querySelectorAll('.quick-chip-btn').forEach(b => {
+            b.classList.toggle('active', b.innerText.trim().includes(concept));
+        });
+        document.getElementById('expense-amount').focus();
+    }
+
+    function closeExpenseModal() {
+        document.getElementById('expense-modal').classList.remove('show');
+    }
+
+    function saveCustomExpense() {
+        const name = document.getElementById('expense-name').value.trim() || 'Gasto Operativo';
+        const amt = document.getElementById('expense-amount').value;
+        if (!amt || isNaN(amt.replace(',', '.')) || parseFloat(amt.replace(',', '.')) <= 0) {
+            return alert('Por favor ingresa un monto válido.');
+        }
+        addTransaction('Gasto', name, amt, name);
+        closeExpenseModal();
+    }
 
     function startVuelta(rutaIndex) {
         isVueltaActive = true;
@@ -2118,16 +2335,24 @@
             const amountClass = t.tipo === 'Ingreso' ? 'inc' : (t.tipo === 'Gasto' ? 'exp' : 'info');
             const prefix = t.tipo === 'Ingreso' ? '+' : (t.tipo === 'Gasto' ? '-' : '');
             const amountText = t.tipo === 'Info' ? `${t.monto}${t.categoria === 'RutaKM' ? ' km' : ''}` : `${prefix} S/ ${parseFloat(t.monto || 0).toFixed(2)}`;
+            
+            // Iconos contextuales para lista del Diario
+            let iconHeader = '<i class="fa-solid fa-receipt"></i>';
+            if (t.categoria === 'GLP' || t.ruta === 'GLP') iconHeader = '<i class="fa-solid fa-gas-pump-right" style="color:var(--orange)"></i>';
+            else if (t.categoria === 'Gasolina' || t.ruta === 'Gasolina') iconHeader = '<i class="fa-solid fa-gas-pump" style="color:var(--red)"></i>';
+            else if (t.categoria === 'Aceite' || t.ruta === 'Aceite') iconHeader = '<i class="fa-solid fa-oil-can-drip" style="color:var(--yellow)"></i>';
+            else if (t.tipo === 'Ingreso') iconHeader = '<i class="fa-solid fa-money-bill-wave" style="color:var(--green)"></i>';
+
             cards.push({
                 time: getRecordTimestamp(t),
                 html: `
                 <div class="record-card">
                     <div class="record-main">
                         <div>
-                            <div class="record-title">${t.ruta || t.categoria || 'Registro'}</div>
+                            <div class="record-title">${iconHeader} ${t.ruta || t.categoria || 'Registro'}</div>
                             <div class="record-meta">
                                 <i class="fa-regular fa-clock"></i> ${parsed.timeKey} · <i class="fa-regular fa-calendar"></i> ${displayDate(parsed.dateKey)}<br>
-                                ${t.tipo} · ${t.categoria || 'Sin categoría'}
+                                ${t.tipo} · ${t.categoria || 'General'}
                             </div>
                         </div>
                         <div class="record-amount ${amountClass}">${amountText}</div>
@@ -2146,7 +2371,7 @@
     function editRouteSummary(vueltaId) {
         const items = masterHistory
             .filter(t => String(t.vuelta_id) === String(vueltaId))
-            .sort((a,b) => getRecordTimestamp(a) - getRecordTimestamp(b));
+            .sort((a,b) => getRecordTimestamp(a) - getRecordTimestamp(a));
         if(items.length === 0) return;
 
         editingSummaryId = String(vueltaId);
@@ -2303,6 +2528,12 @@
         document.getElementById('edit-tipo').value = record.tipo || 'Ingreso';
         document.getElementById('edit-monto').value = record.monto || 0;
         document.getElementById('edit-categoria').value = record.categoria || '';
+
+        const titleLabel = document.getElementById('edit-title-label');
+        if (titleLabel) {
+            titleLabel.innerText = record.tipo === 'Gasto' ? 'Concepto / Nombre del Gasto' : 'Ruta / Detalle';
+        }
+
         document.getElementById('edit-modal').classList.add('show');
     }
 
@@ -2318,14 +2549,16 @@
         const newTime = document.getElementById('edit-hora').value || '00:00';
         const newAmount = parseFloat(document.getElementById('edit-monto').value || 0);
         const oldShiftId = record.shift_id;
+        const newTipo = document.getElementById('edit-tipo').value;
+        const inputNombre = document.getElementById('edit-ruta').value || (newTipo === 'Gasto' ? 'Gasto' : 'Libre');
 
-        record.ruta = document.getElementById('edit-ruta').value || 'Libre';
+        record.ruta = inputNombre;
         record.dateKey = newDate;
         record.timeKey = newTime;
         record.fecha = formatFecha(newDate, newTime);
-        record.tipo = document.getElementById('edit-tipo').value;
+        record.tipo = newTipo;
         record.monto = isNaN(newAmount) ? 0 : newAmount;
-        record.categoria = document.getElementById('edit-categoria').value || 'General';
+        record.categoria = document.getElementById('edit-categoria').value || (newTipo === 'Gasto' ? inputNombre : 'General');
 
         if (record.shift_id) {
             const shiftRef = (activeShift && String(activeShift.id) === String(record.shift_id))
@@ -2387,7 +2620,7 @@
         let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj));
         let downloadAnchorNode = document.createElement('a');
         downloadAnchorNode.setAttribute("href", dataStr);
-        downloadAnchorNode.setAttribute("download", `TaxiTracker_v3.0_Respaldo.json`);
+        downloadAnchorNode.setAttribute("download", `TaxiTracker_v3.1_Respaldo.json`);
         document.body.appendChild(downloadAnchorNode);
         downloadAnchorNode.click();
         downloadAnchorNode.remove();
@@ -2402,7 +2635,6 @@
             try {
                 let importedData = JSON.parse(e.target.result);
                 
-                // 1. Detectar si el archivo es un Array plano (backups directos) o un Objeto completo
                 if (Array.isArray(importedData)) {
                     masterHistory = importedData;
                 } else if (typeof importedData === 'object' && importedData !== null) {
@@ -2430,17 +2662,14 @@
                     throw new Error("Formato no reconocido");
                 }
 
-                // Normalizar registros y asegurar que todos tengan dateKey y timeKey válidos
                 normalizeStoredRecords();
                 saveAll();
 
-                // Re-renderizar componentes de todas las vistas
                 renderButtons();
                 renderRoutes();
                 renderShiftUI();
                 updateShiftUI();
 
-                // Posicionar calendario en la fecha del registro más reciente para ver los datos de inmediato
                 if (masterHistory.length > 0) {
                     const sorted = masterHistory.slice().sort((a,b) => getRecordTimestamp(b) - getRecordTimestamp(a));
                     const latest = parseRecordDate(sorted[0]);
@@ -2449,14 +2678,11 @@
                 }
                 renderDiary();
 
-                // Actualizar inmediatamente estadísticas, listas de turnos y gráficos
                 calculateStats();
                 renderWeeklyShiftsList();
                 renderChart();
 
-                // Resetear el input file para permitir volver a importar el mismo archivo si se desea
                 event.target.value = '';
-
                 showToast("¡Datos restaurados con éxito!");
                 alert(`✅ ¡Datos restaurados con éxito!\n\nSe procesaron ${masterHistory.length} registros y ${shiftsHistory.length} jornadas.`);
             } catch(err) { 
@@ -2484,6 +2710,9 @@
     });
     document.getElementById('fuel-modal').addEventListener('click', function(e) {
         if(e.target.id === 'fuel-modal') closeFuelModal();
+    });
+    document.getElementById('expense-modal').addEventListener('click', function(e) {
+        if(e.target.id === 'expense-modal') closeExpenseModal();
     });
     document.getElementById('shift-edit-modal').addEventListener('click', function(e) {
         if(e.target.id === 'shift-edit-modal') closeShiftEditModal();
